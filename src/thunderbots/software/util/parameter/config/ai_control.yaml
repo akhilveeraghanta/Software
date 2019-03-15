@@ -1,0 +1,12 @@
+AI:
+  override_refbox_defending_side:
+    type: "bool"
+    default: false
+    description: >-
+        Overrides the defending side provided by refbox, 
+        with defending_positive_side parameter
+  defending_positive_side:
+    type: "bool"
+    default: true
+    description: >-
+        The sides are referred to as positive and negative by the refbox
