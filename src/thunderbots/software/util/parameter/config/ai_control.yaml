@@ -9,4 +9,16 @@ AI:
     type: "bool"
     default: true
     description: >-
-        The sides are referred to as positive and negative by the refbox
+        Positive if selected, Negative if unselected
+  override_refbox_friendly_team_color:
+    type: "bool"
+    default: false
+    description: >-
+        Overrides the team color provided by refbox, 
+        with friendly_color_yellow parameter
+  friendly_color_yellow:
+    type: "bool"
+    default: true
+    description: >-
+        Yellow if selected, Blue if unselected
+
