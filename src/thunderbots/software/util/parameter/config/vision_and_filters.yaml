@@ -1,12 +1,21 @@
-AI:
-  asdoverride_refbox_defending_side:
+cameras:
+  ignore_camera_0:
     type: "bool"
     default: false
     description: >-
-        Overrides the defending side provided by refbox, 
-        with defending_positive_side parameter
-  asddefending_positive_side:
+        Ignores camera 0
+  ignore_camera_1:
     type: "bool"
-    default: true
+    default: false
     description: >-
-        The sides are referred to as positive and negative by the refbox
+        Ignores camera 1
+  ignore_camera_2:
+    type: "bool"
+    default: false
+    description: >-
+        Ignores camera 2
+  ignore_camera_3:
+    type: "bool"
+    default: false
+    description: >-
+        Ignores camera 3
