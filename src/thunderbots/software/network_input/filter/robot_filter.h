@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "geom/angle.h"
+    #include "geom/angle.h"
 #include "geom/point.h"
 #include "util/time/timestamp.h"
 
