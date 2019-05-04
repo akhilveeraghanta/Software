@@ -33,7 +33,15 @@ std::unique_ptr<Intent> MoveTactic::calculateNextIntent(
     MoveAction move_action = MoveAction();
     do
     {
+        std::cerr<<"move!"<<std::endl;
         yield(move_action.updateStateAndGetNextIntent(*robot, destination,
-                                                      final_orientation, final_speed));
-    } while (!move_action.done());
+                                                      final_orientation, 10));
+    } while ((destination-robot->position()).len()>1);
+
+    StopAction stop_action = StopAction();
+    do
+    {
+        std::cerr<<"stop!"<<std::endl;
+        yield(stop_action.updateStateAndGetNextIntent(*robot, false));
+    } while ((destination-robot->position()).len()<=1);
 }
