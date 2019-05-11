@@ -1,7 +1,7 @@
 # This project name must match the name of the package defined in package.xml project(thunderbots) 
 # Build in "Release" (with lots of compiler optimizations) by default
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE "Release")
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE "Debug")
 endif()
 
 # For external editor code completion (Visual Studio Code, Vim, etc.)
