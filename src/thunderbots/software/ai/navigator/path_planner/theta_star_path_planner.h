@@ -51,7 +51,8 @@ class ThetaStarPathPlanner : public PathPlanner
      * @return a vector that is the optimal path avoiding obstacles
      * 		if no path void then return std::nullopt
      */
-    std::optional<std::vector<Point>> findPath(const Point &start, const Point &dest);
+    std::optional<std::vector<Point>> findPath(const Point &start,
+                                               const Point &dest) override;
 
     /**
      * Returns a path that is a straight line between start and dest.
@@ -96,7 +97,10 @@ class ThetaStarPathPlanner : public PathPlanner
     bool isUnBlocked(int row, int col);
     bool isDestination(int row, int col, CellCoordinate dest);
     double calculateHValue(int row, int col, CellCoordinate dest);
-std::vector<Point> tracePath( std::vector<std::vector<GridCell>> cellDetails, CellCoordinate dest) ;
+    std::vector<Point> tracePath(CellCoordinate dest);
+    bool updateVertex(CellCoordinate pCurr, CellCoordinate pNew, CellCoordinate dest,
+                      double currToNextNodeDist);
+
 
     Field field_;
     Ball ball_;
