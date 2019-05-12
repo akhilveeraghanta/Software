@@ -58,11 +58,12 @@ double PathPlanningNavigator::place_holder_violation_func(const Point &input_poi
 
 void PathPlanningNavigator::visit(const MoveIntent &move_intent)
 {
-    auto p            = std::make_unique<MovePrimitive>(move_intent);
-    auto path_planner = std::make_unique<StraightLinePathPlanner>();
-
     std::function<double(const Point& p)> test_violation_func = place_holder_violation_func;
     std::vector<Obstacle> no_obstacles;
+
+    auto p            = std::make_unique<MovePrimitive>(move_intent);
+    auto path_planner = std::make_unique<ThetaStarPathPlanner>(this->world.field(), this->world.ball(), no_obstacles);
+
 
     auto path_points = path_planner->findPath(
             this->world.friendlyTeam().getRobotById(p->getRobotId())->position(),

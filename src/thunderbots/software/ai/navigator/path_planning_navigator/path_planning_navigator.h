@@ -3,7 +3,7 @@
 #include "ai/intent/intent.h"
 #include "ai/intent/visitor/intent_visitor.h"
 #include "ai/navigator/navigator.h"
-#include "ai/navigator/path_planner/straight_line_path_planner.h"
+#include "ai/navigator/path_planner/theta_star_path_planner.h"
 #include "ai/primitive/primitive.h"
 #include "ai/navigator/obstacle/obstacle.h"
 #include "ai/navigator/path_planning_navigator/path_planning_navigator.h"
