@@ -6,17 +6,18 @@
 #include "ai/navigator/path_planner/straight_line_path_planner.h"
 #include "ai/primitive/primitive.h"
 #include "ai/navigator/obstacle/obstacle.h"
+#include "ai/navigator/path_planning_navigator/path_planning_navigator.h"
 
 /**
- * This StarNavigator is a simple navigator that will convert the given Intents
+ * This PathPlanningNavigator is a simple navigator that will convert the given Intents
  * into their respective Primitives, without doing any intelligent navigation. It is meant
  * to provide an example of how to implement a navigator and act as a starting point for
  * future navigators to build off of.
  */
-class StarNavigator : public Navigator, public IntentVisitor
+class PathPlanningNavigator : public Navigator, public IntentVisitor
 {
    public:
-    explicit StarNavigator() {
+    explicit PathPlanningNavigator() {
         
     };
 
@@ -24,7 +25,7 @@ class StarNavigator : public Navigator, public IntentVisitor
         const World &world,
         const std::vector<std::unique_ptr<Intent>> &assignedIntents) override;
 
-static double StarNavigator::place_holder_violation_func(const Point &input_point);
+static double place_holder_violation_func(const Point &input_point);
     /**
      * Visits a CatchIntent to perform an operation.
      *
