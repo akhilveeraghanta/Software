@@ -160,6 +160,13 @@ file(GLOB_RECURSE AI_LOGIC_SRC LIST_DIRECTORIES false CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/geom/*.h
         ${CMAKE_CURRENT_SOURCE_DIR}/util/*.h
         ${CMAKE_CURRENT_SOURCE_DIR}/util/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/navigator/*.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/navigator/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/navigator/star_navigator/*.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/navigator/star_navigator/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/navigator/path_planner/*.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/navigator/path_planner/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/primitive/move_primitive.*
         )
 add_executable (ai_logic
         ${AI_LOGIC_SRC}
