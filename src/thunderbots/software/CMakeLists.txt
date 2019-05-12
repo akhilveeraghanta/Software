@@ -883,6 +883,30 @@ if (CATKIN_ENABLE_TESTING)
             ${G3LOG}
             )
 
+    catkin_add_gtest(theta_star_path_planner_test
+            test/ai/navigator/path_planner/theta_star_path_planner.cpp
+            ai/navigator/path_planner/theta_star_path_planner.cpp
+            ai/navigator/obstacle/obstacle.cpp
+            geom/polygon.h
+            geom/polygon.cpp
+            test/test_util/test_util.cpp
+            ai/world/ball.cpp
+            ai/world/field.cpp
+            ai/world/game_state.cpp
+            ai/world/robot.cpp
+            ai/world/team.cpp
+            ai/world/world.cpp
+            geom/util.cpp
+            util/parameter/dynamic_parameters.cpp
+            util/time/duration.cpp
+            util/time/time.cpp
+            util/time/timestamp.cpp
+            )
+    target_link_libraries(theta_star_path_planner_test
+            ${catkin_LIBRARIES}
+            ${G3LOG}
+            )
+
 endif()
 
 ##### ROSTests / Integration Tests #####
