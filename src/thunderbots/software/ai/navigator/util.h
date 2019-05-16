@@ -3,6 +3,8 @@
 #include "geom/point.h"
 #include "geom/util.h"
 
+#include "ai/primitive/move_primitive.h"
+
 /**
  * Calculates the transition speed for the robot between two line segments
  *
@@ -17,4 +19,14 @@
  * of the path
  */
 double calculateTransitionSpeedBetweenSegments(const Point &p1, const Point &p2,
-                                               const Point &p3, double final_speed);
+        const Point &p3, double final_speed);
+/**
+ * Takes a vector of points that represents a path and converts them to a vector of move
+ * primitives
+ *
+ * @param robot_id the robot_id to assign the move primitives and path to
+ * @param points the vector of points representing a path
+ * @return a vector of move primitives converted from a vector of points
+ */
+std::vector<MovePrimitive> convertToMovePrimitives(unsigned int robot_id,
+        const std::vector<Point> &points);
