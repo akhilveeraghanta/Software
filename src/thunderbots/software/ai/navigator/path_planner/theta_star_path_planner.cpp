@@ -182,11 +182,11 @@ std::optional<std::vector<Point>> ThetaStarPathPlanner::findPath(const Point &st
 {
     CellCoordinate src, dest;
     src =
-        std::make_pair((int)((start.y() + field_.length() / 2) / GRID_DIVISION_IN_METERS),
-                       (int)((start.x() + field_.width() / 2) / GRID_DIVISION_IN_METERS));
+        std::make_pair((int)((start.x() + field_.length() / 2) / GRID_DIVISION_IN_METERS),
+                       (int)((start.y() + field_.width() / 2) / GRID_DIVISION_IN_METERS));
     dest = std::make_pair(
-        (int)((destination.y() + field_.length() / 2) / GRID_DIVISION_IN_METERS),
-        (int)((destination.x() + field_.width() / 2) / GRID_DIVISION_IN_METERS));
+        (int)((destination.x() + field_.length() / 2) / GRID_DIVISION_IN_METERS),
+        (int)((destination.y() + field_.width() / 2) / GRID_DIVISION_IN_METERS));
 
     printf("numRows, numCols: (%d, %d)\n", numRows, numCols);
     printf("src: (%d, %d)\n", src.first, src.second);
