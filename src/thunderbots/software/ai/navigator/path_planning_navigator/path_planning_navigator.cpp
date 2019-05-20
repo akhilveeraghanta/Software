@@ -73,7 +73,8 @@ void PathPlanningNavigator::visit(const MoveIntent &move_intent)
     {
         std::cerr << "------------------- move" << std::endl;
         auto move_primtives = convertToMovePrimitives(p->getRobotId(), *path_points);
-        current_primitive   = std::make_unique<MovePrimitive>(move_primtives[1]);
+        auto move   = std::make_unique<MovePrimitive>(move_primtives[1]);
+        current_primitive = std::move(move);
     }
     else
     {
