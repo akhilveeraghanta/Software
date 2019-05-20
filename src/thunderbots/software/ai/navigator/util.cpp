@@ -1,4 +1,5 @@
 #include "ai/navigator/util.h"
+
 #include "ai/primitive/move_primitive.h"
 
 double calculateTransitionSpeedBetweenSegments(const Point &p1, const Point &p2,

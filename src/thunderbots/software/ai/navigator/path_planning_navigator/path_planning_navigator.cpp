@@ -1,8 +1,9 @@
-#include "ai/navigator/util.h"
 #include "ai/navigator/path_planning_navigator/path_planning_navigator.h"
 
+#include "ai/navigator/util.h"
+
 std::vector<std::unique_ptr<Primitive>> PathPlanningNavigator::getAssignedPrimitives(
-        const World &world, const std::vector<std::unique_ptr<Intent>> &assignedIntents)
+    const World &world, const std::vector<std::unique_ptr<Intent>> &assignedIntents)
 {
     this->world = world;
 
@@ -52,27 +53,32 @@ void PathPlanningNavigator::visit(const KickIntent &kick_intent)
     current_primitive = std::move(p);
 }
 
-double PathPlanningNavigator::place_holder_violation_func(const Point &input_point){
+double PathPlanningNavigator::place_holder_violation_func(const Point &input_point)
+{
     return 0.0;
 }
 
 void PathPlanningNavigator::visit(const MoveIntent &move_intent)
 {
     std::vector<Obstacle> no_obstacles = {};
-    auto p            = std::make_unique<MovePrimitive>(move_intent);
-    auto path_planner = std::make_unique<ThetaStarPathPlanner>(this->world.field(), this->world.ball(), no_obstacles);
+    auto p                             = std::make_unique<MovePrimitive>(move_intent);
+    auto path_planner                  = std::make_unique<ThetaStarPathPlanner>(
+        this->world.field(), this->world.ball(), no_obstacles);
 
     auto path_points = path_planner->findPath(
-            this->world.friendlyTeam().getRobotById(p->getRobotId())->position(), p->getDestination());
+        this->world.friendlyTeam().getRobotById(p->getRobotId())->position(),
+        p->getDestination());
 
-    if (path_points){
-        std::cerr<<"------------------- move"<<std::endl;
+    if (path_points)
+    {
+        std::cerr << "------------------- move" << std::endl;
         auto move_primtives = convertToMovePrimitives(p->getRobotId(), *path_points);
-        current_primitive = std::make_unique<MovePrimitive>(move_primtives[1]);
+        current_primitive   = std::make_unique<MovePrimitive>(move_primtives[1]);
     }
-    else{
-        std::cerr<<"------------------- stop"<<std::endl;
-        auto stop = std::make_unique<StopPrimitive>(p->getRobotId(), false);
+    else
+    {
+        std::cerr << "------------------- stop" << std::endl;
+        auto stop         = std::make_unique<StopPrimitive>(p->getRobotId(), false);
         current_primitive = std::move(stop);
     }
 }

@@ -3,11 +3,11 @@
 #include "ai/intent/intent.h"
 #include "ai/intent/visitor/intent_visitor.h"
 #include "ai/navigator/navigator.h"
+#include "ai/navigator/obstacle/obstacle.h"
 #include "ai/navigator/path_planner/straight_line_path_planner.h"
 #include "ai/navigator/path_planner/theta_star_path_planner.h"
-#include "ai/primitive/primitive.h"
-#include "ai/navigator/obstacle/obstacle.h"
 #include "ai/navigator/path_planning_navigator/path_planning_navigator.h"
+#include "ai/primitive/primitive.h"
 
 /**
  * This PathPlanningNavigator is a simple navigator that will convert the given Intents
@@ -18,15 +18,15 @@
 class PathPlanningNavigator : public Navigator, public IntentVisitor
 {
    public:
-    explicit PathPlanningNavigator() {
-        
+    explicit PathPlanningNavigator(){
+
     };
 
     std::vector<std::unique_ptr<Primitive>> getAssignedPrimitives(
         const World &world,
         const std::vector<std::unique_ptr<Intent>> &assignedIntents) override;
 
-static double place_holder_violation_func(const Point &input_point);
+    static double place_holder_violation_func(const Point &input_point);
     /**
      * Visits a CatchIntent to perform an operation.
      *

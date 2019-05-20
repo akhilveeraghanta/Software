@@ -107,9 +107,10 @@ std::vector<Point> ThetaStarPathPlanner::tracePath(CellCoordinate dest)
         CellCoordinate p = Path.top();
         Path.pop();
         path_points.push_back(
-            Point(p.first * GRID_DIVISION_IN_METERS, p.second * GRID_DIVISION_IN_METERS));
-        // Point(p.first * GRID_DIVISION_IN_METERS - field_.length() / 2, p.second *
-        // GRID_DIVISION_IN_METERS - field_.width() / 2));
+            // Point(p.first * GRID_DIVISION_IN_METERS, p.second *
+            // GRID_DIVISION_IN_METERS));
+            Point(p.first * GRID_DIVISION_IN_METERS - field_.length() / 2,
+                  p.second * GRID_DIVISION_IN_METERS - field_.width() / 2));
     }
 
     return path_points;
@@ -180,10 +181,12 @@ std::optional<std::vector<Point>> ThetaStarPathPlanner::findPath(const Point &st
                                                                  const Point &destination)
 {
     CellCoordinate src, dest;
-    src  = std::make_pair((int)(start.x() / GRID_DIVISION_IN_METERS),
-                         (int)(start.y() / GRID_DIVISION_IN_METERS));
-    dest = std::make_pair((int)(destination.x() / GRID_DIVISION_IN_METERS),
-                          (int)(destination.y() / GRID_DIVISION_IN_METERS));
+    src =
+        std::make_pair((int)((start.x() + field_.length() / 2) / GRID_DIVISION_IN_METERS),
+                       (int)((start.y() + field_.width() / 2) / GRID_DIVISION_IN_METERS));
+    dest = std::make_pair(
+        (int)((destination.x() + field_.length() / 2) / GRID_DIVISION_IN_METERS),
+        (int)((destination.y() + field_.width() / 2) / GRID_DIVISION_IN_METERS));
 
     printf("numRows, numCols: (%d, %d)\n", numRows, numCols);
     printf("src: (%d, %d)\n", src.first, src.second);

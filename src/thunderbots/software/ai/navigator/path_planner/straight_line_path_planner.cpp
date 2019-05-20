@@ -13,8 +13,8 @@ std::optional<std::vector<Point>> StraightLinePathPlanner::findPath(
     return std::make_optional<std::vector<Point>>({start, dest});
 }
 
-std::optional<std::vector<Point>> StraightLinePathPlanner::findPath(
-    const Point &start, const Point &dest)
+std::optional<std::vector<Point>> StraightLinePathPlanner::findPath(const Point &start,
+                                                                    const Point &dest)
 {
     return std::make_optional<std::vector<Point>>({start, dest});
 }

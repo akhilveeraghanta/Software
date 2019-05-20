@@ -10,15 +10,14 @@ TEST(TestThetaStarPathPlanner, test_theta_star_path_planner)
 {
     Field field = ::Test::TestUtil::createSSLDivBField();
     Ball ball   = Ball({0, 0}, {0, 0}, Timestamp::fromSeconds(5));
-    Point start{0, 0}, dest{4, 4};
+    Point start{0, 0}, dest{-2, -2};
 
     std::vector<Obstacle> obstacles = std::vector<Obstacle>();
 
     Timestamp current_time = Timestamp::fromSeconds(123);
     Robot robot = Robot(3, Point(2.0, 2.0), Vector(0.0, 0.0), Angle::ofRadians(2.2),
                         AngularVelocity::ofRadians(-0.6), current_time);
-     obstacles.push_back(Obstacle::createRobotObstacleWithScalingParams(robot,
-     .2, .2));
+    obstacles.push_back(Obstacle::createRobotObstacleWithScalingParams(robot, .2, .2));
 
     std::unique_ptr<PathPlanner> planner =
         std::make_unique<ThetaStarPathPlanner>(field, ball, obstacles);
@@ -39,7 +38,7 @@ TEST(TestThetaStarPathPlanner, test_theta_star_path_planner)
     }
     else
     {
-    	printf("No path\n");
+        printf("No path\n");
     }
     //    EXPECT_EQ(path_points[0], start);
     //    EXPECT_EQ(path_points[1], dest);

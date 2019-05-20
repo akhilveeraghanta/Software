@@ -21,6 +21,6 @@ class StraightLinePathPlanner : public PathPlanner
         const Point &start, const Point &dest, const std::vector<Obstacle> &obstacles,
         const ViolationFunction &violation_function) override;
 
-    std::optional<std::vector<Point>> findPath(
-        const Point &start, const Point &dest) override;
+    std::optional<std::vector<Point>> findPath(const Point &start,
+                                               const Point &dest) override;
 };
