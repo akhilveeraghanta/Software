@@ -190,17 +190,17 @@ std::vector<Obstacle> PathPlanningNavigator::getCurrentObstacles(
 {
     std::vector<Obstacle> obstacles;
 
-    // Avoid obstacles specific to this MoveIntent
-    for (auto area : avoid_areas)
-    {
-        auto obstacle_opt = obstacleFromAvoidArea(area);
-        if (obstacle_opt)
-        {
-            obstacles.emplace_back(*obstacle_opt);
-            // draw the avoid area
-            drawObstacle(*obstacle_opt, Util::CanvasMessenger::AVOID_AREA_COLOR);
-        }
-    }
+    //// Avoid obstacles specific to this MoveIntent
+    //for (auto area : avoid_areas)
+    //{
+        //auto obstacle_opt = obstacleFromAvoidArea(area);
+        //if (obstacle_opt)
+        //{
+            //obstacles.emplace_back(*obstacle_opt);
+            //// draw the avoid area
+            //drawObstacle(*obstacle_opt, Util::CanvasMessenger::AVOID_AREA_COLOR);
+        //}
+    //}
 
     for (auto &robot : world.enemyTeam().getAllRobots())
     {

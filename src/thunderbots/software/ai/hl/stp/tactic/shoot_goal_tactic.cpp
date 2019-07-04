@@ -82,7 +82,7 @@ void ShootGoalTactic::shootUntilShotBlocked(KickAction &kick_action,
                                             ChipAction &chip_action,
                                             IntentCoroutine::push_type &yield) const
 {
-    auto shot_target = Evaluation::calcBestShotOnEnemyGoal(field, friendly_team,
+    auto shot_target = Evaluation::calcBestShotOnFriendlyGoal(field, friendly_team,
                                                            enemy_team, ball.position());
     while (shot_target)
     {
@@ -102,7 +102,7 @@ void ShootGoalTactic::shootUntilShotBlocked(KickAction &kick_action,
                                                           shot_target->first, CHIP_DIST));
         }
 
-        shot_target = Evaluation::calcBestShotOnEnemyGoal(field, friendly_team,
+        shot_target = Evaluation::calcBestShotOnFriendlyGoal(field, friendly_team,
                                                           enemy_team, ball.position());
     }
 }
@@ -115,7 +115,7 @@ void ShootGoalTactic::calculateNextIntent(IntentCoroutine::push_type &yield)
 
     do
     {
-        auto shot_target = Evaluation::calcBestShotOnEnemyGoal(
+        auto shot_target = Evaluation::calcBestShotOnFriendlyGoal(
             field, friendly_team, enemy_team, ball.position());
         if (shot_target && shot_target->second > min_net_open_angle)
         {

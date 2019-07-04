@@ -105,7 +105,7 @@ AngularVelocity MotionController::determineAngularVelocityFromPosition(
     double new_robot_angular_velocity_magnitude =
         std::sqrt(std::max<double>(
             (angle_difference.abs() - Angle::ofDegrees(0.2)).toRadians(), 0)) *
-        3;
+        10;
     // Cap our angular velocity at the robot's physical limit
     new_robot_angular_velocity_magnitude = std::min<double>(
         new_robot_angular_velocity_magnitude, max_angular_speed_radians_per_second);

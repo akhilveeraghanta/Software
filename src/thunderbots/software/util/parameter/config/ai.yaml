@@ -242,6 +242,10 @@ GoalieTactic:
       type: "double"
       description: >- 
         Control the final speed of the goalie to be able to intercept shots better
+  experimental:
+      default: false
+      type: "bool"
+      description: Turn on intercept
 RobotCapabilities:
   broken_dribblers:
     default: ""
