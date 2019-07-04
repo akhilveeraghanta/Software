@@ -17,6 +17,11 @@ class GoalieTactic : public Tactic
 
     std::string getName() const override;
 
+    /*
+     * Compute intercept to the ball
+     */
+    Point computeBallIntercept(const Ball& ball, const Robot& robot);
+
     /**
      * Updates the parameters for this GoalieTactic.
      *

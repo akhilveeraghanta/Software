@@ -39,6 +39,33 @@ void GoalieTactic::updateParams(const Ball &ball, const Field &field,
     this->enemy_team    = enemy_team;
 }
 
+Point GoalieTactic::computeBallIntercept(const Ball&ball, const Robot& robot){
+
+    float goalie_max_speed = Util::DynamicParameters::GoalieTactic::goalie_final_speed.value();
+    float a = pow(goalie_max_speed,2) - pow(ball.velocity().len(),2);
+    float b = 2*(robot.position()-ball.position()).dot(ball.velocity());
+    float c = -1*pow((robot.position()-ball.position()).len(),2);
+    
+    float discriminant = b*b - 4*a*c;
+    float time1, time2;
+
+    if (discriminant > 0) {
+        time1 = (-b + sqrt(discriminant)) / (2*a);
+        time2 = (-b - sqrt(discriminant)) / (2*a);
+
+        std::cout << "time taken 1 = " << time1 << std::endl;
+        std::cout << "time taken 2 = " << time2 << std::endl;
+    }
+    
+    else if (discriminant == 0) {
+        std::cout << "Ball isn't moving" << std::endl;
+    }
+    else {
+        std::cout << "No goalie intercept found"  << std::endl;
+    }
+
+}
+
 double GoalieTactic::calculateRobotCost(const Robot &robot, const World &world)
 {
     // Strongly prefer the robot assigned to be the goalie.
@@ -86,6 +113,8 @@ void GoalieTactic::calculateNextIntent(IntentCoroutine::push_type &yield)
 
         auto [intersection1, intersection2] =
             raySegmentIntersection(ball_ray, full_goal_segment);
+
+        auto test = computeBallIntercept(ball, *robot);
 
         // Case 1
         if (intersection1.has_value() &&

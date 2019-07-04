@@ -33,6 +33,6 @@ void MoveTactic::calculateNextIntent(IntentCoroutine::push_type &yield)
     do
     {
         yield(move_action.updateStateAndGetNextIntent(*robot, destination,
-                                                      final_orientation, final_speed));
+                                                      final_orientation, final_speed, false, false, AUTOKICK));
     } while (!move_action.done());
 }
