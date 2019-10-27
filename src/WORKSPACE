@@ -76,11 +76,11 @@ new_local_repository(
     path = "external/qt",  # This directory is symlinked in the setup script
 )
 
+# TODO create thunderbots repo and maybe use git_repository
 http_archive(
     name = "cubemx",
     build_file = "@//external:cubemx.BUILD",
-    sha256 = "ecedef2f6f1a07b290259f9c10b3270bb8cc089a32b022931955ce590dc66527",
-    # TODO create thunderbots repo and maybe use git_repository
+    sha256 = "6bb7250e703be4b3c447accf3a7e3ddf6d244ce907d5acd35ed04a90a1a7b74a",
     urls = ["https://media.githubusercontent.com/media/akhilveeraghanta/cubemx/master/en.stm32cubemx_v5.4.0.zip",]
 )
 
