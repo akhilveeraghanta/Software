@@ -77,6 +77,14 @@ new_local_repository(
 )
 
 http_archive(
+    name = "cubemx",
+    build_file = "@//external:cubemx.BUILD",
+    sha256 = "ecedef2f6f1a07b290259f9c10b3270bb8cc089a32b022931955ce590dc66527",
+    # TODO create thunderbots repo and maybe use git_repository
+    urls = ["https://media.githubusercontent.com/media/akhilveeraghanta/cubemx/master/en.stm32cubemx_v5.4.0.zip",]
+)
+
+http_archive(
     name = "llvm_clang",
     build_file = "@//external:clang.BUILD",
     sha256 = "a23b082b30c128c9831dbdd96edad26b43f56624d0ad0ea9edec506f5385038d",
