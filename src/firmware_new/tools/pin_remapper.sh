@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # This script allows the user to automatically rerun the pinmapper and generate
-# code using STM32CubeMX
-#
+# code using STM32CubeMX binary
+# 
 
 # --- begin runfiles.bash initialization ---
 # Copy-pasted from Bazel's Bash runfiles library (tools/bash/runfiles/runfiles.bash).
@@ -41,11 +41,10 @@ THIS_SCRIPT_FILENAME=$(basename "$0")
 WORKSPACE_DIR="$CURR_DIR/../../"
 
 # Enable bazel runtime debugging
-#RUNFILES_LIB_DEBUG=1
+# RUNFILES_LIB_DEBUG=1
 
 # Load everything we need from bazel
-path_to_arm_none_eabi_gdb=$(rlocation "__main__/external/arm_developer_gcc/bin/arm-none-eabi-gdb")
-path_to_frankie_v1_elf=$(rlocation "__main__/firmware_new/boards/frankie_v1/frankie_v1_main")
+path_to_cubemx_binary=$(rlocation "__main__/external/cubemx/")
 
 # ADD NEW DEPENDENCIES HERE: it's used for error checking, you'll thank yourself later
 EXPECTED_NUM_OF_BAZEL_DEPENDENCIES=2

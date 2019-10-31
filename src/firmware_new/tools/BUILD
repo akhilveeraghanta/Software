@@ -11,11 +11,8 @@ sh_binary(
 
 sh_binary(
     name = "remapper",
-    srcs = ["remapper.sh"],
-    data = [
-        "//firmware_new/boards/frankie_v1:frankie_v1_main",
-    ],
+    srcs = ["pin_remapper.sh"],
     restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = ["@bazel_tools//tools/bash/runfiles",
-            "@cubemx//:runcubemx"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+    data = ["@cubemx//:STM32CubeMX"],
 )
