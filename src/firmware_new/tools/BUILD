@@ -9,10 +9,10 @@ sh_binary(
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
-sh_binary(
-    name = "remapper",
-    srcs = ["pin_remapper.sh"],
+py_binary(
+    name = "regen",
+    srcs = ["regen.py"],
     restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = ["@bazel_tools//tools/bash/runfiles"],
-    data = ["@cubemx//:STM32CubeMX"],
+    deps = ["@rules_python//python/runfiles"],
+    data = ["@cubemx//:STM32CubeMX",],
 )

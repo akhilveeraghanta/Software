@@ -1,11 +1,11 @@
-"""
-Generate a script that can be used by STM32CubeMX command line interface. And
-generate STM32CubeMX code accordingy.
+#!/usr/bin/env python3
+"""Runs STM32CubeMX to regenerate code code given the config
 """
 import sys
 import os
 import subprocess
 import argparse
+from rules_python.python.runfiles import runfiles
 
 CUBE_SCRIPT = '''\
 ###############################################################################
@@ -14,6 +14,7 @@ CUBE_SCRIPT = '''\
 # Note: The paths in this files are relative to the where the STM32CubeMX is
 #       invoked, rather than relative to where this .script file is.
 ###############################################################################
+# TODO give credit for this script
 # Load the project-specific config file (.ioc)
 config load {ioc}
 
@@ -28,14 +29,20 @@ exit
 '''
 
 def generate_cubemx_code(board, ioc, codegen_dir, cubemx):
-    """
-    Generate STM32CubeMX code
+    """Generate STM32CubeMX code by invoking the binary
 
     @param board: Name of the board
     @param ioc: Path to .ioc file
     @param codegen_dir: Directory in which STM32CubeMX code is to be generated
     @param cubemx: Path to STM32CubeMX binary
     """
+	# update environment variables
+	r = runfiles.Create()
+	env = {}
+	env.update(r.EnvVars())
+	
+	p = subprocess.Popen([r.Rlocation("path/to/binary")], env, ...)
+
     # Generate output folder if they don't exist already
     cube_script_dir = os.path.join(codegen_dir, 'auto_generated')
     if not os.path.exists(cube_script_dir):
