@@ -5,7 +5,7 @@ import sys
 import os
 import subprocess
 import argparse
-from rules_python.python.runfiles import runfiles
+# from rules_python.python.runfiles import runfiles
 
 CUBE_SCRIPT = '''\
 ###############################################################################
@@ -37,11 +37,11 @@ def generate_cubemx_code(board, ioc, codegen_dir, cubemx):
     @param cubemx: Path to STM32CubeMX binary
     """
 	# update environment variables
-	r = runfiles.Create()
-	env = {}
-	env.update(r.EnvVars())
+	# r = runfiles.Create()
+	# env = {}
+	# env.update(r.EnvVars())
 	
-	p = subprocess.Popen([r.Rlocation("path/to/binary")], env, ...)
+	# p = subprocess.Popen([r.Rlocation("path/to/binary")], env, ...)
 
     # Generate output folder if they don't exist already
     cube_script_dir = os.path.join(codegen_dir, 'auto_generated')
