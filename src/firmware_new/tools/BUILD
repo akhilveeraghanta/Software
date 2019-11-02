@@ -9,13 +9,41 @@ sh_binary(
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 
-sh_binary(
-    name = "remapper",
-    srcs = ["remapper.sh"],
-    data = [
-        "//firmware_new/boards/frankie_v1:frankie_v1_main",
+
+# Tool to help generate the code frmo the ioc file
+#
+# The following genrule/binary chain will perform the following:
+#   [our code] -> [cubemx folder structure] -> [cubemx] -> [generated_code] -> [our code]
+
+# grab the files we need from our src/headers and
+# create Src Hdrs
+filegroup(
+    name = "firmware_srcs",
+    srcs = glob(["firmware_new/boards/frankie_v1/*.c",]),
+)
+
+filegroup(
+    name = "firmware_hdrs",
+    srcs = glob(["firmware_new/boards/frankie_v1/*.h",]),
+)
+
+genrule(
+    name = "cubemx_folder_structure_generate",
+    srcs = [
+        ":firmware_srcs",
+        ":firmware_hdrs",
     ],
+    outs = [
+    ],
+    cmd = "python3 firmware_new/tools/regen.py\
+           $(srcs)",
+    visibility = ["//visibility:private"],
+)
+
+py_binary(
+    name = "regen",
+    srcs = ["regen.py"],
     restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = ["@bazel_tools//tools/bash/runfiles",
-            "@cubemx//:runcubemx"],
+    deps = ["@rules_python//python/runfiles"],
+    data = ["@cubemx//:STM32CubeMX",],
 )
