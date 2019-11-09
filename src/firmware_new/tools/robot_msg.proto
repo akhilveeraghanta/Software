@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package tools;
+
+// this is a test RobotMsg used for debugging
+message RobotMsg {
+
+  enum SpeedLevel {
+    SLOW = 0;
+    NORMAL = 1;
+    SPEEDY = 2;
+  }
+
+  required string name = 1;
+  required int32 robotid = 2;
+  optional bool on = 3;
+  optional SpeedLevel speed = 4 [default = SPEEDY];
+
+}

@@ -30,6 +30,16 @@ proto_library(
     deps = [],
 )
 
+# protobuf used to communicate with our robots
+proto_library(
+    name = "robot_proto",
+    srcs = [
+        "robot_primitive_array.proto",
+        "robot_vision_packet.proto",
+    ],
+    deps = [],
+)
+
 cc_proto_library(
     name = "ssl_cc_proto",
     deps = [":ssl_proto"],
@@ -38,4 +48,9 @@ cc_proto_library(
 cc_proto_library(
     name = "grsim_cc_proto",
     deps = [":grsim_proto"],
+)
+
+cc_proto_library(
+    name = "robot_cc_proto",
+    deps = [":robot_proto"],
 )

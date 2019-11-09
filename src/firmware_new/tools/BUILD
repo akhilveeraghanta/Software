@@ -14,3 +14,21 @@ sh_binary(
     srcs = ["cubemx_regen.sh"],
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
+
+cc_binary(
+    name = "send_proto_over_serial",
+    srcs = ["send_proto_over_serial.cpp"],
+    deps = ["//firmware_new/tools:robot_cc_proto"],
+)
+
+# protobuf used to communicate with our robots
+proto_library(
+    name = "robot_proto",
+    srcs = ["robot_msg.proto",],
+    deps = [],
+)
+
+cc_proto_library(
+    name = "robot_cc_proto",
+    deps = [":robot_proto"],
+)
