@@ -171,12 +171,7 @@ int main(void)
       /*uart_state = AWAITING_TX_COMPLETE_INTERRUPT;*/
       /*[> USER CODE END WHILE <]*/
       /*while (uart_state != RECIEVED_TX_COMPLETE_INTERRUPT);*/
-
-      /* USER CODE END 2 */
-
-      /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+ }
 }
 
 /**
@@ -385,7 +380,7 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Stream6_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 1);
+  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
   /* DMA1_Stream7_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 0, 0);
@@ -456,17 +451,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     uint16_t current_counter = current_sounter;
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-    uint16_t current_sounter = 0;
-    if (huart->Instance == USART3)
-    {
-        uart_state = RECIEVED_TX_COMPLETE_INTERRUPT;
-        current_sounter = __HAL_DMA_GET_COUNTER(huart->hdmarx);
-    }
-    uint16_t current_counter = current_sounter;
-}
-
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
         Error_Handler();
@@ -486,6 +470,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+    return;
 
   /* USER CODE END Error_Handler_Debug */
 }
