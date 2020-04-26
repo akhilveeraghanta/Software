@@ -49,13 +49,13 @@ static void blocking_udp_multicast_loop(void *arg)
     // https://github.com/UBC-Thunderbots/Software/issues/1190
     err_t err;
 
-    // create two new UDP connections on the heap
-    // NOTE: we need two seperate UDP sockets as we will be
-    // receiving multicast but sending unicast packets to avoid
-    // network congestion (peer robots don't need to know the status
-    // of other robots)
-    struct netconn *recvconn = netconn_new(NETCONN_UDP_IPV6);
-    struct netconn *sendconn = netconn_new(NETCONN_UDP_IPV6);
+    /*// create two new UDP connections on the heap*/
+    /*// NOTE: we need two seperate UDP sockets as we will be*/
+    /*// receiving multicast but sending unicast packets to avoid*/
+    /*// network congestion (peer robots don't need to know the status*/
+    /*// of other robots)*/
+    /*struct netconn *recvconn = netconn_new(netconn_udp_ipv6);*/
+    /*struct netconn *sendconn = netconn_new(netconn_udp_ipv6);*/
 
     // Bind the socket to the multicast address and port
     // we then use that connection profile to join the specified
@@ -66,8 +66,7 @@ static void blocking_udp_multicast_loop(void *arg)
     //
     // This will remain the same regardless of communicating over ethernet
     // or WiFi because both of those media use the ETH interface
-    netconn_bind(recvconn, &config->multicast_address, config->multicast_port);
-    netconn_bind(sendconn, IP6_ADDR_ANY, config->send_port);
+    /*netconn_bind(recvconn, &config->multicast_address, config->multicast_port);*/
     netconn_join_leave_group(recvconn, &config->multicast_address, NULL, NETCONN_JOIN);
 
     // this buffer is used to hold serialized proto
