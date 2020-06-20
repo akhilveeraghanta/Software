@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
         sender->sendProto(control_req);
 
         // 4000 hz test
-        std::this_thread::sleep_for(std::chrono::nanoseconds(250000));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(250000000));
     }
 
     google::protobuf::ShutdownProtobufLibrary();

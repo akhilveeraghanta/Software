@@ -38,7 +38,62 @@ struct multicast_config
     unsigned send_port;
 } typedef multicast_config_t;
 
-static void blocking_udp_multicast_loop(void *arg)
+static void blocking_udp_multicast_send_loop(void *arg)
+{
+    multicast_config_t *config = (multicast_config_t *)arg;
+    struct netbuf *rx_buf      = NULL;
+    struct netbuf *tx_buf      = NULL;
+    int msg_count              = 0;
+
+    // TODO proper err handling, for now all errs are ignored
+    // https://github.com/UBC-Thunderbots/Software/issues/1190
+    err_t err;
+
+    // create two new UDP connections on the heap
+    // NOTE: we need two seperate UDP sockets as we will be
+    // receiving multicast but sending unicast packets to avoid
+    // network congestion (peer robots don't need to know the status
+    // of other robots)
+    struct netconn *sendconn = netconn_new(NETCONN_UDP_IPV6);
+
+    // Bind the socket to the multicast address and port
+    // we then use that connection profile to join the specified
+    // multicast group.
+    //
+    // For the send socket, we use IP6_ADDR_ANY
+    // which will default to the ethernet interface on the STM32H7
+    //
+    // This will remain the same regardless of communicating over ethernet
+    // or WiFi because both of those media use the ETH interface
+    netconn_bind(sendconn, IP6_ADDR_ANY, config->send_port);
+
+    // this buffer is used to hold serialized proto
+    uint8_t buffer[RobotAck_size];
+
+    while (1)
+    {
+
+
+        osDelay(100);
+            tx_buf = netbuf_new();
+            netbuf_alloc(tx_buf, RobotAck_size);
+
+                // update proto
+                ack.msg_count = msg_count++;
+
+                // serialize proto
+                pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
+                pb_encode(&stream, RobotAck_fields, &ack);
+
+                // package payload and send over udp
+                tx_buf->p->payload = buffer;
+                netconn_sendto(sendconn, tx_buf, &config->multicast_address,
+                               config->send_port);
+            netbuf_delete(tx_buf);
+    }
+}
+
+static void blocking_udp_multicast_recv_loop(void *arg)
 {
     multicast_config_t *config = (multicast_config_t *)arg;
     struct netbuf *rx_buf      = NULL;
@@ -55,7 +110,6 @@ static void blocking_udp_multicast_loop(void *arg)
     // network congestion (peer robots don't need to know the status
     // of other robots)
     struct netconn *recvconn = netconn_new(NETCONN_UDP_IPV6);
-    struct netconn *sendconn = netconn_new(NETCONN_UDP_IPV6);
 
     // Bind the socket to the multicast address and port
     // we then use that connection profile to join the specified
@@ -67,7 +121,6 @@ static void blocking_udp_multicast_loop(void *arg)
     // This will remain the same regardless of communicating over ethernet
     // or WiFi because both of those media use the ETH interface
     netconn_bind(recvconn, &config->multicast_address, config->multicast_port);
-    netconn_bind(sendconn, IP6_ADDR_ANY, config->send_port);
     netconn_join_leave_group(recvconn, &config->multicast_address, NULL, NETCONN_JOIN);
 
     // this buffer is used to hold serialized proto
@@ -79,28 +132,13 @@ static void blocking_udp_multicast_loop(void *arg)
 
         if (err == ERR_OK)
         {
-            tx_buf = netbuf_new();
-            netbuf_alloc(tx_buf, RobotAck_size);
-
             // Create a stream that reads from the buffer
             pb_istream_t in_stream =
                 pb_istream_from_buffer((uint8_t *)rx_buf->p->payload, rx_buf->p->tot_len);
 
             if (pb_decode(&in_stream, ControlMsg_fields, &control))
             {
-                // update proto
-                ack.msg_count = msg_count++;
-
-                // serialize proto
-                pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
-                pb_encode(&stream, RobotAck_fields, &ack);
-
-                // package payload and send over udp
-                tx_buf->p->payload = buffer;
-                netconn_sendto(sendconn, tx_buf, (const ip_addr_t *)&(rx_buf->addr),
-                               config->send_port);
             }
-            netbuf_delete(tx_buf);
         }
         netbuf_delete(rx_buf);
     }
@@ -118,6 +156,8 @@ void udp_multicast_init(const char *multicast_address, unsigned multicast_port,
 
     ip6addr_aton(multicast_address, &config->multicast_address);
 
-    sys_thread_new("multicast_thread", blocking_udp_multicast_loop, config, 1024,
+    sys_thread_new("multicast_thread", blocking_udp_multicast_send_loop, config, 1024,
+                   (osPriority_t)osPriorityNormal);
+    sys_thread_new("multicast_thread", blocking_udp_multicast_recv_loop, config, 1024,
                    (osPriority_t)osPriorityNormal);
 }
