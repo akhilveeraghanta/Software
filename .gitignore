@@ -107,21 +107,24 @@ Makefile
 *.out
 *.app
 
-#vim
+# vim
 *~
 
 #bazel
 **/bazel-*
 
-#cscope
+# cscope
 cscope*
 
 # Explicitly un-ignore the .bazelproject file
 !/src/.bazelproject
 
-#kcachegrind
+# kcachegrind
 src/callgrind*
 src/core*
 
 # CubeMX
 *.mxproject
+
+# Network Profile
+./src/.tbots_network_profile
