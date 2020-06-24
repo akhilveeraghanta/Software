@@ -33,7 +33,7 @@ do
             ;;
         *)
             echo "> Selected interface $INTERFACE ($REPLY)"
-            echo "TBOTS_WIFI_INTERFACE=$INTERFACE" >> ~/.profile
+            echo "export TBOTS_WIFI_INTERFACE=$INTERFACE" >> ~/.profile
             echo "> WiFi Interface Configured"
             break
             ;;
@@ -52,7 +52,7 @@ do
             ;;
         *)
             echo "> Selected interface $INTERFACE ($REPLY)"
-            echo "TBOTS_ETHERNET_INTERFACE=$INTERFACE" >> ~/.profile
+            echo "export TBOTS_ETHERNET_INTERFACE=$INTERFACE" >> ~/.profile
             echo "> Ethernet Interface Configured"
             break
             ;;
@@ -61,3 +61,5 @@ done
 
 echo "Loading Configuration..."
 source ~/.profile && echo "Done"
+
+echo "Be sure to cleanup duplicate entries in ~/.profile if this script has been run more than once"

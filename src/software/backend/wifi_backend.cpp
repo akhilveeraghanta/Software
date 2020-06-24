@@ -2,6 +2,7 @@
 
 #include "shared/constants.h"
 #include "software/constants.h"
+#include "software/networking/configured_network_interface.h"
 #include "software/parameter/dynamic_parameters.h"
 #include "software/proto/message_translation/tbots_protobuf.h"
 #include "software/util/design_patterns/generic_factory.h"
@@ -17,12 +18,10 @@ WifiBackend::WifiBackend()
                     Util::DynamicParameters->getAIControlConfig()->getRefboxConfig(),
                     Util::DynamicParameters->getCameraConfig())
 {
-    std::string network_interface =
-        Util::DynamicParameters->getNetworkConfig()->NetworkInterface()->value();
     int channel = Util::DynamicParameters->getNetworkConfig()->Channel()->value();
 
     // connect to current channel
-    joinMulticastChannel(channel, network_interface);
+    joinMulticastChannel(channel, CONFIGURED_NETWORK_INTERFACE);
 }
 
 void WifiBackend::onValueReceived(ConstPrimitiveVectorPtr primitives_ptr)

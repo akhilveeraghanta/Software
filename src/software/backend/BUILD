@@ -48,7 +48,10 @@ cc_library(
 cc_library(
     name = "wifi_backend",
     srcs = ["wifi_backend.cpp"],
-    hdrs = ["wifi_backend.h"],
+    hdrs = [
+        "configured_network_interface.h",
+        "wifi_backend.h",
+    ],
     deps = [
         ":backend",
         "//shared:constants",
