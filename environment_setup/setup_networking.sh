@@ -33,7 +33,7 @@ do
             ;;
         *)
             echo "> Selected interface $INTERFACE ($REPLY)"
-            echo "TBOTS_WIFI_INTERFACE=$INTERFACE" >> ../src/.tbots_network_profile
+            echo "TBOTS_WIFI_INTERFACE=$INTERFACE" >> ~/.profile
             echo "> WiFi Interface Configured"
             break
             ;;
@@ -52,7 +52,7 @@ do
             ;;
         *)
             echo "> Selected interface $INTERFACE ($REPLY)"
-            echo "TBOTS_ETHERNET_INTERFACE=$INTERFACE" >> ../src/.tbots_network_profile
+            echo "TBOTS_ETHERNET_INTERFACE=$INTERFACE" >> ~/.profile
             echo "> Ethernet Interface Configured"
             break
             ;;

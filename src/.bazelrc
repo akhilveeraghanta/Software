@@ -29,3 +29,8 @@ build --disk_cache=~/.cache/thunderbots_bazel_disk_cache
 # to find the X-Window system and create windows
 build --test_env=XDG_RUNTIME_DIR
 build --test_env=DISPLAY
+
+# These environment variables are configured through environment_setup/setup_networking.sh
+# and are used by software/networking
+build --action_env=TBOTS_WIFI_INTERFACE
+build --action_env=TBOTS_ETHERNET_INTERFACE

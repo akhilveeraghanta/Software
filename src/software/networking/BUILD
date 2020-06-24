@@ -5,9 +5,17 @@ genrule(
         outs = ["configured_network_interface.h"],
         cmd = "\n".join([
             # we load the TBOTS_WIFI_INTERFACE env variable that is configured through `setup_networking.sh`
-            "echo env[\'TBOTS_WIFI_INTERFACE\']".
+            # and bring that into a header as a const string. networking libraries that need the configued
+            # interface will include this header and will have access to the configured string
+            "echo \'#pragma once const std::string CONFIGURED_NETIF = \"\' > pre_out.h",
+            "echo $$TBOTS_WIFI_INTERFACE >> pre_out.h",
+            "echo \'\";\' >> pre_out.h",
+
+            # we truncate the new line characters, because its easier to 
+            "tr -d \'\n\' < pre_out.h >> out.h",
             "mv out.h $@",
         ]),
+        local = True,
         visibility = ["//visibility:private"],
 )
 
@@ -19,7 +27,6 @@ cc_library(
     ],
     visibility = ["//visibility:private"],
     deps = [
-        ":configured_network_interface",
         "//software/logger",
         "@boost//:asio",
     ],
@@ -32,7 +39,6 @@ cc_library(
         "threaded_proto_multicast_listener.tpp",
     ],
     deps = [
-        ":configured_network_interface",
         ":proto_multicast_listener",
         "@boost//:asio",
     ],
@@ -43,10 +49,10 @@ cc_library(
     hdrs = [
         "proto_multicast_sender.h",
         "proto_multicast_sender.tpp",
+        "configured_network_interface.h",
     ],
     visibility = ["//visibility:private"],
     deps = [
-        ":configured_network_interface",
         "//software/logger",
         "@boost//:asio",
     ],
@@ -57,9 +63,9 @@ cc_library(
     hdrs = [
         "threaded_proto_multicast_sender.h",
         "threaded_proto_multicast_sender.tpp",
+        "configured_network_interface.h",
     ],
     deps = [
-        ":configured_network_interface",
         ":proto_multicast_sender",
         "@boost//:asio",
     ],

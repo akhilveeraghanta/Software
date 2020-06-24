@@ -125,6 +125,3 @@ src/core*
 
 # CubeMX
 *.mxproject
-
-# Network Profile
-./src/.tbots_network_profile
