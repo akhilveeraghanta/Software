@@ -49,7 +49,6 @@ cc_library(
     name = "wifi_backend",
     srcs = ["wifi_backend.cpp"],
     hdrs = [
-        "configured_network_interface.h",
         "wifi_backend.h",
     ],
     deps = [
@@ -57,6 +56,7 @@ cc_library(
         "//shared:constants",
         "//software:constants",
         "//software/backend/input/network/networking:network_client",
+        "//software/networking:configured_network_interface",
         "//software/networking:threaded_proto_multicast_listener",
         "//software/networking:threaded_proto_multicast_sender",
         "//software/proto/message_translation:tbots_protobuf",
