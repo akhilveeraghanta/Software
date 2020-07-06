@@ -100,8 +100,15 @@ int main(int argc, char **argv)
         std::shared_ptr<const AIControlConfig> ai_control_config =
             DynamicParameters->getAIControlConfig();
 
+        // TODO remove this when we move to non-generic factories for backends
+        // https://github.com/UBC-Thunderbots/Software/issues/1452
+        MutableDynamicParameters->getMutableNetworkConfig()
+            ->mutableNetworkInterface()
+            ->setValue(args.network_interface_name);
+
         std::shared_ptr<Backend> backend =
             GenericFactory<std::string, Backend>::create(args.backend_name);
+
         auto ai = std::make_shared<AIWrapper>(ai_config, ai_control_config);
         std::shared_ptr<ThreadedFullSystemGUI> visualizer;
 
