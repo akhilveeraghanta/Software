@@ -1,9 +1,21 @@
+<<<<<<< HEAD
 SUPPORTED_TYPES = [
     "bool",
     "int",
     "unsigned",
     "double",
     "std::string",
+=======
+INCLUDE_KEY = "include"
+PARAMETER_KEY = "parameters"
+
+SUPPORTED_TYPES = [
+    "bool",
+    "int",
+    "uint",
+    "float",
+    "string",
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
     "factory",
     "enum",
 ]
@@ -59,9 +71,15 @@ PARAM_DEF_SCHEMA = {
                     "type": "object",
                     "properties": {
                         "name": {"type": "string"},
+<<<<<<< HEAD
                         "min": {"type": "integer"},
                         "max": {"type": "integer"},
                         "value": {"type": "integer"},
+=======
+                        "min": {"type": "integer", "minimum": 0},
+                        "max": {"type": "integer", "minimum": 0},
+                        "value": {"type": "integer", "minimum": 0},
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                         "description": {"type": "string"},
                     },
                     "required": ["name", "min", "max", "value", "description"],

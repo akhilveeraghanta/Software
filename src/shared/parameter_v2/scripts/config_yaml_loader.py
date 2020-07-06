@@ -6,10 +6,22 @@ import yaml
 from colorama import Fore, init
 import jsonschema
 
+<<<<<<< HEAD
+=======
+from typing import List
+
+YamlPathList = List[str]
+
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
 from dynamic_parameter_schema import (
     INCLUDE_DEF_SCHEMA,
     PARAM_DEF_SCHEMA,
     SUPPORTED_TYPES,
+<<<<<<< HEAD
+=======
+    INCLUDE_KEY,
+    PARAMETER_KEY,
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
 )
 
 #######################################################################
@@ -19,10 +31,18 @@ from dynamic_parameter_schema import (
 
 class ConfigYamlLoader(object):
     @staticmethod
+<<<<<<< HEAD
     def get_config_metadata(yaml_paths: list):
         """Loads the yamls in the root config directory and verifies that the
         requested configuration is valid. Then returns config_metadata dict
         with a specified format capturing all the requested params and configs.
+=======
+    def get_config_metadata(yaml_paths: YamlPathList) -> dict:
+        """Loads the yamls in the YamlPathList (a list of absolute paths to yamls)
+        and verifies that the requested configuration is valid. Then returns
+        config_metadata dict with a specified format capturing all the requested
+        params and configs.
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
 
         Example config directory:
         .
@@ -41,10 +61,21 @@ class ConfigYamlLoader(object):
 
         A valid config directory maintains the following properties:
 
+<<<<<<< HEAD
+=======
+        - All yaml file names are unique
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
         - All yamls are properly formed (i.e proper syntax, YAML Version 1.2)
         - All parameter definitions abide by the dynamic parameter schema
         - All include statements do NOT cause cycles in configs
 
+<<<<<<< HEAD
+=======
+        :raises ConfigYamlMalformed: when the yaml is malformed
+        :raises ConfigSchemaViolation: When the shema is violated
+        :raises ConfigYamlCycleDetected: When a cycle is detected in the incldues
+
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
         :param yaml_paths: the path to all the config yamls
         :type yaml_paths: list of str
 
@@ -75,7 +106,11 @@ class ConfigYamlLoader(object):
         # load yaml into config_metadata
         config_metadata = ConfigYamlLoader.__load_yaml_into_dict(yaml_paths)
 
+<<<<<<< HEAD
         # validate schema
+=======
+        # validate correct format with schema
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
         ConfigYamlLoader.__validate_config_metadata(config_metadata)
 
         # detect cycles
@@ -85,12 +120,20 @@ class ConfigYamlLoader(object):
         return config_metadata
 
     @staticmethod
+<<<<<<< HEAD
     def __load_yaml_into_dict(yaml_paths: list):
+=======
+    def __load_yaml_into_dict(yaml_paths: YamlPathList) -> dict:
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
         """Loads the yamls into an dictionary. Any errors while in the yaml
         syntax will raise to the main thread. We also adjust how the dictionary
         is stored for easier access later.
 
+<<<<<<< HEAD
         :raises: ConfigYamlMalformed
+=======
+        :raises ConfigYamlMalformed: when the yaml is malformed
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
         :param yaml_paths: the path to all the config yamls
         :type yaml_paths: list of str
         :returns: config_medata dict representing the data to generate
@@ -114,23 +157,43 @@ class ConfigYamlLoader(object):
                         # include only in file
                         if isinstance(raw_config_metadata[tail][0], dict):
                             raw_config_metadata[tail] = {
+<<<<<<< HEAD
                                 "include": raw_config_metadata[tail][0]["include"]
+=======
+                                INCLUDE_KEY: raw_config_metadata[tail][0][INCLUDE_KEY]
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                             }
 
                         # parameter definitions only in file
                         if isinstance(raw_config_metadata[tail][0], list):
                             raw_config_metadata[tail] = {
+<<<<<<< HEAD
                                 "parameters": raw_config_metadata[tail][0]
+=======
+                                PARAMETER_KEY: raw_config_metadata[tail][0]
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                             }
 
                     elif len(raw_config_metadata[tail]) == 2:
 
                         # include and param definition in file
                         raw_config_metadata[tail] = {
+<<<<<<< HEAD
                             "include": raw_config_metadata[tail][0]["include"],
                             "parameters": raw_config_metadata[tail][1],
                         }
 
+=======
+                            INCLUDE_KEY: raw_config_metadata[tail][0][INCLUDE_KEY],
+                            PARAMETER_KEY: raw_config_metadata[tail][1],
+                        }
+
+                    else:
+                        raise ConfigYamlMalformed(
+                            "More than two yaml documents in {}".format(tail)
+                        )
+
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                 except yaml.YAMLError as ymle:
                     raise ConfigYamlMalformed(
                         "Check malformed {} \n {}".format(tail, ymle)
@@ -144,8 +207,13 @@ class ConfigYamlLoader(object):
         dynamic_parameter_schemas and then checks for duplicate includes
         and duplicate parameters in the same config.
 
+<<<<<<< HEAD
         :raises: ConfigYamlMalformed
         :raises: ConfigSchemaViolation
+=======
+        :raises ConfigYamlMalformed: When the yaml is malformed
+        :raises ConfigSchemaViolation: When the shema is violated
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
         :param config_metadata: Metadata describing params and config includes
         :type config_metadata: dict
 
@@ -153,24 +221,40 @@ class ConfigYamlLoader(object):
 
         for config_file, metadata in config_metadata.items():
 
+<<<<<<< HEAD
             if "include" in metadata:
 
                 # check schema
                 try:
                     jsonschema.validate(metadata["include"], INCLUDE_DEF_SCHEMA)
+=======
+            if INCLUDE_KEY in metadata:
+
+                # validate correct format with schema
+                try:
+                    jsonschema.validate(metadata[INCLUDE_KEY], INCLUDE_DEF_SCHEMA)
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                 except jsonschema.exceptions.ValidationError as jsval:
                     raise ConfigYamlSchemaViolation(
                         "Schema violation in {}: {}".format(config_file, jsval)
                     ) from None
 
                 # check duplicates
+<<<<<<< HEAD
                 if len(metadata["include"]) > len(set(metadata["include"])):
+=======
+                if len(metadata[INCLUDE_KEY]) > len(set(metadata[INCLUDE_KEY])):
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                     raise ConfigYamlMalformed(
                         "Duplicate include detected in {}".format(config_file)
                     )
 
                 # check that included yaml is defined elsewhere
+<<<<<<< HEAD
                 for included_yaml in metadata["include"]:
+=======
+                for included_yaml in metadata[INCLUDE_KEY]:
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                     if included_yaml not in config_metadata.keys():
                         raise ConfigYamlMalformed(
                             "definition could not be found for {} in {}".format(
@@ -178,11 +262,19 @@ class ConfigYamlLoader(object):
                             )
                         )
 
+<<<<<<< HEAD
             if "parameters" in metadata:
 
                 # check schema
                 try:
                     jsonschema.validate(metadata["parameters"], PARAM_DEF_SCHEMA)
+=======
+            if PARAMETER_KEY in metadata:
+
+                # validate correct format with schema
+                try:
+                    jsonschema.validate(metadata[PARAMETER_KEY], PARAM_DEF_SCHEMA)
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                 except jsonschema.exceptions.ValidationError as jsval:
                     raise ConfigYamlSchemaViolation(
                         "Schema violation in {}: {}".format(config_file, jsval)
@@ -194,7 +286,11 @@ class ConfigYamlLoader(object):
                 # exists in the parameter dictionary
                 param_names = [
                     list(param_entry.values())[0]["name"]
+<<<<<<< HEAD
                     for param_entry in metadata["parameters"]
+=======
+                    for param_entry in metadata[PARAMETER_KEY]
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                 ]
 
                 # check duplicates
@@ -209,7 +305,11 @@ class ConfigYamlLoader(object):
                 # can't validate that we would like to check
                 requested_types = [
                     key[0]
+<<<<<<< HEAD
                     for key in [list(entry.keys()) for entry in metadata["parameters"]]
+=======
+                    for key in [list(entry.keys()) for entry in metadata[PARAMETER_KEY]]
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                 ]
 
                 # check if type requested is supported
@@ -226,7 +326,11 @@ class ConfigYamlLoader(object):
         """Creates a DiGraph from all the included configs and checks if there
         are cycles. Raises to the main thread if a cycle is detected
 
+<<<<<<< HEAD
         :raises: ConfigYamlCycleDetected
+=======
+        :raises ConfigYamlCycleDetected: When a cycle is detected in the incldues
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
         :param config_metadata: Metadata describing params and config includes
         :type config_metadata: dict
 
@@ -234,8 +338,13 @@ class ConfigYamlLoader(object):
         edges = []
 
         for config, metadata in config_metadata.items():
+<<<<<<< HEAD
             if "include" in metadata:
                 for included_config in metadata["include"]:
+=======
+            if INCLUDE_KEY in metadata:
+                for included_config in metadata[INCLUDE_KEY]:
+>>>>>>> 5d2c96b782680af6fd4f43f057cdf1be939b46e6
                     edges.append((config, included_config))
 
         G = networkx.DiGraph(edges)
