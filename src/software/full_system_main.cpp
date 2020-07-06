@@ -12,10 +12,11 @@
 
 struct commandLineArgs
 {
-    bool help                = false;
-    std::string backend_name = "";
-    bool headless            = false;
-    bool err                 = false;
+    bool help                          = false;
+    std::string backend_name           = "";
+    std::string network_interface_name = "";
+    bool headless                      = false;
+    bool err                           = false;
 };
 
 // clang-format off
@@ -52,14 +53,23 @@ commandLineArgs parseCommandLineArgs(int argc, char **argv)
     std::string backend_help_str =
         "The backend that you would like to use, one of: " + all_backend_names;
 
+    std::string interface_help_str =
+        "The interface to send and receive packets over, ifconfig to get an idea";
+
     boost::program_options::options_description desc{"Options"};
     desc.add_options()("help,h", boost::program_options::bool_switch(&args.help),
-                       "Help screen")(
+                       "Help screen");
+    desc.add_options()(
         "backend",
         boost::program_options::value<std::string>(&args.backend_name)->required(),
-        backend_help_str.c_str())("headless",
-                                  boost::program_options::bool_switch(&args.headless),
-                                  "Run without the FullSystemGUI");
+        backend_help_str.c_str());
+    desc.add_options()(
+        "interface",
+        boost::program_options::value<std::string>(&args.network_interface_name)
+            ->required(),
+        interface_help_str.c_str());
+    desc.add_options()("headless", boost::program_options::bool_switch(&args.headless),
+                       "Run without the FullSystemGUI");
 
     boost::program_options::variables_map vm;
     try
