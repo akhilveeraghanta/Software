@@ -36,6 +36,25 @@ std::vector<ObstaclePtr> RobotNavigationObstacleFactory::createFromMotionConstra
             obstacles.push_back(createFromFieldRectangle(
                 world.field().enemyDefenseArea(), world.field().fieldLines(),
                 world.field().fieldBoundary(), 0.3));
+
+            auto center = world.field().centerPoint();
+
+            // minefeild
+            //for (int x = -world.field().xLength()/2; x<world.field().xLength()/2; x++){
+            //for (int y = -world.field().yLength()/2; y<world.field().yLength()/2; y++){
+                    //obstacles.push_back(createFromShape(
+                        //Circle(Point(x,y+0.5), 0.01)));
+                //}
+            //}
+
+            // Youngs Triple Slit Experiment
+            // obstacles.push_back(createFromShape(
+                 //Rectangle(center + Vector(-0.25, -0.5), center + Vector(0.25, -2))));
+
+            // obstacles.push_back(createFromShape(
+                //Rectangle(center + Vector(0.25, 0.5), center + Vector(-0.25, 2))));
+
+            break;
         }
         break;
         case MotionConstraint::FRIENDLY_DEFENSE_AREA:
@@ -44,10 +63,12 @@ std::vector<ObstaclePtr> RobotNavigationObstacleFactory::createFromMotionConstra
                 world.field().fieldBoundary()));
             break;
         case MotionConstraint::ENEMY_DEFENSE_AREA:
+        {
             obstacles.push_back(createFromFieldRectangle(world.field().enemyDefenseArea(),
                                                          world.field().fieldLines(),
                                                          world.field().fieldBoundary()));
             break;
+        }
         case MotionConstraint::FRIENDLY_HALF:
             obstacles.push_back(createFromFieldRectangle(world.field().friendlyHalf(),
                                                          world.field().fieldLines(),

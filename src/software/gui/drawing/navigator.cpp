@@ -17,7 +17,7 @@ AIDrawFunction drawNavigator(std::shared_ptr<Navigator> navigator)
         // patterns don't have enough space between the dashes so aren't easily
         // distinguishable as dashed lines.
         QVector<qreal> dashes;
-        qreal space = 7;
+        qreal space = 8;
         dashes << 2 << space << 2;
         path_pen.setDashPattern(dashes);
 

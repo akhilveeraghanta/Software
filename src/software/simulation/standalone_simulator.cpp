@@ -67,27 +67,6 @@ void StandaloneSimulator::initNetworking()
 
 void StandaloneSimulator::setupInitialSimulationState()
 {
-    RobotState blue_robot_state1(Point(3, 2.5), Vector(0, 0), Angle::half(),
-                                 AngularVelocity::zero());
-    RobotState blue_robot_state2(Point(3, 1.5), Vector(0, 0), Angle::half(),
-                                 AngularVelocity::zero());
-    RobotState blue_robot_state3(Point(3, 0.5), Vector(0, 0), Angle::half(),
-                                 AngularVelocity::zero());
-    RobotState blue_robot_state4(Point(3, -0.5), Vector(0, 0), Angle::half(),
-                                 AngularVelocity::zero());
-    RobotState blue_robot_state5(Point(3, -1.5), Vector(0, 0), Angle::half(),
-                                 AngularVelocity::zero());
-    RobotState blue_robot_state6(Point(3, -2.5), Vector(0, 0), Angle::half(),
-                                 AngularVelocity::zero());
-    std::vector<RobotStateWithId> blue_robot_states = {
-        RobotStateWithId{.id = 0, .robot_state = blue_robot_state1},
-        RobotStateWithId{.id = 1, .robot_state = blue_robot_state2},
-        RobotStateWithId{.id = 2, .robot_state = blue_robot_state3},
-        RobotStateWithId{.id = 3, .robot_state = blue_robot_state4},
-        RobotStateWithId{.id = 4, .robot_state = blue_robot_state5},
-        RobotStateWithId{.id = 5, .robot_state = blue_robot_state6},
-    };
-    simulator.addBlueRobots(blue_robot_states);
 
     RobotState yellow_robot_state1(Point(-3, 2.5), Vector(0, 0), Angle::zero(),
                                    AngularVelocity::zero());
