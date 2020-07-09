@@ -40,12 +40,12 @@ std::vector<ObstaclePtr> RobotNavigationObstacleFactory::createFromMotionConstra
             auto center = world.field().centerPoint();
 
             // minefeild
-            //for (int x = -world.field().xLength()/2; x<world.field().xLength()/2; x++){
-            //for (int y = -world.field().yLength()/2; y<world.field().yLength()/2; y++){
-                    //obstacles.push_back(createFromShape(
-                        //Circle(Point(x,y+0.5), 0.01)));
-                //}
-            //}
+            for (int x = -world.field().xLength()/2; x<world.field().xLength()/2; x+=2){
+            for (int y = -world.field().yLength()/2; y<world.field().yLength()/2; y+=2){
+                    obstacles.push_back(createFromShape(
+                        Circle(Point(x,y+1), 0.1)));
+                }
+            }
 
             // Youngs Triple Slit Experiment
             // obstacles.push_back(createFromShape(
