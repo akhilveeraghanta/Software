@@ -80,7 +80,7 @@ cc_library(
     deps = [
         ":play",
         "//shared:constants",
-        "//software/ai/hl/stp/tactic:move_tactic",
+        "//software/ai/hl/stp/tactic:patrol_tactic",
         "//software/logger",
         "//software/util/design_patterns:generic_factory",
     ],

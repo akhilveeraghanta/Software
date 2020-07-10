@@ -11,7 +11,7 @@ MoveAction::MoveAction(bool loop_forever, double close_to_dest_threshold,
       autokick_type(AutokickType::NONE),
       ball_collision_type(BallCollisionType::AVOID),
       close_to_dest_threshold(close_to_dest_threshold),
-      close_to_orientation_threshold(close_to_orientation_threshold)
+      close_to_orientation_threshold(Angle::fromDegrees(5))
 {
 }
 
@@ -73,6 +73,8 @@ void MoveAction::calculateNextIntent(IntentCoroutine::push_type& yield)
         yield(std::make_unique<MoveIntent>(robot->id(), destination, final_orientation,
                                            final_speed, 0, enable_dribbler, move_type,
                                            autokick_type, ball_collision_type));
+        //std::cerr<< "MOVE ACTION" << (robot->position() - destination).length() <<std::endl;
+        //std::cerr<<close_to_dest_threshold<<std::endl;
     } while ((robot->position() - destination).length() > close_to_dest_threshold ||
              (robot->orientation().minDiff(final_orientation) >
               close_to_orientation_threshold));
