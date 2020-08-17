@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon";
+package SSLProto;
 
 // a reply that is sent by the controller for each request from teams or autoRefs
 message ControllerReply {

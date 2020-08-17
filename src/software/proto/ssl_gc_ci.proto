@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/ci";
+package SSLProto;
 
 import "ssl_vision_wrapper_tracked.proto";
 import "ssl_gc_api.proto";
