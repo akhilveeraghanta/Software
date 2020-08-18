@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package SSLProto;
 
-import "ssl_vision_detection_tracked.proto";
+import "software/proto/ssl_vision_detection_tracked.proto";
 
 // A wrapper packet containing meta data of the source
 // Also serves for the possibility to extend the protocol later

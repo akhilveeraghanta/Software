@@ -2,10 +2,10 @@ syntax = "proto2";
 
 package SSLProto;
 
-import "ssl_gc_common.proto";
-import "ssl_gc_geometry.proto";
-import "ssl_gc_game_event.proto";
-import "ssl_gc_referee_message.proto";
+import "software/proto/ssl_gc_common.proto";
+import "software/proto/ssl_gc_geometry.proto";
+import "software/proto/ssl_gc_game_event.proto";
+import "software/proto/ssl_gc_referee_message.proto";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";

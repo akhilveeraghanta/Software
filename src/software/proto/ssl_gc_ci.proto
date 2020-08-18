@@ -2,9 +2,9 @@ syntax = "proto2";
 
 package SSLProto;
 
-import "ssl_vision_wrapper_tracked.proto";
-import "ssl_gc_api.proto";
-import "ssl_gc_referee_message.proto";
+import "software/proto/ssl_vision_wrapper_tracked.proto";
+import "software/proto/ssl_gc_api.proto";
+import "software/proto/ssl_gc_referee_message.proto";
 
 // The input format to the GC
 message CiInput {

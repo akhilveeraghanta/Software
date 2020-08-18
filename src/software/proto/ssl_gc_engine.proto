@@ -2,8 +2,8 @@ syntax = "proto2";
 
 package SSLProto;
 
-import "ssl_gc_geometry.proto";
-import "ssl_gc_common.proto";
+import "software/proto/ssl_gc_geometry.proto";
+import "software/proto/ssl_gc_common.proto";
 
 message GcState {
     map<string, GcStateTeam> team_state = 1;

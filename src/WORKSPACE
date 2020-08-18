@@ -37,6 +37,12 @@ git_repository(
     shallow_since = "1570056263 -0700",
 )
 
+git_repository(
+    name = "com_github_protocolbuffers_protobuf",
+    commit = "8a71927d74a4ce34efe2d8769fda198f52d20d12",
+    remote = "https://github.com/protocolbuffers/protobuf",
+)
+
 load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
 
 boost_deps()

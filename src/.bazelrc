@@ -12,6 +12,9 @@ build --crosstool_top=//cc_toolchain:toolchain
 # Add warnings to Thunderbots code only
 build --per_file_copt=//software/.*,//shared/.*,//firmware/.*,//firmware_new/.*@-Wall,-Wextra,-Wconversion,-Wno-unused-parameter
 
+# Disable warnings for SSL Protobuf Library
+build --per_file_copt=-//software/proto:ssl_proto@-w
+
 # Warn variable length arrays only when compiling cpp
 build --per_file_copt=.*\.cpp@-Wvla
 

@@ -2,8 +2,8 @@ syntax = "proto2";
 
 package SSLProto;
 
-import "ssl_vision_detection.proto";
-import "ssl_vision_geometry.proto";
+import "software/proto/ssl_vision_detection.proto";
+import "software/proto/ssl_vision_geometry.proto";
 
 message SSL_WrapperPacket {
   optional SSL_DetectionFrame detection = 1;

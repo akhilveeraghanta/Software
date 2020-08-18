@@ -144,6 +144,17 @@ void SimulatedTestFixture::updateSensorFusion()
     sensor_fusion.updateWorld(sensor_msg);
 }
 
+void SimulatedTestFixture::updateSensorFusion()
+{
+    auto ssl_wrapper_packet = simulator->getSSLWrapperPacket();
+    assert(ssl_wrapper_packet);
+
+    auto sensor_msg                        = SensorProto();
+    *(sensor_msg.mutable_ssl_vision_msg()) = *ssl_wrapper_packet;
+
+    sensor_fusion.updateWorld(sensor_msg);
+}
+
 void SimulatedTestFixture::sleep(
     const std::chrono::steady_clock::time_point &wall_start_time,
     const Duration &desired_wall_tick_time)

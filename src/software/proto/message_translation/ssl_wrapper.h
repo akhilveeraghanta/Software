@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "software/proto/messages_robocup_ssl_detection.pb.h"
-#include "software/proto/messages_robocup_ssl_geometry.pb.h"
-#include "software/proto/messages_robocup_ssl_wrapper.pb.h"
+#include "software/proto/ssl_vision_detection.pb.h"
+#include "software/proto/ssl_vision_geometry.pb.h"
+#include "software/proto/ssl_vision_wrapper.pb.h"
 
 /**
  * Creates a WrapperPacket from the given data
