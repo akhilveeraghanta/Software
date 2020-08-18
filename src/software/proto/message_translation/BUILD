@@ -87,6 +87,20 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "ssl_vision_detection_tracked",
+    srcs = ["ssl_vision_detection_tracked.cpp"],
+    hdrs = ["ssl_vision_detection_tracked.h"],
+    deps = [
+        "//shared:constants",
+        "//software/proto:ssl_cc_proto",
+        "//software/sensor_fusion/filter:vision_detection",
+        "//software/time:timestamp",
+        "//software/world:ball_state",
+        "//software/world:robot_state",
+    ],
+)
+
 cc_test(
     name = "ssl_detection_test",
     srcs = ["ssl_detection_test.cpp"],
@@ -104,6 +118,16 @@ cc_library(
     deps = [
         ":ssl_detection",
         ":ssl_geometry",
+        "//software/proto:ssl_cc_proto",
+    ],
+)
+
+cc_library(
+    name = "ssl_vision_wrapper_tracked",
+    srcs = ["ssl_vision_wrapper_tracked.cpp"],
+    hdrs = ["ssl_vision_wrapper_tracked.h"],
+    deps = [
+        ":ssl_vision_detection_tracked",
         "//software/proto:ssl_cc_proto",
     ],
 )
