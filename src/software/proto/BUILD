@@ -9,23 +9,23 @@ proto_library(
         "ssl_gc_change.proto",
         "ssl_gc_ci.proto",
         "ssl_gc_common.proto",
+        "ssl_gc_engine.proto",
+        "ssl_gc_engine_config.proto",
         "ssl_gc_game_event.proto",
         "ssl_gc_geometry.proto",
         "ssl_gc_referee_message.proto",
-        "ssl_gc_engine.proto",
         "ssl_gc_state.proto",
-        "ssl_gc_engine_config.proto",
         "ssl_vision_detection.proto",
         "ssl_vision_detection_tracked.proto",
         "ssl_vision_geometry.proto",
         "ssl_vision_wrapper.proto",
         "ssl_vision_wrapper_tracked.proto",
     ],
+    visibility = ["//visibility:private"],
     deps = [
         "@com_github_protocolbuffers_protobuf//:duration_proto",
         "@com_github_protocolbuffers_protobuf//:timestamp_proto",
     ],
-    visibility = ["//visibility:private"],
 )
 
 proto_library(

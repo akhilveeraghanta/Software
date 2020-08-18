@@ -10,7 +10,8 @@ import "software/proto/ssl_gc_engine_config.proto";
 import "google/protobuf/duration.proto";
 
 // Message format that is pushed from the GC to the client
-message Output {
+message Output
+{
     // The current match state
     optional State match_state = 1;
     // The current GC state
@@ -22,17 +23,20 @@ message Output {
 }
 
 // The game protocol
-message Protocol {
+message Protocol
+{
     // Is this a delta only?
-    // Entries that were already sent are not sent again, because the protocol is immutable anyway.
-    // But if the game is reset, the whole protocol must be replaced. That's what this flag is for.
+    // Entries that were already sent are not sent again, because the protocol is
+    // immutable anyway. But if the game is reset, the whole protocol must be replaced.
+    // That's what this flag is for.
     optional bool delta = 1;
     // The (delta) list of entries
     repeated ProtocolEntry entry = 2;
 }
 
 // A protocol entry of a change
-message ProtocolEntry {
+message ProtocolEntry
+{
     // Id of the entry
     optional int32 id = 1;
     // The change that was made
@@ -44,7 +48,8 @@ message ProtocolEntry {
 }
 
 // Message format that can be send from the client to the GC
-message Input {
+message Input
+{
     // A change to be enqueued into the GC engine
     optional Change change = 1;
     // Reset the match

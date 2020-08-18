@@ -7,7 +7,8 @@ import "software/proto/ssl_gc_api.proto";
 import "software/proto/ssl_gc_referee_message.proto";
 
 // The input format to the GC
-message CiInput {
+message CiInput
+{
     // New unix timestamp in [ns] for the GC
     optional int64 timestamp = 1;
     // New tracker packet with ball and robot data
@@ -17,7 +18,8 @@ message CiInput {
 }
 
 // The output format of the GC response
-message CiOutput {
+message CiOutput
+{
     // Latest referee message
     optional Referee referee_msg = 1;
 }

@@ -3,7 +3,8 @@ syntax = "proto2";
 package SSLProto;
 
 // Team is either blue or yellow
-enum Team {
+enum Team
+{
     // team not set
     UNKNOWN = 0;
     // yellow team
@@ -13,7 +14,8 @@ enum Team {
 }
 
 // RobotId is the combination of a team and a robot id
-message RobotId {
+message RobotId
+{
     // the robot number
     optional uint32 id = 1;
     // the team that the robot belongs to
@@ -21,8 +23,9 @@ message RobotId {
 }
 
 // Division denotes the current division, which influences some rules
-enum Division {
+enum Division
+{
     DIV_UNKNOWN = 0;
-    DIV_A = 1;
-    DIV_B = 2;
+    DIV_A       = 1;
+    DIV_B       = 2;
 }

@@ -5,15 +5,17 @@ package SSLProto;
 import "software/proto/ssl_gc_geometry.proto";
 import "software/proto/ssl_gc_common.proto";
 
-message GcState {
-    map<string, GcStateTeam> team_state = 1;
+message GcState
+{
+    map<string, GcStateTeam> team_state        = 1;
     map<string, GcStateAutoRef> auto_ref_state = 2;
-    map<string, GcStateTracker> tracker_state = 3;
-    optional GcStateTracker tracker_state_gc = 4;
-    optional bool ready_to_continue = 5;
+    map<string, GcStateTracker> tracker_state  = 3;
+    optional GcStateTracker tracker_state_gc   = 4;
+    optional bool ready_to_continue            = 5;
 }
 
-message GcStateTeam {
+message GcStateTeam
+{
     // true: The team is connected
     optional bool connected = 1;
 
@@ -27,12 +29,14 @@ message GcStateTeam {
     optional bool remote_control_connection_verified = 4;
 }
 
-message GcStateAutoRef {
+message GcStateAutoRef
+{
     // true: The autoRef connected via TLS with a verified certificate
     optional bool connection_verified = 1;
 }
 
-message GcStateTracker {
+message GcStateTracker
+{
     // Name of the source
     optional string source_name = 1;
 
@@ -46,7 +50,8 @@ message GcStateTracker {
     repeated Robot robots = 3;
 }
 
-message Ball {
+message Ball
+{
     // ball position [m]
     optional Vector3 pos = 1;
 
@@ -54,7 +59,8 @@ message Ball {
     optional Vector3 vel = 2;
 }
 
-message Robot {
+message Robot
+{
     // robot id and team
     optional RobotId id = 1;
 
