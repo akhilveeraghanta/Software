@@ -124,23 +124,13 @@ SSLProto::SSL_WrapperPacket StandaloneSimulator::getSSLWrapperPacket() const
 void StandaloneSimulator::setYellowRobotPrimitives(
     TbotsProto_PrimitiveSet primitive_set_msg)
 {
-    for (pb_size_t i = 0; i < primitive_set_msg.robot_primitives_count; i++)
-    {
-        RobotId id                         = primitive_set_msg.robot_primitives[i].key;
-        TbotsProto_Primitive primitive_msg = primitive_set_msg.robot_primitives[i].value;
-        simulator.setYellowRobotPrimitive(id, primitive_msg);
-    }
+    simulator.setYellowRobotPrimitiveSet(primitive_set_msg);
 }
 
 void StandaloneSimulator::setBlueRobotPrimitives(
     TbotsProto_PrimitiveSet primitive_set_msg)
 {
-    for (pb_size_t i = 0; i < primitive_set_msg.robot_primitives_count; i++)
-    {
-        RobotId id                         = primitive_set_msg.robot_primitives[i].key;
-        TbotsProto_Primitive primitive_msg = primitive_set_msg.robot_primitives[i].value;
-        simulator.setBlueRobotPrimitive(id, primitive_msg);
-    }
+    simulator.setBlueRobotPrimitiveSet(primitive_set_msg);
 }
 
 void StandaloneSimulator::startSimulation()
@@ -181,4 +171,9 @@ void StandaloneSimulator::addYellowRobot(const Point& position)
 void StandaloneSimulator::addBlueRobot(const Point& position)
 {
     simulator.addBlueRobot(position);
+}
+
+void StandaloneSimulator::removeRobot(std::weak_ptr<PhysicsRobot> robot)
+{
+    simulator.removeRobot(robot);
 }
