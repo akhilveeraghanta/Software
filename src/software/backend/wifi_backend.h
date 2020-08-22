@@ -42,8 +42,8 @@ class WifiBackend : public Backend
 
     // ProtoMulticast** to communicate with robots
     std::unique_ptr<ThreadedProtoMulticastSender<TbotsProto::Vision>> vision_output;
-    std::unique_ptr<ThreadedProtoMulticastSender<TbotsProto::PrimitiveSet>>
-        primitive_output;
     std::unique_ptr<ThreadedProtoMulticastListener<TbotsProto::RobotStatus>>
         robot_msg_input;
+    std::unique_ptr<ThreadedProtoMulticastSender<TbotsProto::PrimitiveSet>>
+        primitive_output;
 };

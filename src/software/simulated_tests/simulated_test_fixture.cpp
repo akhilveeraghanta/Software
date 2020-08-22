@@ -3,9 +3,14 @@
 #include "software/gui/drawing/navigator.h"
 #include "software/logger/logger.h"
 #include "software/proto/message_translation/primitive_google_to_nanopb_converter.h"
+#include "software/proto/message_translation/ssl_gc_ci.h"
+#include "software/proto/ssl_gc_ci.pb.h"
 #include "software/proto/message_translation/tbots_protobuf.h"
 #include "software/test_util/test_util.h"
 #include "software/time/duration.h"
+#include <boost/asio.hpp>
+
+using boost::asio::ip::tcp;
 
 SimulatedTestFixture::SimulatedTestFixture()
     : simulator(std::make_unique<Simulator>(Field::createSSLDivisionBField())),
@@ -13,6 +18,7 @@ SimulatedTestFixture::SimulatedTestFixture()
       ai(DynamicParameters->getAIConfig(), DynamicParameters->getAIControlConfig()),
       run_simulation_in_realtime(false)
 {
+
 }
 
 void SimulatedTestFixture::SetUp()
@@ -145,15 +151,39 @@ void SimulatedTestFixture::updateSensorFusion()
     sensor_fusion.updateWorld(sensor_msg);
 }
 
-void SimulatedTestFixture::updateSensorFusion()
+void SimulatedTestFixture::updateGameController()
 {
-    auto ssl_wrapper_packet = simulator->getSSLWrapperPacket();
-    assert(ssl_wrapper_packet);
+    auto ssl_tracker_wrapper = simulator->getSSLTrackerWrapperPacket();
+    assert(ssl_tracker_wrapper);
+    auto ssl_gc_ci_input = createSSLCiInput(std::move(ssl_tracker_wrapper));
+    std::vector<uint8_t> serialized_proto(ssl_gc_ci_input->ByteSizeLong());
+    ssl_gc_ci_input->SerializeToArray(
+             serialized_proto.data(), static_cast<int>(ssl_gc_ci_input->ByteSizeLong()));
+    try
+    {
+        boost::asio::io_service io_service;
 
-    auto sensor_msg                        = SensorProto();
-    *(sensor_msg.mutable_ssl_vision_msg()) = *ssl_wrapper_packet;
+        tcp::resolver resolver(io_service);
+        tcp::resolver::query query(tcp::v4(), "localhost", "10009");
+        tcp::resolver::iterator iterator = resolver.resolve(query);
 
-    sensor_fusion.updateWorld(sensor_msg);
+        tcp::socket s(io_service);
+        boost::asio::connect(s, iterator);
+
+        boost::asio::write(s, boost::asio::buffer(serialized_proto));
+
+        char reply[9000];
+        size_t reply_length = boost::asio::read(s,
+                                                boost::asio::buffer(reply, 9000));
+        std::cout << "Reply is: ";
+        std::cout.write(reply, reply_length);
+        std::cout << "\n";
+        s.close();
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << "\n";
+    }
 }
 
 void SimulatedTestFixture::sleep(
@@ -179,6 +209,8 @@ void SimulatedTestFixture::runTest(
     const Duration &timeout)
 {
     updateSensorFusion();
+    updateGameController();
+
     std::shared_ptr<World> world;
     if (auto world_opt = sensor_fusion.getWorld())
     {
@@ -214,6 +246,7 @@ void SimulatedTestFixture::runTest(
         {
             simulator->stepSimulation(simulation_time_step);
             updateSensorFusion();
+            updateGameController();
         }
 
         if (auto world_opt = sensor_fusion.getWorld())

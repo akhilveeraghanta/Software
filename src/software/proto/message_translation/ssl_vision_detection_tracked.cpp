@@ -24,6 +24,7 @@ std::unique_ptr<SSLProto::Vector3> createVector3(const Vector& vect, float heigh
 
     vector_3->set_x(vect.x());
     vector_3->set_y(vect.y());
+    vector_3->set_z(height);
 
     return std::move(vector_3);
 }
@@ -92,6 +93,8 @@ std::unique_ptr<SSLProto::TrackedFrame> createSSLTrackedFrame(
         *(tracked_frame->add_robots()) =
             *createSSLTrackedRobot(blue_robot, SSLProto::Team::BLUE);
     }
+
+    return std::move(tracked_frame);
 
     // TODO populate?
     // optional KickedBall kicked_ball = 5;

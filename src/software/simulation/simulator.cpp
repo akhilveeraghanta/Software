@@ -1,9 +1,9 @@
 #include "software/simulation/simulator.h"
 
 #include "software/proto/message_translation/primitive_google_to_nanopb_converter.h"
-#include "software/proto/message_translation/proto_creator_primitive_visitor.h"
 #include "software/proto/message_translation/ssl_detection.h"
 #include "software/proto/message_translation/ssl_geometry.h"
+#include "software/proto/message_translation/ssl_vision_wrapper_tracked.h"
 #include "software/proto/message_translation/ssl_wrapper.h"
 #include "software/simulation/simulator_ball_singleton.h"
 #include "software/simulation/simulator_robot_singleton.h"
@@ -212,6 +212,21 @@ std::unique_ptr<SSLProto::SSL_WrapperPacket> Simulator::getSSLWrapperPacket() co
         createGeometryData(physics_world.getField(), FIELD_LINE_THICKNESS_METRES);
     auto wrapper_packet =
         createSSLWrapperPacket(std::move(geometry_data), std::move(detection_frame));
+    return std::move(wrapper_packet);
+}
+
+std::unique_ptr<SSLProto::TrackerWrapperPacket> Simulator::getSSLTrackerWrapperPacket()
+    const
+{
+    static double timestamp = 0;
+    auto ball_state  = physics_world.getBallState();
+    auto ball_states = ball_state.has_value()
+                           ? std::vector<BallState>({ball_state.value()})
+                           : std::vector<BallState>();
+
+    auto wrapper_packet = createTrackerWrapperPacket(0, physics_world.getTimestamp().getSeconds(), ball_states,
+                                                     physics_world.getYellowRobotStates(),
+                                                     physics_world.getBlueRobotStates());
     return std::move(wrapper_packet);
 }
 

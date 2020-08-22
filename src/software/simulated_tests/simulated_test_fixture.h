@@ -8,6 +8,9 @@
 #include "software/simulated_tests/validation/non_terminating_function_validator.h"
 #include "software/simulated_tests/validation/terminating_function_validator.h"
 #include "software/simulation/simulator.h"
+#include "software/networking/threaded_proto_multicast_sender.h"
+#include "software/networking/threaded_proto_multicast_listener.h"
+#include "software/proto/ssl_gc_ci.pb.h"
 
 /**
  * This is a test fixture designed to make it easy to write integration tests. It provides
@@ -119,6 +122,7 @@ class SimulatedTestFixture : public ::testing::Test
      * A helper function that updates SensorFusion with the latest data from the Simulator
      */
     void updateSensorFusion();
+    void updateGameController();
 
     /**
      * Runs the given function validators and returns whether or not the

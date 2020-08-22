@@ -63,6 +63,16 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "ssl_gc_ci",
+    srcs = ["ssl_gc_ci.cpp"],
+    hdrs = ["ssl_gc_ci.h"],
+    deps = [
+        "//shared:constants",
+        "//software/proto:ssl_cc_proto",
+    ],
+)
+
 cc_test(
     name = "ssl_geometry_test",
     srcs = ["ssl_geometry_test.cpp"],

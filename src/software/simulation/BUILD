@@ -133,6 +133,7 @@ cc_library(
         "//software/proto/message_translation:proto_creator_primitive_visitor",
         "//software/proto/message_translation:ssl_detection",
         "//software/proto/message_translation:ssl_geometry",
+        "//software/proto/message_translation:ssl_vision_wrapper_tracked",
         "//software/proto/message_translation:ssl_wrapper",
         "//software/simulation/physics:physics_world",
         "//software/world",

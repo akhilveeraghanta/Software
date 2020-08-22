@@ -2,6 +2,7 @@
 
 #include "software/primitive/primitive.h"
 #include "software/proto/ssl_vision_wrapper.pb.h"
+#include "software/proto/ssl_vision_wrapper_tracked.pb.h"
 #include "software/simulation/firmware_object_deleter.h"
 #include "software/simulation/physics/physics_world.h"
 #include "software/simulation/simulator_ball.h"
@@ -131,6 +132,7 @@ class Simulator
      * of the simulation
      */
     std::unique_ptr<SSLProto::SSL_WrapperPacket> getSSLWrapperPacket() const;
+    std::unique_ptr<SSLProto::TrackerWrapperPacket> getSSLTrackerWrapperPacket() const;
 
     /**
      * Returns the field in the simulation

@@ -34,6 +34,7 @@ TEST(ProtoCreatorPrimitiveVisitor, visit_direct_velocity_primitive)
     expected_primitive_params.set_parameter2(static_cast<float>(32.3 * 1000));
     expected_primitive_params.set_parameter3(static_cast<float>(556 * 100));
     expected_primitive_params.set_parameter4(static_cast<float>(0));
+    expected_primitive_params.set_parameter4(static_cast<fl
     expected_primitive_params.set_extra_bits(100);
 
     TbotsProto::Primitive expected_primitive;

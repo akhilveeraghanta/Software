@@ -14,6 +14,7 @@ WifiBackend::WifiBackend(std::shared_ptr<const NetworkConfig> network_config)
 {
     std::string network_interface =
         DynamicParameters->getNetworkConfig()->NetworkInterface()->value();
+
     int channel = DynamicParameters->getNetworkConfig()->Channel()->value();
 
     MutableDynamicParameters->getMutableNetworkConfig()
@@ -53,3 +54,4 @@ void WifiBackend::joinMulticastChannel(int channel, const std::string& interface
 
 // Register this backend in the genericFactory
 static TGenericFactory<std::string, Backend, WifiBackend> factory;
+TGe

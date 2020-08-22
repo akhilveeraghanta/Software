@@ -1,5 +1,14 @@
 package(default_visibility = ["//visibility:public"])
 
+cc_binary(
+    name = "test_test",
+    srcs = ["proto_tcp_connection.cpp"],
+    deps = [
+        "//software/logger",
+        "@boost//:asio",
+    ],
+)
+
 cc_library(
     name = "multicast_listener",
     srcs = ["multicast_listener.cpp"],
