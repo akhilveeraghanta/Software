@@ -27,8 +27,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "firmware_new/boards/frankie_v1/io/proto_multicast_communication_profile.h"
-#include "firmware_new/boards/frankie_v1/io/proto_multicast_communication_tasks.h"
+#include "firmware/boards/frankie_v1/io/proto_multicast_communication_profile.h"
+#include "firmware/boards/frankie_v1/io/proto_multicast_communication_tasks.h"
 #include "shared/constants.h"
 #include "shared/proto/robot_status_msg.nanopb.h"
 #include "shared/proto/tbots_software_msgs.nanopb.h"

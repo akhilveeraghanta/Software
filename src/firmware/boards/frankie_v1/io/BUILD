@@ -6,7 +6,7 @@ cc_library(
     hdrs = ["gpio_pin.h"],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware_new/boards/frankie_v1:hal",
+        "//firmware/boards/frankie_v1:hal",
     ],
 )
 
@@ -16,7 +16,7 @@ cc_library(
     hdrs = ["pwm_pin.h"],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware_new/boards/frankie_v1:hal",
+        "//firmware/boards/frankie_v1:hal",
     ],
 )
 
@@ -41,7 +41,7 @@ cc_test(
     name = "infineon_TLE009_E1000_angle_sensor_test",
     srcs = ["infineon_TLE5009_E1000_angle_sensor_test.cpp"],
     deps = [
-        "//firmware_new/boards/frankie_v1/io:infineon_TLE009_E1000_angle_sensor",
+        "//firmware/boards/frankie_v1/io:infineon_TLE009_E1000_angle_sensor",
         "@gtest//:gtest_main",
     ],
 )
@@ -74,9 +74,9 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware_new/boards/frankie_v1:frankie_v1_lwip",
-        "//firmware_new/boards/frankie_v1:hal",
-        "//firmware_new/boards/frankie_v1:lwip",
+        "//firmware/boards/frankie_v1:frankie_v1_lwip",
+        "//firmware/boards/frankie_v1:hal",
+        "//firmware/boards/frankie_v1:lwip",
         "//shared/proto:tbots_nanopb_proto",
         "@nanopb",
     ],

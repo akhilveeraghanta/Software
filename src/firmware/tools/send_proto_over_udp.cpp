@@ -25,7 +25,7 @@ using google::protobuf::Message;
  * On linux it will usually be eth0 or enp3s0f1
  *
  * Plug the STM32H7 into the same switch/router and then run this with
- * bazel run //firmware_new/tools:send_proto_over_udp -- your_interface_here
+ * bazel run //firmware/tools:send_proto_over_udp -- your_interface_here
  *
  */
 void callback(TbotsProto::RobotStatus test)

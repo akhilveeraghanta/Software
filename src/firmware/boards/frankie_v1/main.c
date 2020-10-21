@@ -30,7 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "firmware_new/boards/frankie_v1/io/drivetrain.h"
+#include "firmware/boards/frankie_v1/io/drivetrain.h"
 
 /* USER CODE END Includes */
 

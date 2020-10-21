@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("//firmware_new:rules.bzl", "stm32h7_hal_library_files_genrule")
+load("//firmware:rules.bzl", "stm32h7_hal_library_files_genrule")
 
 cc_binary(
     name = "frankie_v1_main",
@@ -14,7 +14,7 @@ cc_binary(
         "STM32H743xx",
     ],
     linkopts = [
-        "-T$(location //firmware_new/boards/frankie_v1:STM32H743ZITx_FLASH.ld)",
+        "-T$(location //firmware/boards/frankie_v1:STM32H743ZITx_FLASH.ld)",
         "-specs=nano.specs",
         "-lc",
         "-lm",
@@ -24,10 +24,10 @@ cc_binary(
     deps = [
         ":STM32H743ZITx_FLASH.ld",
         ":frankie_v1_main_lib",
-        "//firmware_new/boards/frankie_v1/io:drivetrain",
-        "//firmware_new/boards/frankie_v1/io:drivetrain_unit",
-        "//firmware_new/boards/frankie_v1/io:gpio_pin",
-        "//firmware_new/boards/frankie_v1/io:pwm_pin",
+        "//firmware/boards/frankie_v1/io:drivetrain",
+        "//firmware/boards/frankie_v1/io:drivetrain_unit",
+        "//firmware/boards/frankie_v1/io:gpio_pin",
+        "//firmware/boards/frankie_v1/io:pwm_pin",
     ],
 )
 
@@ -64,7 +64,7 @@ cc_library(
     deps = [
         ":hal",
         ":lwip",
-        "//firmware_new/boards/frankie_v1/io:proto_multicast_communication",
+        "//firmware/boards/frankie_v1/io:proto_multicast_communication",
         "//shared:constants",
         "//shared/proto:tbots_nanopb_proto",
         "@nanopb",

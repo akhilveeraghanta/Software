@@ -1,8 +1,8 @@
-#include "firmware_new/boards/frankie_v1/io/proto_multicast_communication_tasks.h"
+#include "firmware/boards/frankie_v1/io/proto_multicast_communication_tasks.h"
 
 #include <stdlib.h>
 
-#include "firmware_new/boards/frankie_v1/io/proto_multicast_communication_profile.h"
+#include "firmware/boards/frankie_v1/io/proto_multicast_communication_profile.h"
 #include "lwip.h"
 #include "lwip/api.h"
 #include "lwip/inet.h"
