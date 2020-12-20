@@ -78,33 +78,95 @@ void io_ublox_odinw262_communicator_task(void* arg)
 
     // TODO handle errors and implement WiFi watchdog
     // https://github.com/UBC-Thunderbots/Software/issues/1875
+    char* response = NULL;
     io_ublox_odinw262_communicator_sendATCommand("AT+UMLA=2,00AAAAAAAA00\r");
     io_ublox_odinw262_communicator_sendATCommand("AT&W\r");
     io_ublox_odinw262_communicator_sendATCommand("AT+CPWROFF\r");
     io_ublox_odinw262_communicator_waitForBoot();
 
-    io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,0,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,1,3,1\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,100,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,107,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UBRGCA=0,3\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=0,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=1,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=2,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=3,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=5,3\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=4,1\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UETHCA=3\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,0,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,2,\"" WIFI_SSID "\"\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,5,2\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,8,\"" WIFI_PASS "\"\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,300,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,301,0\r");
-    io_ublox_odinw262_communicator_sendATCommand("AT+UWSCA=0,3\r");
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,0,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,1,3,1\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,100,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UBRGC=0,107,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UBRGCA=0,3\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=0,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=1,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=2,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=3,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=5,3\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UETHC=4,1\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UETHCA=3\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,0,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,2,\"" WIFI_SSID "\"\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,5,2\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,8,\"" WIFI_PASS "\"\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,300,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSC=0,301,0\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
+    response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSCA=0,3\r");
+    if (response!=NULL){
+        TLOG_DEBUG("ublox response %s", response);
+    }
 
     for (;;)
     {
+        response = io_ublox_odinw262_communicator_sendATCommand("AT+UWSSTAT\r");
+        if (response!=NULL){
+            TLOG_DEBUG("=====> ublox status %s", response);
+        }
         osDelay(1000);
     }
 }
@@ -159,8 +221,13 @@ wait_for_ublox_to_respond:
 
         if (g_ublox_response_status == UBLOX_RESPONSE_INCOMPLETE)
         {
-            TLOG_WARNING("u-blox did not respond in %d seconds to %s",
-                         g_ublox_response_timeout, command);
+            io_ublox_odinw262_communicator_extractResponseFromCircularBuffer(
+                g_last_byte_parsed_from_dma_buffer, g_dma_counter_on_uart_idle_line,
+                RX_BUFFER_LENGTH_BYTES, g_dma_uart_receive_buffer, g_uart_receive_buffer);
+
+            g_last_byte_parsed_from_dma_buffer = g_dma_counter_on_uart_idle_line;
+            TLOG_WARNING("u-blox did not respond in %d seconds to %s, buffer %s",
+                         g_ublox_response_timeout, command, g_uart_receive_buffer);
             return NULL;
         }
     }
