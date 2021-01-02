@@ -512,3 +512,32 @@ TEST(CalcBestShotTest, test_calc_open_shot_circles)
                     .length() < 0.0001);
     EXPECT_NEAR(42.1928, testshot->getOpenAngle().toDegrees(), 1e-4);
 }
+
+TEST(ApproximateBestShotTest, approximate_best_shot_test_empty_net_no_robots)
+{
+    World world          = ::TestUtil::createBlankTestingWorld();
+    Robot shooting_robot = Robot(0, Point(0, 0), Vector(0, 0), Angle::zero(),
+                                 AngularVelocity::zero(), Timestamp::fromSeconds(0));
+
+    std::optional<Shot> good_enough_shot = approximateBestShotOnGoal(
+        Segment(world.field().enemyGoalpostNeg(), world.field().enemyGoalpostPos()),
+        shooting_robot.position(), world.enemyTeam().getAllRobots());
+
+    EXPECT_EQ(good_enough_shot->getPointToShootAt(), world.field().enemyGoalCenter());
+}
+
+TEST(ApproximateBestShotTest, approximate_best_shot_test_empty_net_with_robots)
+{
+    World world          = ::TestUtil::createBlankTestingWorld();
+    Robot shooting_robot = Robot(0, Point(0, 0), Vector(0, 0), Angle::zero(),
+                                 AngularVelocity::zero(), Timestamp::fromSeconds(0));
+    world                = ::TestUtil::setEnemyRobotPositions(
+        world, {world.field().enemyCornerNeg(), world.field().enemyCornerPos()},
+        Timestamp::fromSeconds(0));
+
+    std::optional<Shot> good_enough_shot = approximateBestShotOnGoal(
+        Segment(world.field().enemyGoalpostNeg(), world.field().enemyGoalpostPos()),
+        shooting_robot.position(), world.enemyTeam().getAllRobots());
+
+    EXPECT_EQ(good_enough_shot->getPointToShootAt(), world.field().enemyGoalCenter());
+}

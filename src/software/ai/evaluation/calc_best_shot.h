@@ -53,3 +53,22 @@ std::optional<Shot> calcBestShotOnGoal(const Field &field, const Team &friendly_
                                        TeamType goal,
                                        const std::vector<Robot> &robots_to_ignore = {},
                                        double radius = ROBOT_MAX_RADIUS_METERS);
+
+/**
+ * Finds the best shot on the specified goal using an approximation method.
+ * We shoot rays from the shot_origin and look at the shadows on the goal_post to
+ * determine the largest open interval for the shot.
+ *
+ * See: https://www.redblobgames.com/articles/visibility/ (simple approach section)
+ *
+ * @param goal_post The goal post of the net by the y-coordinate
+ * @param shot_origin The point that the shot will be taken from
+ * @param robot_obstacles The locations of any robots on the field that may obstruct
+ * the shot.
+ * @param goal_post_search_points How many rays to cast onto the goal_post to search for
+ * the best shot. The more search points, the more accurate the shot on goal.
+ */
+std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
+                                              const Point &shot_origin,
+                                              const std::vector<Robot> &robot_obstacles,
+                                              int goal_post_search_points = 100);
