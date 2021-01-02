@@ -71,23 +71,39 @@ std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
     //
     // TODO: This function can be removed when calcBestShotOnGoal is more performant.
     // https://github.com/UBC-Thunderbots/Software/issues/1788
-
-    // Convert all the robots into segments, perpendicular to the vector from the
-    // shot_origin to the robot position
-    std::vector<Segment> robot_obstacles_as_segments;
+    //
+    // Convert all the robots into a pair of angles that define the "bounding angles"
+    // of the robot. Any ray with an angle between the first and second angle would be
+    // blocked by the robot.
+    std::vector<std::pair<Angle, Angle>> robot_obstacles_as_pair_of_angles;
 
     for (Robot robot : robot_obstacles)
     {
         Angle perpendicular_segment_angle =
             Angle::fromDegrees(90) + (robot.position() - shot_origin).orientation();
 
-        Segment robot_as_segment =
-            Segment(robot.position() + (ROBOT_MAX_RADIUS_METERS)*Vector::createFromAngle(
-                                           perpendicular_segment_angle),
-                    robot.position() - (ROBOT_MAX_RADIUS_METERS)*Vector::createFromAngle(
-                                           perpendicular_segment_angle));
+        // The angle of the ray one and two that are tangent to either side of the robot
+        Angle one =
+            ((robot.position() + (ROBOT_MAX_RADIUS_METERS)*Vector::createFromAngle(
+                                     perpendicular_segment_angle)) -
+             shot_origin)
+                .orientation();
+        Angle two =
+            ((robot.position() - (ROBOT_MAX_RADIUS_METERS)*Vector::createFromAngle(
+                                     perpendicular_segment_angle)) -
+             shot_origin)
+                .orientation();
 
-        robot_obstacles_as_segments.emplace_back(robot_as_segment);
+        // We make sure the first angle in the pair is ahead of the second angle in the
+        // counterclockwise direction
+        if (one > two)
+        {
+            robot_obstacles_as_pair_of_angles.emplace_back(std::make_pair(one, two));
+        }
+        else
+        {
+            robot_obstacles_as_pair_of_angles.emplace_back(std::make_pair(two, one));
+        }
     }
 
     double segment_step = goal_post.length() / goal_post_search_points;
@@ -96,15 +112,22 @@ std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
     Segment current_segment   = Segment(goal_post.getStart(), goal_post.getStart());
     bool at_least_one_blocker = false;
 
-    for (int k = 0; k <= goal_post_search_points; k++)
+    for (int search_point = 0; search_point <= goal_post_search_points; ++search_point)
     {
         Point point_on_goal_post =
-            goal_post.getStart() + (k * segment_step) * goal_post.toVector().normalize();
+            goal_post.getStart() +
+            (search_point * segment_step) * goal_post.toVector().normalize();
+        Angle angle_to_point_on_goal_post =
+            (point_on_goal_post - shot_origin).orientation();
         bool point_on_goal_post_blocked = false;
 
-        for (Segment robot_seg : robot_obstacles_as_segments)
+        // The angle pair represent the angles formed by the rays that are tangent
+        // to either side of the obstacles. Any rays that are between these two 
+        // bounding rays, would be blocked by the obstacle.
+        for (std::pair<Angle, Angle> angle_pair : robot_obstacles_as_pair_of_angles)
         {
-            if (intersects(robot_seg, Segment(shot_origin, point_on_goal_post)))
+            if (angle_pair.first > angle_to_point_on_goal_post &&
+                angle_to_point_on_goal_post > angle_pair.second)
             {
                 point_on_goal_post_blocked = true;
                 at_least_one_blocker       = true;
@@ -112,6 +135,10 @@ std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
             }
         }
 
+        // If the point_on_goal_post is blocked, we finish off the current_segment
+        // by setting the end of the segment to the current point_on_goal_post. We then
+        // store max(max_segment, current_segment) in max_segment. current_segment start is set
+        // to the current point_on_goal_post and we continue.
         if (point_on_goal_post_blocked)
         {
             current_segment.setEnd(point_on_goal_post);
@@ -125,6 +152,11 @@ std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
         }
     }
 
+    if (!at_least_one_blocker)
+    {
+        max_segment = goal_post;
+    }
+
     if (max_segment.length() != 0)
     {
         return std::make_optional<Shot>(
@@ -132,15 +164,6 @@ std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
             (max_segment.getStart() - shot_origin)
                 .orientation()
                 .minDiff((max_segment.getEnd() - shot_origin).orientation()));
-    }
-
-    if (!at_least_one_blocker)
-    {
-        return std::make_optional<Shot>(
-            goal_post.midPoint(),
-            (goal_post.getStart() - shot_origin)
-                .orientation()
-                .minDiff((goal_post.getEnd() - shot_origin).orientation()));
     }
 
     return std::nullopt;

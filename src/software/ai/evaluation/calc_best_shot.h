@@ -71,4 +71,4 @@ std::optional<Shot> calcBestShotOnGoal(const Field &field, const Team &friendly_
 std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
                                               const Point &shot_origin,
                                               const std::vector<Robot> &robot_obstacles,
-                                              int goal_post_search_points = 20);
+                                              int goal_post_search_points = 30);
