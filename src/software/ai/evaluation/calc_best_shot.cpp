@@ -108,6 +108,7 @@ std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
             {
                 point_on_goal_post_blocked = true;
                 at_least_one_blocker       = true;
+                break;
             }
         }
 
