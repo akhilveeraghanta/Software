@@ -110,13 +110,15 @@ std::optional<Shot> approximateBestShotOnGoal(const Segment &goal_post,
 
     Segment max_segment       = Segment(goal_post.getStart(), goal_post.getStart());
     Segment current_segment   = Segment(goal_post.getStart(), goal_post.getStart());
+    Vector direction = goal_post.toVector().normalize();
+
     bool at_least_one_blocker = false;
 
     for (int search_point = 0; search_point <= goal_post_search_points; ++search_point)
     {
         Point point_on_goal_post =
             goal_post.getStart() +
-            (search_point * segment_step) * goal_post.toVector().normalize();
+            (search_point * segment_step) * direction;
         Angle angle_to_point_on_goal_post =
             (point_on_goal_post - shot_origin).orientation();
         bool point_on_goal_post_blocked = false;
