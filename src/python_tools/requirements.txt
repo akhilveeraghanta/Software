@@ -3,3 +3,6 @@ notebook==6.1.5
 numpy==1.19.4
 matplotlib==3.3.3
 protobuf==3.6.1
+ipywidgets>=7.2
+plotly==4.14.1
+pandas>=1.0

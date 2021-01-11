@@ -1,5 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
+load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
 load("@python_tools_deps//:requirements.bzl", "requirement")
 
 py_test(
@@ -25,6 +26,16 @@ py_library(
     ],
 )
 
+pybind_extension(
+    name = "cost_function_python_wrapper",
+    srcs = ["cost_function_python_wrapper.cpp"],
+)
+
+py_library(
+    name = "cost_function_python_wrapper",
+    data = [":cost_function_python_wrapper.so"],
+)
+
 py_binary(
     name = "jupyter",
     srcs = ["jupyter.py"],
@@ -35,8 +46,10 @@ py_binary(
         requirement("notebook"),
         requirement("numpy"),
         requirement("matplotlib"),
+        requirement("plotly"),
         ":proto_log",
         ":sensor_proto_log",
+        ":cost_function_python_wrapper",
         "//shared/proto:tbots_py_proto",
         "//software/proto:software_py_proto",
     ],
