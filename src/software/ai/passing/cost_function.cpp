@@ -89,6 +89,52 @@ double ratePassShootScore(const Field& field, const Team& enemy_team, const Pass
 
     // Figure out the range of angles for which we have an open shot to the goal after
     // receiving the pass
+    auto shot_opt = calcBestShotOnGoal(
+        Segment(field.enemyGoalpostNeg(), field.enemyGoalpostPos()), pass.receiverPoint(),
+        enemy_team.getAllRobots());
+
+    Angle open_angle_to_goal = Angle::zero();
+    Point shot_target        = field.enemyGoalCenter();
+    if (shot_opt && shot_opt->getOpenAngle().abs() > Angle::fromDegrees(0))
+    {
+        open_angle_to_goal = shot_opt->getOpenAngle();
+    }
+
+    // Figure out what the maximum open angle of the goal could be from the receiver pos.
+    Angle goal_angle = acuteAngle(field.enemyGoalpostNeg(), pass.receiverPoint(),
+                                  field.enemyGoalpostPos())
+                           .abs();
+    double net_percent_open = 0;
+    if (goal_angle > Angle::zero())
+    {
+        net_percent_open = open_angle_to_goal.toDegrees() / goal_angle.toDegrees();
+    }
+
+    // Create the shoot score by creating a sigmoid that goes to a large value as
+    // the section of net we're shooting on approaches 100% (ie. completely open)
+    double shot_openness_score = sigmoid(net_percent_open, 0.5, 0.95);
+
+    // Prefer angles where the robot does not have to turn much after receiving the
+    // pass to take the shot (or equivalently the shot deflection angle)
+    Angle rotation_to_shot_target_after_pass = pass.receiverOrientation().minDiff(
+        (shot_target - pass.receiverPoint()).orientation());
+    double required_rotation_for_shot_score =
+        1 - sigmoid(rotation_to_shot_target_after_pass.abs().toDegrees(),
+                    ideal_max_rotation_to_shoot_degrees, 4);
+
+    return shot_openness_score * required_rotation_for_shot_score;
+}
+
+double ratePassShootScoreApproximately(const Field& field, const Team& enemy_team, const Pass& pass)
+{
+    // TODO: You don't even use this first parameter, but stuff is hardcoded below
+    double ideal_max_rotation_to_shoot_degrees = DynamicParameters->getAIConfig()
+                                                     ->getPassingConfig()
+                                                     ->IdealMaxRotationToShootDegrees()
+                                                     ->value();
+
+    // Figure out the range of angles for which we have an open shot to the goal after
+    // receiving the pass
     auto shot_opt = approximateBestShotOnGoal(
         Segment(field.enemyGoalpostNeg(), field.enemyGoalpostPos()), pass.receiverPoint(),
         enemy_team.getAllRobots());

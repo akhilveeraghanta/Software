@@ -72,6 +72,7 @@ PYBIND11_MODULE(cost_function_python_wrapper, m) {
     // Cost Functions
     m.def("ratePass", &ratePass);
     m.def("ratePassShootScore", &ratePassShootScore);
+    m.def("ratePassShootScoreApproximately", &ratePassShootScoreApproximately);
     m.def("ratePassEnemyRisk", &ratePassEnemyRisk);
     m.def("ratePassFriendlyCapability", &ratePassFriendlyCapability);
     m.def("getStaticPositionQuality", &getStaticPositionQuality);

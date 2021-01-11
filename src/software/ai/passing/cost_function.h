@@ -51,6 +51,7 @@ double ratePass(const World& world, const Pass& pass,
  *         the pass
  */
 double ratePassShootScore(const Field& field, const Team& enemy_team, const Pass& pass);
+double ratePassShootScoreApproximately(const Field& field, const Team& enemy_team, const Pass& pass);
 
 /**
  * Calculates the risk of an enemy robot interfering with a given pass
