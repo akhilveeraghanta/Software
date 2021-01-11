@@ -29,6 +29,11 @@ py_library(
 pybind_extension(
     name = "cost_function_python_wrapper",
     srcs = ["cost_function_python_wrapper.cpp"],
+    deps = [
+            "//software/ai/passing:evaluation",
+            "//software/ai/passing:pass",
+            "//software/geom:point",
+        ],
 )
 
 py_library(
