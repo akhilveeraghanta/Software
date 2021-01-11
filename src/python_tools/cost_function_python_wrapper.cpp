@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include "software/ai/passing/cost_function.h"
 #include "software/geom/point.h"
 #include "software/geom/vector.h"
@@ -28,9 +29,6 @@ PYBIND11_MODULE(cost_function_python_wrapper, m) {
     py::class_<Angle>(m, "Angle")
         .def(py::init([](double rad) {
             return Angle::fromRadians(rad);
-        }))
-        .def(py::init([](double deg) {
-            return Angle::fromDegrees(deg);
         }));
 
     // Timestamp Class
@@ -72,5 +70,13 @@ PYBIND11_MODULE(cost_function_python_wrapper, m) {
         .def("estimatePassDuration", &Pass::estimatePassDuration);
 
     // Cost Functions
+    m.def("ratePass", &ratePass);
+    m.def("ratePassShootScore", &ratePassShootScore);
+    m.def("ratePassEnemyRisk", &ratePassEnemyRisk);
+    m.def("ratePassFriendlyCapability", &ratePassFriendlyCapability);
     m.def("getStaticPositionQuality", &getStaticPositionQuality);
+
+    // Overloaded Cost Functions
+    m.def("calculateInterceptRiskTeam", py::overload_cast<const Team&, const Pass&>(&calculateInterceptRisk));
+    m.def("calculateInterceptRiskRobot", py::overload_cast<const Robot&, const Pass&>(&calculateInterceptRisk));
 }
