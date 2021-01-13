@@ -19,6 +19,7 @@ TEST(CalcBestShotTest, calc_best_shot_on_enemy_goal_with_no_obstacles)
         calcBestShotOnGoal(world.field(), world.friendlyTeam(), world.enemyTeam(),
                            shooting_robot.position(), TeamType::ENEMY, {shooting_robot});
 
+    std::cerr<<result<<std::endl;
     // We expect to be able to find a shot
     ASSERT_TRUE(result);
 
