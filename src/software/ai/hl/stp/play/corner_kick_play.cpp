@@ -37,70 +37,17 @@ bool CornerKickPlay::invariantHolds(const World &world) const
 
 void CornerKickPlay::getNextTactics(TacticCoroutine::push_type &yield, const World &world)
 {
-    /**
-     * There are three main stages to this Play:
-     * NOTE: "pass" below can mean a pass where the robot receives the ball and dribbles
-     *       it, or when we try to pass but instantly kick it (a "one-touch" kick)
-     * 1. Align the passer to the ball
-     *  - In this stage we roughly line up the passer robot to be behind the ball, ready
-     *    to take the kick
-     *  - We also run two cherry-pickers, which move around the field in specified areas
-     *    and try and find good points for the passer to pass to
-     *  - We also run two "bait" robots that move to static positions to draw enemies
-     *    away from where we're likely to pass to
-     * 2. Decide on a pass:
-     *  - During this stage we start by looking for the best pass possible, but over
-     *    time decrease the minimum "quality" of pass we'll accept so we're eventually
-     *    forced to at least accept one
-     *  - During this time we continue to run the cherry pick and bait robots
-     * 3. Execute the pass:
-     *  - Once we've decided on a pass, we simply yield a passer/receiver and execute
-     *    the pass
-     *
-     */
-
-    auto goalie_tactic = std::make_shared<GoalieTactic>(
-        world.ball(), world.field(), world.friendlyTeam(), world.enemyTeam());
-
-    // Setup two bait robots on the opposite side of the field to where the corner kick
-    // is taking place to pull enemies away from the goal
-    Point opposite_corner_to_kick = (world.ball().position().y() > 0)
-                                        ? world.field().enemyCornerNeg()
-                                        : world.field().enemyCornerPos();
-
-    Point bait_move_tactic_1_pos =
-        opposite_corner_to_kick - Vector(world.field().enemyDefenseArea().yLength() * 0.5,
-                                         copysign(0.5, opposite_corner_to_kick.y()));
-    Point bait_move_tactic_2_pos =
-        opposite_corner_to_kick - Vector(world.field().enemyDefenseArea().yLength() * 1.5,
-                                         copysign(0.5, opposite_corner_to_kick.y()));
-    auto bait_move_tactic_1 = std::make_shared<MoveTactic>(true);
-    auto bait_move_tactic_2 = std::make_shared<MoveTactic>(true);
-    bait_move_tactic_1->updateControlParams(
-        bait_move_tactic_1_pos,
-        (world.field().enemyGoalCenter() - bait_move_tactic_1_pos).orientation(), 0.0);
-    bait_move_tactic_2->updateControlParams(
-        bait_move_tactic_2_pos,
-        (world.field().enemyGoalCenter() - bait_move_tactic_2_pos).orientation(), 0.0);
-
-    Pass pass =
-        setupPass(yield, bait_move_tactic_1, bait_move_tactic_2, goalie_tactic, world);
-
-    // Perform the pass and wait until the receiver is finished
-    auto passer =
-        std::make_shared<PasserTactic>(pass, world.ball(), world.field(), false);
-    auto receiver =
-        std::make_shared<ReceiverTactic>(world.field(), world.friendlyTeam(),
-                                         world.enemyTeam(), pass, world.ball(), false);
+        PassGenerator pass_generator(world, world.ball().position(),
+                                 PassType::ONE_TOUCH_SHOT);
+        PassWithRating best_pass_and_score_so_far = pass_generator.getBestPassSoFar();
     do
     {
-        passer->updateControlParams(pass);
-        receiver->updateControlParams(pass);
-
-        yield({goalie_tactic, passer, receiver, bait_move_tactic_1, bait_move_tactic_2});
-    } while (!receiver->done());
-
-    LOG(DEBUG) << "Finished";
+        updatePassGenerator(pass_generator, world);
+        best_pass_and_score_so_far = pass_generator.getBestPassSoFar();
+        LOG(DEBUG) << "Best pass found so far is: " << best_pass_and_score_so_far.pass;
+        LOG(DEBUG) << "    with score: " << best_pass_and_score_so_far.rating;
+        yield({});
+    } while (true);
 }
 
 Pass CornerKickPlay::setupPass(TacticCoroutine::push_type &yield,
