@@ -282,10 +282,7 @@ double ratePassFriendlyCapability(Team friendly_team, const Pass& pass,
 {
     // Remove the passer robot from the friendly team before evaluating, as we assume
     // the passer is not passing to itself
-    if (passer_robot_id)
-    {
-        friendly_team.removeRobotWithId(*passer_robot_id);
-    }
+    friendly_team.removeRobotWithId(0);
 
     // We need at least one robot to pass to
     if (friendly_team.getAllRobots().empty())

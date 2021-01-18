@@ -1,7 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include "software/ai/passing/cost_function.h"
-#include "software/ai/passing/pass_generator.h"
 #include "software/geom/point.h"
 #include "software/geom/vector.h"
 #include "software/geom/angle.h"
@@ -10,7 +9,6 @@
 
 namespace py = pybind11;
 
-static
 
 PYBIND11_MODULE(cost_function_python_wrapper, m) {
 

@@ -98,6 +98,7 @@ class PassGenerator
      * @param robot_id The id of the robot performing the pass
      */
     void setPasserRobotId(unsigned int robot_id);
+    void setGeneratePoint(Point p);
 
     /**
      * Set the target region that we would like to pass to
@@ -265,7 +266,7 @@ class PassGenerator
      *
      * @return A vector containing the requested number of passes
      */
-    std::vector<Pass> generatePasses(unsigned long num_passes_to_gen);
+    std::vector<Pass> generatePasses(Point location, double radius, unsigned long num_passes_to_gen);
 
     // Whether or not this generator is running deterministically (ie. threading
     // disabled so that the same sequence of calls to this function always returns
@@ -307,6 +308,7 @@ class PassGenerator
 
     // The point we are passing from
     Point passer_point;
+    Point generate_point;
 
     // The mutex for the passer_point
     std::mutex best_known_pass_mutex;

@@ -11,6 +11,8 @@ TEST(PassTest, constructing_pass_with_negative_speed)
 TEST(PassTest, simple_getters)
 {
     Pass p(Point(1, 2), Point(3, 4), 3.443, Timestamp::fromSeconds(10));
+    Pass()
+
 
     EXPECT_EQ(Point(1, 2), p.passerPoint());
     EXPECT_EQ(Point(3, 4), p.receiverPoint());

@@ -177,13 +177,14 @@ void setupPlayOverrideComboBox(
     // TODO: this value is hardcoded and it should take the default value from dynamic
     // parameters once https://github.com/UBC-Thunderbots/Software/issues/1299 is done and
     // integrated
-    play_override_combo_box->setCurrentText(QString::fromStdString("HaltPlay"));
+    play_override_combo_box->setCurrentText(QString::fromStdString("ExamplePlay"));
 
     auto on_play_changed = [play_override_parameter,
                             current_play_parameter](const QString &text) {
         if (text == "Use AI Selection")
         {
-            play_override_parameter->setValue(false);
+            play_override_parameter->setValue(true);
+            current_play_parameter->setValue("CornerKickPlay");
         }
         else
         {
@@ -193,6 +194,7 @@ void setupPlayOverrideComboBox(
     };
     QWidget::connect(play_override_combo_box, &QComboBox::currentTextChanged,
                      on_play_changed);
+    play_override_parameter->setValue(true);
 }
 
 void setupChannelSpinBox(QSpinBox *channel_spin_box,

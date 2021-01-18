@@ -27,7 +27,6 @@ void CherryPickTactic::calculateNextAction(ActionCoroutine::push_type& yield)
 {
     auto move_action = std::make_shared<MoveAction>(
         true, MoveAction::ROBOT_CLOSE_TO_DEST_THRESHOLD, Angle());
-    auto best_pass_and_score = pass_generator.getBestPassSoFar();
     do
     {
         pass_generator.setWorld(world);

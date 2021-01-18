@@ -132,6 +132,21 @@ cc_library(
 )
 
 cc_library(
+    name = "pass_generator",
+    srcs = ["pass_generator.cpp"],
+    hdrs = ["pass_generator.h"],
+    deps = [
+        ":colors",
+        ":draw_functions",
+        ":geom",
+        ":obstacle_artist",
+        "//software/ai/passing:pass_generator",
+        "//software/gui:geometry_conversion",
+        "@qt//:qt_widgets",
+    ],
+)
+
+cc_library(
     name = "draw_functions",
     hdrs = ["draw_functions.h"],
     deps = [

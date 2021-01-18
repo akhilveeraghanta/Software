@@ -20,7 +20,7 @@ NetworkConfig:
       VisionPort:
         min: 1
         max: 65535
-        default: 10006
+        default: 10020
         type: "int"
         description: The port to listen on for vision data
       GameControllerIPv4Address:

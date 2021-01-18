@@ -37,16 +37,38 @@ bool CornerKickPlay::invariantHolds(const World &world) const
 
 void CornerKickPlay::getNextTactics(TacticCoroutine::push_type &yield, const World &world)
 {
-        PassGenerator pass_generator(world, world.ball().position(),
-                                 PassType::ONE_TOUCH_SHOT);
-        PassWithRating best_pass_and_score_so_far = pass_generator.getBestPassSoFar();
+    PassGenerator pass_generator(world, world.ball().position(), PassType::ONE_TOUCH_SHOT);
+    pass_generator.setPasserRobotId(0);
+
+    std::vector<std::shared_ptr<MoveTactic>> move_tactics;
+    std::map<size_t, Point> generate_point;
+
+    auto goalie_tactic = std::make_shared<GoalieTactic>(
+        world.ball(), world.field(), world.friendlyTeam(), world.enemyTeam());
+    move_tactics.emplace_back(std::make_shared<MoveTactic>(true));
+    move_tactics.emplace_back(std::make_shared<MoveTactic>(true));
+    move_tactics.emplace_back(std::make_shared<MoveTactic>(true));
+    move_tactics.emplace_back(std::make_shared<MoveTactic>(true));
+    move_tactics.emplace_back(std::make_shared<MoveTactic>(true));
+
+    auto robots = world.friendlyTeam().getAllRobots();
     do
     {
+        pass_generator.setPasserPoint(world.ball().position());
         updatePassGenerator(pass_generator, world);
-        best_pass_and_score_so_far = pass_generator.getBestPassSoFar();
-        LOG(DEBUG) << "Best pass found so far is: " << best_pass_and_score_so_far.pass;
-        LOG(DEBUG) << "    with score: " << best_pass_and_score_so_far.rating;
-        yield({});
+        for (size_t k = 0; k < 5; k++)
+        {
+            if (generate_point.count(k) == 0)
+                pass_generator.setGeneratePoint(robots[k].position());
+            else
+                pass_generator.setGeneratePoint(generate_point[k]);
+            auto bob = pass_generator.getBestPassSoFar();
+            move_tactics[k]->updateControlParams(
+                            bob.pass.receiverPoint(), Angle::half(), 0);
+            generate_point[k] = bob.pass.receiverPoint();
+        }
+        yield({goalie_tactic, move_tactics[0], move_tactics[1], move_tactics[2],
+                    move_tactics[3], move_tactics[4]});
     } while (true);
 }
 
