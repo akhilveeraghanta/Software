@@ -36,6 +36,13 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "grid",
+    hdrs = ["grid.h"],
+    deps = [
+    ],
+)
+
 cc_test(
     name = "pass_test",
     srcs = ["pass_test.cpp"],
@@ -61,6 +68,7 @@ cc_library(
     deps = [
         ":evaluation",
         ":pass",
+        ":grid",
         ":pass_with_rating",
         "//software/optimization:gradient_descent",
         "//software/world",

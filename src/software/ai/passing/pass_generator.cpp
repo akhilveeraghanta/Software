@@ -27,6 +27,11 @@ PassGenerator::PassGenerator(const World& world, const Point& passer_point,
 {
 }
 
+PassGenerator::~PassGenerator()
+{
+
+}
+
 PassWithRating PassGenerator::getBestPassSoFar()
 {
     auto pass = updateAndOptimizeAndPrunePasses();
@@ -35,7 +40,6 @@ PassWithRating PassGenerator::getBestPassSoFar()
 
 Pass PassGenerator::updateAndOptimizeAndPrunePasses()
 {
-    PassMatrix pass_matrix = generatePassMatrix();
     return Pass(Point(0,0), Point(0,0), 10.0, Timestamp::fromSeconds(1));
 }
 
@@ -160,13 +164,8 @@ double PassGenerator::ratePass(const Pass& pass)
     return rating;
 }
 
-PassMatrix PassGenerator::generatePassMatrix()
+std::vector<std::vector<Pass>> PassGenerator::generatePassMatrix()
 {
-    std::uniform_real_distribution x_distribution(-world.field().xLength() / 2,
-                                                  world.field().xLength() / 2);
-    std::uniform_real_distribution y_distribution(-world.field().yLength() / 2,
-                                                  world.field().yLength() / 2);
-
     double curr_time             = world.getMostRecentTimestamp().toSeconds();
     double min_start_time_offset = DynamicParameters->getAiConfig()
                                        ->getPassingConfig()
@@ -186,20 +185,18 @@ PassMatrix PassGenerator::generatePassMatrix()
                                                           ->getPassingConfig()
                                                           ->getMaxPassSpeedMPerS()
                                                           ->value());
-    PassMatrix pass_matrix;
-
+    std::vector<std::vector<Pass>> pass_matrix(45, std::vector<Pass>(30));
     for (unsigned x = 0; x < 45; x++)
     {
         for (unsigned y = 0; y < 30; y++)
         {
-            Point receiver_point(x_distribution(random_num_gen),
-                                 y_distribution(random_num_gen));
+            Point receiver_point((x - 22.5)*0.2, (y - 15)*0.2);
             Timestamp start_time =
                 Timestamp::fromSeconds(start_time_distribution(random_num_gen));
             double pass_speed = speed_distribution(random_num_gen);
 
             Pass p(passer_point, receiver_point, pass_speed, start_time);
-            pass_matrix(x, y) = p;
+            pass_matrix[x][y] = p;
         }
     }
 

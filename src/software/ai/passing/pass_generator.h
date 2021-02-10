@@ -52,6 +52,8 @@ using CostMatrix = Eigen::Matrix<double, 45, 30>;
 class PassGenerator
 {
    public:
+       std::vector<std::vector<Pass>> generatePassMatrix();
+    double ratePass(const Pass& pass);
     // Delete the default constructor, we want to force users to choose what
     // pass quality they deem reasonable
     PassGenerator() = delete;
@@ -177,7 +179,6 @@ class PassGenerator
      * @return A value in [0,1] representing the quality of the pass with 1 being the
      *         best pass and 0 being the worst pass
      */
-    double ratePass(const Pass& pass);
 
     /**
      * Compares the quality of the two given passes
@@ -202,7 +203,6 @@ class PassGenerator
      */
     bool passesEqual(Pass pass1, Pass pass2);
 
-    PassMatrix generatePassMatrix();
 
     // This world is what is used in the optimization loop
     World world;
