@@ -35,9 +35,7 @@ MAKE_ENUM(PassType,
  * @return A value in [0,1] representing the quality of the pass, with 1 being an
  *         ideal pass, and 0 being the worst pass possible
  */
-double ratePass(const World& world, const Pass& pass,
-                const std::optional<Rectangle>& target_region,
-                std::optional<unsigned int> passer_robot_id, PassType pass_type);
+double ratePass(const World& world, const Pass& pass, PassType pass_type);
 
 /**
  * Rate pass based on the probability of scoring once we receive the pass
@@ -106,8 +104,7 @@ double calculateInterceptRisk(const Robot& enemy_robot, const Pass& pass);
  *         friendly team to receive the given pass, with 1 being very likely, 0
  *         being impossible
  */
-double ratePassFriendlyCapability(Team friendly_team, const Pass& pass,
-                                  std::optional<unsigned int> passer_robot_id);
+double ratePassFriendlyCapability(Team friendly_team, const Pass& pass);
 
 /**
  * Calculates the static position quality for a given position on a given field

@@ -1,5 +1,8 @@
 #include "software/ai/passing/pass.h"
 
+Pass::Pass()
+{
+}
 
 Pass::Pass(Point passer_point, Point receiver_point, double pass_speed_m_per_s,
            Timestamp pass_start_time)

@@ -64,6 +64,7 @@ cc_library(
         ":pass_with_rating",
         "//software/optimization:gradient_descent",
         "//software/world",
+        "@eigen",
     ],
 )
 
