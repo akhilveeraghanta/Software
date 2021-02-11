@@ -14,7 +14,7 @@
 class Pass
 {
    public:
-    Pass();
+    Pass() = delete;
 
     /**
      * Create a pass with given parameters
@@ -27,8 +27,6 @@ class Pass
      */
     Pass(Point passer_point, Point receiver_point, double pass_speed_m_per_s,
          Timestamp pass_start_time);
-
-    double ratePass(const Pass& pass);
 
     /**
      * Gets the value of the receiver point
