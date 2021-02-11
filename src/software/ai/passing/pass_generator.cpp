@@ -24,7 +24,7 @@ PassGenerator::PassGenerator(const World& world, const Point& passer_point,
       in_destructor(false)
 {
     // Generate the initial set of passes
-    passes_to_optimize = generatePasses(getNumPassesToOptimize());
+    passes_to_optimize = generatePasses();
 
     // Start the thread to do the pass generation in the background
     // The lambda expression here is needed so that we can call
@@ -195,42 +195,17 @@ void PassGenerator::optimizePasses()
 
 void PassGenerator::pruneAndReplacePasses()
 {
-    // Sort the passes by decreasing quality
-    std::sort(passes_to_optimize.begin(), passes_to_optimize.end(),
-              [this](Pass p1, Pass p2) { return comparePassQuality(p1, p2); });
+        std::vector<Pass> new_passes = generatePasses();
 
-    // Merge Passes That Are Similar
-    // We start by assuming that the most similar passes will be right beside each other,
-    // then iterate over the entire list, building a new list as we go by only adding
-    // elements when they are dissimilar enough from the last element we added
-    // NOTE: This flips the passes so they are sorted by increasing quality
-    passes_to_optimize = std::accumulate(
-        passes_to_optimize.begin(), passes_to_optimize.end(), std::vector<Pass>(),
-        [this](std::vector<Pass>& passes, Pass curr_pass) {
-            // Check if we have no passes, or if this pass is too similar to the
-            // last pass we added to the list
-            if (passes.empty() || !passesEqual(curr_pass, passes.back()))
+        for (int k = 0; k<18; k++)
+        {
+            // if new pass is shittier keep the old pass
+            if(comparePassQuality(new_passes[k], passes_to_optimize[k]))
             {
-                passes.emplace_back(curr_pass);
+                passes_to_optimize[k] = new_passes[k];
             }
-            return passes;
-        });
-
-    // Replace the least promising passes
-    passes_to_optimize.erase(
-        passes_to_optimize.begin() + getNumPassesToKeepAfterPruning(),
-        passes_to_optimize.end());
-
-    // Generate new passes to replace the ones we just removed
-    int num_new_passes =
-        getNumPassesToOptimize() - static_cast<int>(passes_to_optimize.size());
-    if (num_new_passes > 0)
-    {
-        std::vector<Pass> new_passes = generatePasses(num_new_passes);
-        // Append our newly generated passes to replace the passes we just removed
-        passes_to_optimize.insert(passes_to_optimize.end(), new_passes.begin(),
-                                  new_passes.end());
-    }
+            // If pass is super trash just discard
+        }
 }
 
 void PassGenerator::saveBestPass()
@@ -303,15 +278,11 @@ double PassGenerator::ratePass(const Pass& pass)
     return rating;
 }
 
-std::vector<Pass> PassGenerator::generatePasses(unsigned long num_passes_to_gen)
+std::vector<Pass> PassGenerator::generatePasses()
 {
     // Take ownership of world for the duration of this function
     std::lock_guard<std::mutex> world_lock(world_mutex);
 
-    std::uniform_real_distribution x_distribution(-world.field().xLength() / 2,
-                                                  world.field().xLength() / 2);
-    std::uniform_real_distribution y_distribution(-world.field().yLength() / 2,
-                                                  world.field().yLength() / 2);
 
     double curr_time             = world.getMostRecentTimestamp().toSeconds();
     double min_start_time_offset = DynamicParameters->getAiConfig()
@@ -334,18 +305,24 @@ std::vector<Pass> PassGenerator::generatePasses(unsigned long num_passes_to_gen)
                                                           ->value());
 
     std::vector<Pass> passes;
-    for (unsigned i = 0; i < num_passes_to_gen; i++)
+    for (double start_y = 3.0; start_y > -3.0; start_y-=2.0)
     {
-        Point receiver_point(x_distribution(random_num_gen),
-                             y_distribution(random_num_gen));
-        Timestamp start_time =
-            Timestamp::fromSeconds(start_time_distribution(random_num_gen));
-        double pass_speed = speed_distribution(random_num_gen);
+        for (double start_x = -4.5; start_x< 4.5; start_x+=1.5)
+        {
+            std::uniform_real_distribution x_distribution(0.0, 1.5);
+            std::uniform_real_distribution y_distribution(0.0, 2.0);
 
-        Pass p(passer_point, receiver_point, pass_speed, start_time);
-        passes.emplace_back(p);
+            Point receiver_point(start_x + x_distribution(random_num_gen),
+                                 start_y - y_distribution(random_num_gen));
+
+            Timestamp start_time =
+                Timestamp::fromSeconds(start_time_distribution(random_num_gen));
+            double pass_speed = speed_distribution(random_num_gen);
+
+            Pass p(passer_point, receiver_point, pass_speed, start_time);
+            passes.emplace_back(p);
+        }
     }
-
     return passes;
 }
 

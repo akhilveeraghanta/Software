@@ -265,7 +265,7 @@ class PassGenerator
      *
      * @return A vector containing the requested number of passes
      */
-    std::vector<Pass> generatePasses(unsigned long num_passes_to_gen);
+    std::vector<Pass> generatePasses();
 
     // Whether or not this generator is running deterministically (ie. threading
     // disabled so that the same sequence of calls to this function always returns
