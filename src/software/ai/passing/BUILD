@@ -65,6 +65,7 @@ cc_library(
         "//software/optimization:gradient_descent",
         "//software/world",
     ],
+    linkopts = ["-lgomp"]
 )
 
 cc_test(

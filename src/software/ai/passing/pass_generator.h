@@ -328,6 +328,8 @@ class PassGenerator
 
     // The mutex for the in_destructor flag
     std::mutex in_destructor_mutex;
+    std::mutex yeehaw;
+
 
     // This flag is used to indicate that we are in the destructor. We use this to
     // communicate with pass_generation_thread that it is

@@ -37,6 +37,7 @@ FG_Colour ColouredCoutSink::getColour(const LEVELS level)
 
 void ColouredCoutSink::resetColour()
 {
+    return;
     std::ostringstream oss;
     oss << "\033[" << colourToString(FG_Colour::WHITE) << "m"
         << " "
@@ -46,6 +47,7 @@ void ColouredCoutSink::resetColour()
 
 void ColouredCoutSink::displayColouredLog(g3::LogMessageMover log_entry)
 {
+    return;
     auto level  = log_entry.get()._level;
     auto colour = colourToString(getColour(level));
 

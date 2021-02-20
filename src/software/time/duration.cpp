@@ -62,7 +62,7 @@ Duration Duration::operator-(const Duration &duration) const
 
 std::ostream &operator<<(std::ostream &output_stream, const Duration &duration)
 {
-    output_stream << std::setprecision(2) << std::fixed << duration.toSeconds() << "s";
+    output_stream << std::setprecision(2) << std::fixed << duration.toSeconds();
 
     return output_stream;
 }

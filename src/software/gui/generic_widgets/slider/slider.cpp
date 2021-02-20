@@ -19,9 +19,9 @@ std::function<void(double)> setupSliderLineEdit(
 
     auto on_line_edit_changed = [line_edit, slider, min, max, slider_step_size,
                                  value_changed_callback](const QString &text) {
-        bool ok;
+        bool ok = false;
         double line_edit_input = text.toDouble(&ok);
-        double value;
+        double value = 0.0;
 
         // handle corner case of empty input and minus sign
         if ((text.isEmpty()) || (text == "-"))

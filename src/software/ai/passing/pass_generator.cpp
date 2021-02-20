@@ -1,5 +1,7 @@
 #include "software/ai/passing/pass_generator.h"
 
+#include <omp.h>
+
 #include <algorithm>
 #include <numeric>
 
@@ -118,7 +120,13 @@ void PassGenerator::continuouslyGeneratePasses()
         // conditional check
         in_destructor_mutex.unlock();
 
+        auto t1 = std::chrono::high_resolution_clock::now();
         updateAndOptimizeAndPrunePasses();
+        auto t2 = std::chrono::high_resolution_clock::now();
+        auto duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+
+        std::cout << duration << std::endl;
 
         // Yield to allow other threads to run. This is particularly important if we
         // have this thread and another running on one core
@@ -172,22 +180,53 @@ void PassGenerator::optimizePasses()
     // NOTE: Parallelizing this `for` loop would probably be safe and potentially more
     //       performant
     std::vector<Pass> updated_passes;
-    for (Pass& pass : passes_to_optimize)
     {
-        auto pass_array =
-            optimizer.maximize(objective_function, convertPassToArray(pass),
-                               DynamicParameters->getAiConfig()
-                                   ->getPassingConfig()
-                                   ->getNumberOfGradientDescentStepsPerIter()
-                                   ->value());
-        try
+        for (size_t k = 0; k < passes_to_optimize.size(); k++)
         {
-            updated_passes.emplace_back(convertArrayToPass(pass_array));
-        }
-        catch (std::invalid_argument& e)
-        {
-            // Sometimes the gradient descent algorithm could return an invalid pass, if
-            // so, we can just ignore it and carry on
+            const auto pass_array = optimizer.maximize(
+                objective_function, convertPassToArray(passes_to_optimize[k]),
+                DynamicParameters->getAiConfig()
+                    ->getPassingConfig()
+                    ->getNumberOfGradientDescentStepsPerIter()
+                    ->value());
+            try
+            {
+                const auto new_pass = convertArrayToPass(pass_array);
+                // double old_score = ratePass(passes_to_optimize[k]);
+                // double new_score = ratePass(new_pass);
+
+                updated_passes.emplace_back(new_pass);
+
+                // if(old_score < 0.001)
+                ////continue;
+
+                // std::cerr<<old_score;
+                // std::cerr<<",";
+                // std::cerr<<new_score;
+                // std::cerr<<",";
+                // std::cerr<<new_score - old_score;
+                // std::cerr<<",";
+                // std::cerr<<(new_pass.receiverPoint() -
+                // passes_to_optimize[k].receiverPoint()).length(); std::cerr<<",";
+                // std::cerr<<passes_to_optimize[k].speed();
+                // std::cerr<<",";
+                // std::cerr<<new_pass.speed();
+                // std::cerr<<",";
+                // std::cerr<<new_pass.speed() - passes_to_optimize[k].speed();
+                // std::cerr<<",";
+                // std::cerr<<passes_to_optimize[k].startTime();
+                // std::cerr<<",";
+                // std::cerr<<new_pass.startTime();
+                // std::cerr<<",";
+                // std::cerr<<new_pass.startTime() - passes_to_optimize[k].startTime();
+                // std::cerr<<",";
+                // std::cerr<<std::endl;
+            }
+            catch (std::invalid_argument& e)
+            {
+                // Sometimes the gradient descent algorithm could return an invalid pass,
+                // if so, we can just ignore it and carry on
+            }
         }
     }
     passes_to_optimize = updated_passes;

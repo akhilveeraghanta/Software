@@ -31,21 +31,6 @@ double ratePass(const World& world, const Pass& pass,
         in_region_quality = rectangleSigmoid(*target_region, pass.receiverPoint(), 0.1);
     }
 
-    // Place strict limits on pass start time
-    double min_pass_time_offset = DynamicParameters->getAiConfig()
-                                      ->getPassingConfig()
-                                      ->getMinTimeOffsetForPassSeconds()
-                                      ->value();
-    double max_pass_time_offset = DynamicParameters->getAiConfig()
-                                      ->getPassingConfig()
-                                      ->getMaxTimeOffsetForPassSeconds()
-                                      ->value();
-    double pass_time_offset_quality =
-        sigmoid(pass.startTime().toSeconds(),
-                min_pass_time_offset + world.getMostRecentTimestamp().toSeconds(), 0.5) *
-        (1 - sigmoid(pass.startTime().toSeconds(),
-                     max_pass_time_offset + world.ball().timestamp().toSeconds(), 0.5));
-
     // Place strict limits on the ball speed
     double min_pass_speed = DynamicParameters->getAiConfig()
                                 ->getPassingConfig()
@@ -65,12 +50,12 @@ double ratePass(const World& world, const Pass& pass,
         case PassType::RECEIVE_AND_DRIBBLE:
             pass_quality = static_pass_quality * friendly_pass_rating *
                            enemy_pass_rating * in_region_quality *
-                           pass_time_offset_quality * pass_speed_quality;
+                           pass_speed_quality;
             break;
         case PassType::ONE_TOUCH_SHOT:
             pass_quality = static_pass_quality * friendly_pass_rating *
                            enemy_pass_rating * shoot_pass_rating * in_region_quality *
-                           pass_time_offset_quality * pass_speed_quality;
+                           pass_speed_quality;
             break;
         default:
             throw std::invalid_argument("Unhandled pass type given to `ratePass`");
