@@ -184,43 +184,39 @@ void PassGenerator::optimizePasses()
         for (size_t k = 0; k < passes_to_optimize.size(); k++)
         {
             const auto pass_array = optimizer.maximize(
-                objective_function, convertPassToArray(passes_to_optimize[k]),
-                DynamicParameters->getAiConfig()
-                    ->getPassingConfig()
-                    ->getNumberOfGradientDescentStepsPerIter()
-                    ->value());
+                objective_function, convertPassToArray(passes_to_optimize[k]), 100);
             try
             {
                 const auto new_pass = convertArrayToPass(pass_array);
-                // double old_score = ratePass(passes_to_optimize[k]);
-                // double new_score = ratePass(new_pass);
+                 double old_score = ratePass(passes_to_optimize[k]);
+                 double new_score = ratePass(new_pass);
 
                 updated_passes.emplace_back(new_pass);
 
-                // if(old_score < 0.001)
-                ////continue;
-
-                // std::cerr<<old_score;
-                // std::cerr<<",";
-                // std::cerr<<new_score;
-                // std::cerr<<",";
-                // std::cerr<<new_score - old_score;
-                // std::cerr<<",";
-                // std::cerr<<(new_pass.receiverPoint() -
-                // passes_to_optimize[k].receiverPoint()).length(); std::cerr<<",";
-                // std::cerr<<passes_to_optimize[k].speed();
-                // std::cerr<<",";
-                // std::cerr<<new_pass.speed();
-                // std::cerr<<",";
-                // std::cerr<<new_pass.speed() - passes_to_optimize[k].speed();
-                // std::cerr<<",";
-                // std::cerr<<passes_to_optimize[k].startTime();
-                // std::cerr<<",";
-                // std::cerr<<new_pass.startTime();
-                // std::cerr<<",";
-                // std::cerr<<new_pass.startTime() - passes_to_optimize[k].startTime();
-                // std::cerr<<",";
-                // std::cerr<<std::endl;
+                if (old_score < 0.05)
+                {
+                    std::cerr << new_score;
+                    // std::cerr << ",";
+                    // std::cerr << new_score - old_score;
+                    // std::cerr << ",";
+                    // std::cerr << (new_pass.receiverPoint() -
+                                   //passes_to_optimize[k].receiverPoint())
+                                      //.length();
+                    // std::cerr << ",";
+                    // std::cerr << passes_to_optimize[k].speed();
+                    // std::cerr << ",";
+                    // std::cerr << new_pass.speed();
+                    // std::cerr << ",";
+                    // std::cerr << new_pass.speed() - passes_to_optimize[k].speed();
+                    // std::cerr << ",";
+                    // std::cerr << passes_to_optimize[k].startTime();
+                    // std::cerr << ",";
+                    // std::cerr << new_pass.startTime();
+                    // std::cerr << ",";
+                    // std::cerr << new_pass.startTime() - passes_to_optimize[k].startTime();
+                    // std::cerr << ",";
+                    std::cerr << std::endl;
+                }
             }
             catch (std::invalid_argument& e)
             {
