@@ -25,7 +25,6 @@
 #include "crc.h"
 #include "i2c.h"
 #include "lwip.h"
-#include "sdmmc.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"

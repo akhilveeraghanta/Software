@@ -24,7 +24,8 @@ cc_binary(
         ":STM32H743ZITx_FLASH.ld",
         ":dma",
         ":adc",
-        ":fatfs",
+        ":i2c",
+        ":spi",
         ":frankie_v1_main_lib",
         ":gpio",
         ":lwip",
@@ -76,53 +77,6 @@ cc_library(
     alwayslink = True,
 )
 
-cc_library(
-    name = "ff",
-    srcs = [
-        "ff.c",
-    ],
-    hdrs = [
-        "ff.h",
-        "main.h",
-    ],
-    copts = [
-        # We don't want to mark warnings as errors for 3rd party code
-        "-Wno-error",
-        "-DSTM32H743xx",
-    ],
-    restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = [
-        ":hal",
-    ],
-    # This is _very_ important. If we don't do this, bazel will not link in the
-    # interrupt handling code, which *will not* cause an error, and *will* cause
-    # interrupts to stop working
-    alwayslink = True,
-)
-
-cc_library(
-    name = "fatfs",
-    srcs = [
-        "fatfs.c",
-    ],
-    hdrs = [
-        "fatfs.h",
-        "main.h",
-    ],
-    copts = [
-        # We don't want to mark warnings as errors for 3rd party code
-        "-Wno-error",
-        "-DSTM32H743xx",
-    ],
-    restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = [
-        ":hal",
-    ],
-    # This is _very_ important. If we don't do this, bazel will not link in the
-    # interrupt handling code, which *will not* cause an error, and *will* cause
-    # interrupts to stop working
-    alwayslink = True,
-)
 
 cc_library(
     name = "crc",
@@ -202,6 +156,52 @@ cc_library(
     ],
     hdrs = [
         "adc.h",
+        "main.h",
+    ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+        "-DSTM32H743xx",
+    ],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    deps = [
+        ":hal",
+    ],
+    # This is _very_ important. If we don't do this, bazel will not link in the
+    # interrupt handling code, which *will not* cause an error, and *will* cause
+    # interrupts to stop working
+    alwayslink = True,
+)
+cc_library(
+    name = "i2c",
+    srcs = [
+        "i2c.c",
+    ],
+    hdrs = [
+        "i2c.h",
+        "main.h",
+    ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+        "-DSTM32H743xx",
+    ],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    deps = [
+        ":hal",
+    ],
+    # This is _very_ important. If we don't do this, bazel will not link in the
+    # interrupt handling code, which *will not* cause an error, and *will* cause
+    # interrupts to stop working
+    alwayslink = True,
+)
+cc_library(
+    name = "spi",
+    srcs = [
+        "spi.c",
+    ],
+    hdrs = [
+        "spi.h",
         "main.h",
     ],
     copts = [
