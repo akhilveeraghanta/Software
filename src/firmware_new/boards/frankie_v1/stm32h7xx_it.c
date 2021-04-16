@@ -59,6 +59,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern ETH_HandleTypeDef heth;
 extern DMA_HandleTypeDef hdma_uart4_rx;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart3;
@@ -224,6 +225,20 @@ void UART4_IRQHandler(void)
   /* USER CODE BEGIN UART4_IRQn 1 */
 
   /* USER CODE END UART4_IRQn 1 */
+}
+
+/**
+  * @brief This function handles Ethernet global interrupt.
+  */
+void ETH_IRQHandler(void)
+{
+  /* USER CODE BEGIN ETH_IRQn 0 */
+
+  /* USER CODE END ETH_IRQn 0 */
+  HAL_ETH_IRQHandler(&heth);
+  /* USER CODE BEGIN ETH_IRQn 1 */
+
+  /* USER CODE END ETH_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

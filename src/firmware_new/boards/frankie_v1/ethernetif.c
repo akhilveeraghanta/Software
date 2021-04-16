@@ -183,6 +183,9 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+    /* Peripheral interrupt init */
+    HAL_NVIC_SetPriority(ETH_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(ETH_IRQn);
   /* USER CODE BEGIN ETH_MspInit 1 */
 
   /* USER CODE END ETH_MspInit 1 */
@@ -217,6 +220,9 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
     HAL_GPIO_DeInit(GPIOA, RMII_REF_CLK_Pin|RMII_MDIO_Pin|RMII_CRS_DV_Pin);
 
     HAL_GPIO_DeInit(GPIOB, RMII_TX_EN_Pin|RMII_TXD0_Pin|RMII_TXD1_Pin);
+
+    /* Peripheral interrupt Deinit*/
+    HAL_NVIC_DisableIRQ(ETH_IRQn);
 
   /* USER CODE BEGIN ETH_MspDeInit 1 */
 
