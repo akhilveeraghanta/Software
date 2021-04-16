@@ -23,10 +23,8 @@
 #include "adc.h"
 #include "crc.h"
 #include "dma.h"
-#include "fatfs.h"
 #include "i2c.h"
 #include "lwip.h"
-#include "sdmmc.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -129,9 +127,7 @@ int main(void)
   MX_ADC3_Init();
   MX_I2C1_SMBUS_Init();
   MX_I2C2_Init();
-  MX_SDMMC1_SD_Init();
   MX_SPI1_Init();
-  MX_FATFS_Init();
   MX_ADC1_Init();
   MX_ADC2_Init();
   MX_TIM1_Init();
