@@ -26,10 +26,13 @@
 #endif /* MDK ARM Compiler */
 #include <string.h>
 
+#include "ethernetif.h"
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
+static void ethernet_link_status_updated(struct netif *netif);
 /* ETH Variables initialization ----------------------------------------------*/
 void Error_Handler(void);
 
@@ -46,6 +49,10 @@ uint8_t IP_ADDRESS[4];
 uint8_t NETMASK_ADDRESS[4];
 uint8_t GATEWAY_ADDRESS[4];
 ip6_addr_t ip6addr;
+/* USER CODE BEGIN OS_THREAD_ATTR_CMSIS_RTOS_V2 */
+#define INTERFACE_THREAD_STACK_SIZE (1024)
+osThreadAttr_t attributes;
+/* USER CODE END OS_THREAD_ATTR_CMSIS_RTOS_V2 */
 
 /* USER CODE BEGIN 2 */
 
@@ -56,6 +63,7 @@ ip6_addr_t ip6addr;
   */
 void MX_LWIP_Init(void)
 {
+<<<<<<< HEAD
   /* IP addresses initialization */
   IP_ADDRESS[0] = 0;
   IP_ADDRESS[1] = 0;
@@ -103,6 +111,48 @@ void MX_LWIP_Init(void)
 /* USER CODE BEGIN 3 */
 
 /* USER CODE END 3 */
+=======
+    /* Initilialize the LwIP stack with RTOS */
+    tcpip_init(NULL, NULL);
+
+    /* add the network interface (IPv6) with RTOS */
+    netif_add(&gnetif, NULL, &ethernetif_init, &tcpip_input);
+
+    /* Create IPv6 local address */
+    netif_create_ip6_linklocal_address(&gnetif, 0);
+    netif_ip6_addr_set_state(&gnetif, 0, IP6_ADDR_VALID);
+    gnetif.ip6_autoconfig_enabled = 1;
+
+    /* Registers the default network interface */
+    netif_set_default(&gnetif);
+
+    if (netif_is_link_up(&gnetif))
+    {
+        /* When the netif is fully configured this function must be called */
+        netif_set_up(&gnetif);
+    }
+    else
+    {
+        /* When the netif link is down this function must be called */
+        netif_set_down(&gnetif);
+    }
+
+    /* Set the link callback function, this function is called on change of link status*/
+    netif_set_link_callback(&gnetif, ethernet_link_status_updated);
+
+    /* Create the Ethernet link handler thread */
+    /* USER CODE BEGIN H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
+    memset(&attributes, 0x0, sizeof(osThreadAttr_t));
+    attributes.name       = "EthLink";
+    attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
+    attributes.priority   = osPriorityBelowNormal;
+    osThreadNew(ethernet_link_thread, &gnetif, &attributes);
+    /* USER CODE END H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
+
+    /* USER CODE BEGIN 3 */
+
+    /* USER CODE END 3 */
+>>>>>>> jonathan/fix_cubemx
 }
 
 #ifdef USE_OBSOLETE_USER_CODE_SECTION_4
@@ -112,7 +162,30 @@ void MX_LWIP_Init(void)
 /* USER CODE END 4 */
 #endif
 
+<<<<<<< HEAD
 #if defined ( __CC_ARM )  /* MDK ARM Compiler */
+=======
+/**
+ * @brief  Notify the User about the network interface config status
+ * @param  netif: the network interface
+ * @retval None
+ */
+static void ethernet_link_status_updated(struct netif *netif)
+{
+    if (netif_is_up(netif))
+    {
+        /* USER CODE BEGIN 5 */
+        /* USER CODE END 5 */
+    }
+    else /* netif is down */
+    {
+        /* USER CODE BEGIN 6 */
+        /* USER CODE END 6 */
+    }
+}
+
+#if defined(__CC_ARM) /* MDK ARM Compiler */
+>>>>>>> jonathan/fix_cubemx
 /**
  * Opens a serial device for communication.
  *

@@ -69,6 +69,7 @@ static TbotsProto_RobotLog robot_log_msg;
 static TbotsProto_Primitive primitive_msg;
 
 /* USER CODE END Variables */
+<<<<<<< HEAD
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
@@ -76,6 +77,67 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 1024 * 4
 };
+=======
+/* Definitions for NetStartTask */
+osThreadId_t NetStartTaskHandle;
+const osThreadAttr_t NetStartTask_attributes = {
+    .name       = "NetStartTask",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for RobotStatusTask */
+osThreadId_t RobotStatusTaskHandle;
+const osThreadAttr_t RobotStatusTask_attributes = {
+    .name       = "RobotStatusTask",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal1,
+};
+/* Definitions for VisionMsgTask */
+osThreadId_t VisionMsgTaskHandle;
+const osThreadAttr_t VisionMsgTask_attributes = {
+    .name       = "VisionMsgTask",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for PrimMsgTask */
+osThreadId_t PrimMsgTaskHandle;
+const osThreadAttr_t PrimMsgTask_attributes = {
+    .name       = "PrimMsgTask",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for testMsgUpdate */
+osThreadId_t testMsgUpdateHandle;
+const osThreadAttr_t testMsgUpdate_attributes = {
+    .name       = "testMsgUpdate",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for RobotLogMsgSend */
+osThreadId_t RobotLogMsgSendHandle;
+const osThreadAttr_t RobotLogMsgSend_attributes = {
+    .name       = "RobotLogMsgSend",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for NetworkRobotLog */
+osThreadId_t NetworkRobotLogHandle;
+const osThreadAttr_t NetworkRobotLog_attributes = {
+    .name       = "NetworkRobotLog",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for UbloxOdinTask */
+osThreadId_t UbloxOdinTaskHandle;
+const osThreadAttr_t UbloxOdinTask_attributes = {
+    .name       = "UbloxOdinTask",
+    .stack_size = 1024 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
+};
+/* Definitions for RobotLogProtoQ */
+osMessageQueueId_t RobotLogProtoQHandle;
+const osMessageQueueAttr_t RobotLogProtoQ_attributes = {.name = "RobotLogProtoQ"};
+>>>>>>> jonathan/fix_cubemx
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -111,6 +173,7 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_QUEUES */
     /* add queues, ... */
+<<<<<<< HEAD
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -119,6 +182,56 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* USER CODE END RTOS_THREADS */
+=======
+    /* USER CODE END RTOS_QUEUES */
+
+    /* Create the thread(s) */
+    /* creation of NetStartTask */
+    NetStartTaskHandle = osThreadNew(io_proto_multicast_startNetworkingTask, NULL,
+                                     &NetStartTask_attributes);
+
+    /* creation of RobotStatusTask */
+    RobotStatusTaskHandle =
+        osThreadNew(io_proto_multicast_sender_task,
+                    (void *)robot_status_msg_sender_profile, &RobotStatusTask_attributes);
+
+    /* creation of VisionMsgTask */
+    VisionMsgTaskHandle =
+        osThreadNew(io_proto_multicast_listener_task, (void *)vision_msg_listener_profile,
+                    &VisionMsgTask_attributes);
+
+    /* creation of PrimMsgTask */
+    PrimMsgTaskHandle =
+        osThreadNew(io_proto_multicast_listener_task,
+                    (void *)primitive_msg_listener_profile, &PrimMsgTask_attributes);
+
+    /* creation of testMsgUpdate */
+    testMsgUpdateHandle =
+        osThreadNew(test_msg_update, (void *)robot_status_msg_sender_profile,
+                    &testMsgUpdate_attributes);
+
+    /* creation of RobotLogMsgSend */
+    RobotLogMsgSendHandle =
+        osThreadNew(io_proto_multicast_sender_task, (void *)robot_log_msg_sender_profile,
+                    &RobotLogMsgSend_attributes);
+
+    /* creation of NetworkRobotLog */
+    NetworkRobotLogHandle =
+        osThreadNew(io_network_logger_task, (void *)robot_log_msg_sender_profile,
+                    &NetworkRobotLog_attributes);
+
+    /* creation of UbloxOdinTask */
+    UbloxOdinTaskHandle =
+        osThreadNew(io_ublox_odinw262_communicator_task, NULL, &UbloxOdinTask_attributes);
+
+    /* USER CODE BEGIN RTOS_THREADS */
+    /* USER CODE END RTOS_THREADS */
+
+    /* USER CODE BEGIN RTOS_EVENTS */
+    /* add events, ... */
+    /* USER CODE END RTOS_EVENTS */
+}
+>>>>>>> jonathan/fix_cubemx
 
 }
 

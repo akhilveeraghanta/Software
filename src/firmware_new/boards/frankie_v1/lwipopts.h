@@ -25,7 +25,7 @@
 #include "main.h"
 
 /*-----------------------------------------------------------------------------*/
-/* Current version of LwIP supported by CubeMx: 2.0.3 -*/
+/* Current version of LwIP supported by CubeMx: 2.1.2 -*/
 /*-----------------------------------------------------------------------------*/
 
 /* Within 'USER CODE' section, code will be kept by default at each generation */
@@ -47,6 +47,21 @@
 
 /* LwIP Stack Parameters (modified compared to initialization value in opt.h) -*/
 /* Parameters set in STM32CubeMX LwIP Configuration GUI -*/
+<<<<<<< HEAD
+=======
+/*----- Default value in ETH configuration GUI in CubeMx: 1524 -----*/
+#define ETH_RX_BUFFER_SIZE 1524
+/*----- Default Value for LWIP_IGMP: 0 ---*/
+#define LWIP_IGMP 1
+/*----- Default Value for MEMP_NUM_UDP_PCB: 4 ---*/
+#define MEMP_NUM_UDP_PCB 10
+/*----- Value in opt.h for LWIP_TCP: 1 -----*/
+#define LWIP_TCP 0
+/*----- Default Value for MEM_LIBC_MALLOC: 0 ---*/
+#define MEM_LIBC_MALLOC 1
+/*----- Default Value for MEMP_MEM_MALLOC: 0 ---*/
+#define MEMP_MEM_MALLOC 1
+>>>>>>> jonathan/fix_cubemx
 /*----- Value in opt.h for MEM_ALIGNMENT: 1 -----*/
 #define MEM_ALIGNMENT 4
 /*----- Default Value for H7 devices: 0x30044000 -----*/
@@ -55,7 +70,20 @@
 #define LWIP_SUPPORT_CUSTOM_PBUF 1
 /*----- Value in opt.h for LWIP_ETHERNET: LWIP_ARP || PPPOE_SUPPORT -*/
 #define LWIP_ETHERNET 1
+<<<<<<< HEAD
 /*----- Value in opt.h for LWIP_DNS_SECURE: (LWIP_DNS_SECURE_RAND_XID | LWIP_DNS_SECURE_NO_MULTIPLE_OUTSTANDING | LWIP_DNS_SECURE_RAND_SRC_PORT) -*/
+=======
+/*----- Default Value for LWIP_IPV4: 1 ---*/
+#define LWIP_IPV4 0
+/*----- Default Value for LWIP_BROADCAST_PING: 0 ---*/
+#define LWIP_BROADCAST_PING 1
+/*----- Default Value for LWIP_MULTICAST_PING: 0 ---*/
+#define LWIP_MULTICAST_PING 1
+/*----- Default Value for LWIP_MULTICAST_TX_OPTIONS: 1 ---*/
+#define LWIP_MULTICAST_TX_OPTIONS 0
+/*----- Value in opt.h for LWIP_DNS_SECURE: (LWIP_DNS_SECURE_RAND_XID |
+ * LWIP_DNS_SECURE_NO_MULTIPLE_OUTSTANDING | LWIP_DNS_SECURE_RAND_SRC_PORT) -*/
+>>>>>>> jonathan/fix_cubemx
 #define LWIP_DNS_SECURE 7
 /*----- Value in opt.h for TCP_SND_QUEUELEN: (4*TCP_SND_BUF + (TCP_MSS - 1))/TCP_MSS -----*/
 #define TCP_SND_QUEUELEN 9
@@ -65,6 +93,8 @@
 #define TCP_SNDQUEUELOWAT 5
 /*----- Value in opt.h for TCP_WND_UPDATE_THRESHOLD: LWIP_MIN(TCP_WND/4, TCP_MSS*4) -----*/
 #define TCP_WND_UPDATE_THRESHOLD 536
+/*----- Value in opt.h for LWIP_NETIF_LINK_CALLBACK: 0 -----*/
+#define LWIP_NETIF_LINK_CALLBACK 1
 /*----- Value in opt.h for TCPIP_THREAD_STACKSIZE: 0 -----*/
 #define TCPIP_THREAD_STACKSIZE 1024
 /*----- Value in opt.h for TCPIP_THREAD_PRIO: 1 -----*/

@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
   ******************************************************************************
   * File Name          : CRC.h
   * Description        : This file provides code for the configuration
@@ -16,9 +17,29 @@
   *
   ******************************************************************************
   */
+=======
+ ******************************************************************************
+ * @file    crc.h
+ * @brief   This file contains all the function prototypes for
+ *          the crc.c file
+ ******************************************************************************
+ * @attention
+ *
+ * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+ * All rights reserved.</center></h2>
+ *
+ * This software component is licensed by ST under Ultimate Liberty license
+ * SLA0044, the "License"; You may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at:
+ *                             www.st.com/SLA0044
+ *
+ ******************************************************************************
+ */
+>>>>>>> jonathan/fix_cubemx
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __crc_H
-#define __crc_H
+#ifndef __CRC_H__
+#define __CRC_H__
+
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -45,6 +66,7 @@ void MX_CRC_Init(void);
 #ifdef __cplusplus
 }
 #endif
+<<<<<<< HEAD
 #endif /*__ crc_H */
 
 /**
@@ -54,5 +76,9 @@ void MX_CRC_Init(void);
 /**
   * @}
   */
+=======
+
+#endif /* __CRC_H__ */
+>>>>>>> jonathan/fix_cubemx
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
