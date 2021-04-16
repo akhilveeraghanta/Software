@@ -18,6 +18,7 @@
 #include "pb.h"
 #include "pb_decode.h"
 #include "pb_encode.h"
+#include "firmware/app/logger/logger.h"
 
 // internal event to signal network interface configured
 static osEventFlagsId_t networking_event;
@@ -149,6 +150,7 @@ void io_proto_multicast_listener_task(void* communication_profile)
                 {
                     io_proto_multicast_communication_profile_notifyEvents(profile,
                                                                           RECEIVED_PROTO);
+                    TLOG_DEBUG("Received primitive message");
                 }
                 break;
             }

@@ -77,6 +77,7 @@ cc_library(
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
         ":ublox_odinw262_communicator",
+        "//firmware/app/logger",
         "//firmware_new/boards/frankie_v1:hal",
         "//firmware_new/boards/frankie_v1:lwip",
         "//shared/proto:tbots_nanopb_proto",

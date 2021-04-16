@@ -16,3 +16,19 @@ sh_binary(
     srcs = ["cubemx_regen.sh"],
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
+
+cc_binary(
+    name = "send_proto_over_udp",
+    srcs = ["send_proto_over_udp.cpp"],
+    restricted_to = ["//cc_toolchain:k8"],
+    deps = [
+        "//shared:constants",
+        "//shared/proto:tbots_cc_proto",
+        "//software/logger",
+        "//software/networking:threaded_proto_udp_listener",
+        "//software/networking:threaded_proto_udp_sender",
+        "//software/proto/message_translation:tbots_protobuf",
+        "@boost//:asio",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
