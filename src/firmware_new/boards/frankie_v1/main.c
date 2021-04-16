@@ -21,14 +21,15 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#include "cmsis_os.h"
-#include "crc.h"
-#include "dma.h"
+#include "adc.h"
+#include "eth.h"
+#include "fatfs.h"
 #include "gpio.h"
-#include "lwip.h"
+#include "i2c.h"
+#include "sdmmc.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
-#include "usb_otg.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -63,7 +64,6 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MPU_Config(void);
-void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 static void initIoLayer(void);
@@ -118,12 +118,23 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_DMA_Init();
     MX_USART3_UART_Init();
-    MX_USB_OTG_FS_PCD_Init();
-    MX_CRC_Init();
+    MX_ETH_Init();
+    MX_ADC3_Init();
+    MX_I2C1_SMBUS_Init();
+    MX_I2C2_Init();
+    MX_SDMMC1_SD_Init();
+    MX_SPI1_Init();
+    MX_FATFS_Init();
+    MX_ADC1_Init();
+    MX_ADC2_Init();
+    MX_TIM1_Init();
+    MX_TIM2_Init();
+    MX_TIM3_Init();
     MX_TIM4_Init();
-    MX_UART8_Init();
+    MX_TIM8_Init();
+    MX_TIM12_Init();
+    MX_UART4_Init();
     /* USER CODE BEGIN 2 */
 
     //              ---- Initialize App/IO Layers ----
@@ -138,13 +149,6 @@ int main(void)
     initIoLayer();
     /* USER CODE END 2 */
 
-    /* Init scheduler */
-    osKernelInitialize(); /* Call init function for freertos objects (in freertos.c) */
-    MX_FREERTOS_Init();
-    /* Start scheduler */
-    osKernelStart();
-
-    /* We should never get here as control is now taken by the scheduler */
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
@@ -176,10 +180,13 @@ void SystemClock_Config(void)
     while (!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY))
     {
     }
+    /** Macro to configure the PLL clock source
+     */
+    __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
     /** Initializes the CPU, AHB and APB buses clocks
      */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState       = RCC_HSE_BYPASS;
+    RCC_OscInitStruct.HSEState       = RCC_HSE_ON;
     RCC_OscInitStruct.PLL.PLLState   = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource  = RCC_PLLSOURCE_HSE;
     RCC_OscInitStruct.PLL.PLLM       = 1;
@@ -212,16 +219,25 @@ void SystemClock_Config(void)
         Error_Handler();
     }
     PeriphClkInitStruct.PeriphClockSelection =
-        RCC_PERIPHCLK_USART3 | RCC_PERIPHCLK_UART8 | RCC_PERIPHCLK_USB;
+        RCC_PERIPHCLK_USART3 | RCC_PERIPHCLK_UART4 | RCC_PERIPHCLK_SPI1 |
+        RCC_PERIPHCLK_SDMMC | RCC_PERIPHCLK_I2C2 | RCC_PERIPHCLK_ADC | RCC_PERIPHCLK_I2C1;
+    PeriphClkInitStruct.PLL2.PLL2M                = 1;
+    PeriphClkInitStruct.PLL2.PLL2N                = 19;
+    PeriphClkInitStruct.PLL2.PLL2P                = 3;
+    PeriphClkInitStruct.PLL2.PLL2Q                = 2;
+    PeriphClkInitStruct.PLL2.PLL2R                = 2;
+    PeriphClkInitStruct.PLL2.PLL2RGE              = RCC_PLL2VCIRANGE_3;
+    PeriphClkInitStruct.PLL2.PLL2VCOSEL           = RCC_PLL2VCOMEDIUM;
+    PeriphClkInitStruct.PLL2.PLL2FRACN            = 0;
+    PeriphClkInitStruct.SdmmcClockSelection       = RCC_SDMMCCLKSOURCE_PLL;
+    PeriphClkInitStruct.Spi123ClockSelection      = RCC_SPI123CLKSOURCE_PLL;
     PeriphClkInitStruct.Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1;
-    PeriphClkInitStruct.UsbClockSelection         = RCC_USBCLKSOURCE_PLL;
+    PeriphClkInitStruct.I2c123ClockSelection      = RCC_I2C123CLKSOURCE_D2PCLK1;
+    PeriphClkInitStruct.AdcClockSelection         = RCC_ADCCLKSOURCE_PLL2;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
     {
         Error_Handler();
     }
-    /** Enable USB Voltage detector
-     */
-    HAL_PWREx_EnableUSBVoltageDetector();
 }
 
 /* USER CODE BEGIN 4 */

@@ -1,8 +1,8 @@
 /**
  ******************************************************************************
- * File Name          : USART.h
+ * File Name          : DEBUG.c
  * Description        : This file provides code for the configuration
- *                      of the USART instances.
+ *                      of the DEBUG instances.
  ******************************************************************************
  * @attention
  *
@@ -16,46 +16,19 @@
  *
  ******************************************************************************
  */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __usart_H
-#define __usart_H
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include "debug.h"
 
-    /* USER CODE BEGIN Includes */
+/* USER CODE BEGIN 0 */
 
-    /* USER CODE END Includes */
+/* USER CODE END 0 */
 
-    extern UART_HandleTypeDef huart4;
-    extern UART_HandleTypeDef huart3;
+/* DEBUG init function */
+void MX_DEBUG_Init(void) {}
 
-    /* USER CODE BEGIN Private defines */
+/* USER CODE BEGIN 1 */
 
-    /* USER CODE END Private defines */
-
-    void MX_UART4_Init(void);
-    void MX_USART3_UART_Init(void);
-
-    /* USER CODE BEGIN Prototypes */
-
-    /* USER CODE END Prototypes */
-
-#ifdef __cplusplus
-}
-#endif
-#endif /*__ usart_H */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
+/* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

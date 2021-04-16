@@ -53,12 +53,11 @@ extern "C"
     void MemManage_Handler(void);
     void BusFault_Handler(void);
     void UsageFault_Handler(void);
+    void SVC_Handler(void);
     void DebugMon_Handler(void);
+    void PendSV_Handler(void);
     void SysTick_Handler(void);
-    void DMA1_Stream0_IRQHandler(void);
-    void ETH_IRQHandler(void);
-    void ETH_WKUP_IRQHandler(void);
-    void UART8_IRQHandler(void);
+    void USART3_IRQHandler(void);
     /* USER CODE BEGIN EFP */
 
     /* USER CODE END EFP */

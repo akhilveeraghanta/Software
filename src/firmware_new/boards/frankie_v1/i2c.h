@@ -1,8 +1,8 @@
 /**
  ******************************************************************************
- * File Name          : USART.h
+ * File Name          : I2C.h
  * Description        : This file provides code for the configuration
- *                      of the USART instances.
+ *                      of the I2C instances.
  ******************************************************************************
  * @attention
  *
@@ -17,8 +17,8 @@
  ******************************************************************************
  */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __usart_H
-#define __usart_H
+#ifndef __i2c_H
+#define __i2c_H
 #ifdef __cplusplus
 extern "C"
 {
@@ -31,15 +31,15 @@ extern "C"
 
     /* USER CODE END Includes */
 
-    extern UART_HandleTypeDef huart4;
-    extern UART_HandleTypeDef huart3;
+    extern SMBUS_HandleTypeDef hsmbus1;
+    extern I2C_HandleTypeDef hi2c2;
 
     /* USER CODE BEGIN Private defines */
 
     /* USER CODE END Private defines */
 
-    void MX_UART4_Init(void);
-    void MX_USART3_UART_Init(void);
+    void MX_I2C1_SMBUS_Init(void);
+    void MX_I2C2_Init(void);
 
     /* USER CODE BEGIN Prototypes */
 
@@ -48,7 +48,7 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ usart_H */
+#endif /*__ i2c_H */
 
 /**
  * @}
