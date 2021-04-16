@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : ADC.c
-  * Description        : This file provides code for the configuration
-  *                      of the ADC instances.
+  * @file    adc.c
+  * @brief   This file provides code for the configuration
+  *          of the ADC instances.
   ******************************************************************************
   * @attention
   *
@@ -31,10 +31,18 @@ ADC_HandleTypeDef hadc3;
 /* ADC1 init function */
 void MX_ADC1_Init(void)
 {
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
   ADC_MultiModeTypeDef multimode = {0};
   ADC_ChannelConfTypeDef sConfig = {0};
 
-  /** Common config 
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+  /** Common config
   */
   hadc1.Instance = ADC1;
   hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV2;
@@ -55,14 +63,14 @@ void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
-  /** Configure the ADC multi-mode 
+  /** Configure the ADC multi-mode
   */
   multimode.Mode = ADC_MODE_INDEPENDENT;
   if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
   {
     Error_Handler();
   }
-  /** Configure Regular Channel 
+  /** Configure Regular Channel
   */
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = ADC_REGULAR_RANK_1;
@@ -70,18 +78,30 @@ void MX_ADC1_Init(void)
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
+  sConfig.OffsetSignedSaturation = DISABLE;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
   }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
 
 }
 /* ADC2 init function */
 void MX_ADC2_Init(void)
 {
+
+  /* USER CODE BEGIN ADC2_Init 0 */
+
+  /* USER CODE END ADC2_Init 0 */
+
   ADC_ChannelConfTypeDef sConfig = {0};
 
-  /** Common config 
+  /* USER CODE BEGIN ADC2_Init 1 */
+
+  /* USER CODE END ADC2_Init 1 */
+  /** Common config
   */
   hadc2.Instance = ADC2;
   hadc2.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV2;
@@ -102,7 +122,7 @@ void MX_ADC2_Init(void)
   {
     Error_Handler();
   }
-  /** Configure Regular Channel 
+  /** Configure Regular Channel
   */
   sConfig.Channel = ADC_CHANNEL_10;
   sConfig.Rank = ADC_REGULAR_RANK_1;
@@ -110,18 +130,30 @@ void MX_ADC2_Init(void)
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
+  sConfig.OffsetSignedSaturation = DISABLE;
   if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
   {
     Error_Handler();
   }
+  /* USER CODE BEGIN ADC2_Init 2 */
+
+  /* USER CODE END ADC2_Init 2 */
 
 }
 /* ADC3 init function */
 void MX_ADC3_Init(void)
 {
+
+  /* USER CODE BEGIN ADC3_Init 0 */
+
+  /* USER CODE END ADC3_Init 0 */
+
   ADC_ChannelConfTypeDef sConfig = {0};
 
-  /** Common config 
+  /* USER CODE BEGIN ADC3_Init 1 */
+
+  /* USER CODE END ADC3_Init 1 */
+  /** Common config
   */
   hadc3.Instance = ADC3;
   hadc3.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV2;
@@ -142,7 +174,7 @@ void MX_ADC3_Init(void)
   {
     Error_Handler();
   }
-  /** Configure Regular Channel 
+  /** Configure Regular Channel
   */
   sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = ADC_REGULAR_RANK_1;
@@ -150,10 +182,14 @@ void MX_ADC3_Init(void)
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
+  sConfig.OffsetSignedSaturation = DISABLE;
   if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
   {
     Error_Handler();
   }
+  /* USER CODE BEGIN ADC3_Init 2 */
+
+  /* USER CODE END ADC3_Init 2 */
 
 }
 
@@ -173,17 +209,17 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     if(HAL_RCC_ADC12_CLK_ENABLED==1){
       __HAL_RCC_ADC12_CLK_ENABLE();
     }
-  
+
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOF_CLK_ENABLE();
-    /**ADC1 GPIO Configuration    
+    /**ADC1 GPIO Configuration
     PC0     ------> ADC1_INP10
     PA3     ------> ADC1_INP15
     PB0     ------> ADC1_INP9
     PF11     ------> ADC1_INP2
-    PF12     ------> ADC1_INP6 
+    PF12     ------> ADC1_INP6
     */
     GPIO_InitStruct.Pin = WHEEL_FRONT_RIGHT_CSOUT_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
@@ -219,14 +255,14 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     if(HAL_RCC_ADC12_CLK_ENABLED==1){
       __HAL_RCC_ADC12_CLK_ENABLE();
     }
-  
+
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
-    /**ADC2 GPIO Configuration    
+    /**ADC2 GPIO Configuration
     PC0     ------> ADC2_INP10
     PA3     ------> ADC2_INP15
-    PB0     ------> ADC2_INP9 
+    PB0     ------> ADC2_INP9
     */
     GPIO_InitStruct.Pin = WHEEL_FRONT_RIGHT_CSOUT_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
@@ -254,10 +290,10 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
   /* USER CODE END ADC3_MspInit 0 */
     /* ADC3 clock enable */
     __HAL_RCC_ADC3_CLK_ENABLE();
-  
+
     __HAL_RCC_GPIOF_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
-    /**ADC3 GPIO Configuration    
+    /**ADC3 GPIO Configuration
     PF3     ------> ADC3_INP5
     PF4     ------> ADC3_INP9
     PF5     ------> ADC3_INP4
@@ -270,9 +306,9 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     PC0     ------> ADC3_INP10
     PC2_C     ------> ADC3_INN1
     PC2_C     ------> ADC3_INP0
-    PC3_C     ------> ADC3_INP1 
+    PC3_C     ------> ADC3_INP1
     */
-    GPIO_InitStruct.Pin = ENCODER_FRONT_LEFT_SIN_Pin|ENCODER_FRONT_LEFT_COS_Pin|ENCODER_BACK_LEFT_COS_Pin|ENCODER_BACK_LEFT_SIN_Pin 
+    GPIO_InitStruct.Pin = ENCODER_FRONT_LEFT_SIN_Pin|ENCODER_FRONT_LEFT_COS_Pin|ENCODER_BACK_LEFT_COS_Pin|ENCODER_BACK_LEFT_SIN_Pin
                           |ENCODER_BACK_RIGHT_COS_Pin|ENCODER_BACK_RIGHT_SIN_Pin|HV_SENSE_PWR_BRD_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -306,13 +342,13 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     if(HAL_RCC_ADC12_CLK_ENABLED==0){
       __HAL_RCC_ADC12_CLK_DISABLE();
     }
-  
-    /**ADC1 GPIO Configuration    
+
+    /**ADC1 GPIO Configuration
     PC0     ------> ADC1_INP10
     PA3     ------> ADC1_INP15
     PB0     ------> ADC1_INP9
     PF11     ------> ADC1_INP2
-    PF12     ------> ADC1_INP6 
+    PF12     ------> ADC1_INP6
     */
     HAL_GPIO_DeInit(WHEEL_FRONT_RIGHT_CSOUT_GPIO_Port, WHEEL_FRONT_RIGHT_CSOUT_Pin);
 
@@ -336,11 +372,11 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     if(HAL_RCC_ADC12_CLK_ENABLED==0){
       __HAL_RCC_ADC12_CLK_DISABLE();
     }
-  
-    /**ADC2 GPIO Configuration    
+
+    /**ADC2 GPIO Configuration
     PC0     ------> ADC2_INP10
     PA3     ------> ADC2_INP15
-    PB0     ------> ADC2_INP9 
+    PB0     ------> ADC2_INP9
     */
     HAL_GPIO_DeInit(WHEEL_FRONT_RIGHT_CSOUT_GPIO_Port, WHEEL_FRONT_RIGHT_CSOUT_Pin);
 
@@ -359,8 +395,8 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
   /* USER CODE END ADC3_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_ADC3_CLK_DISABLE();
-  
-    /**ADC3 GPIO Configuration    
+
+    /**ADC3 GPIO Configuration
     PF3     ------> ADC3_INP5
     PF4     ------> ADC3_INP9
     PF5     ------> ADC3_INP4
@@ -373,9 +409,9 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     PC0     ------> ADC3_INP10
     PC2_C     ------> ADC3_INN1
     PC2_C     ------> ADC3_INP0
-    PC3_C     ------> ADC3_INP1 
+    PC3_C     ------> ADC3_INP1
     */
-    HAL_GPIO_DeInit(GPIOF, ENCODER_FRONT_LEFT_SIN_Pin|ENCODER_FRONT_LEFT_COS_Pin|ENCODER_BACK_LEFT_COS_Pin|ENCODER_BACK_LEFT_SIN_Pin 
+    HAL_GPIO_DeInit(GPIOF, ENCODER_FRONT_LEFT_SIN_Pin|ENCODER_FRONT_LEFT_COS_Pin|ENCODER_BACK_LEFT_COS_Pin|ENCODER_BACK_LEFT_SIN_Pin
                           |ENCODER_BACK_RIGHT_COS_Pin|ENCODER_BACK_RIGHT_SIN_Pin|HV_SENSE_PWR_BRD_Pin);
 
     HAL_GPIO_DeInit(WHEEL_FRONT_RIGHT_CSOUT_GPIO_Port, WHEEL_FRONT_RIGHT_CSOUT_Pin);
@@ -384,7 +420,7 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 
   /* USER CODE END ADC3_MspDeInit 1 */
   }
-} 
+}
 
 /* USER CODE BEGIN 1 */
 

@@ -25,7 +25,7 @@
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */     
+/* USER CODE BEGIN Includes */
 #include "firmware/app/logger/logger.h"
 #include "firmware_new/boards/frankie_v1/io/drivetrain.h"
 #include "firmware_new/boards/frankie_v1/io/network_logger.h"
@@ -69,82 +69,79 @@ static TbotsProto_RobotLog robot_log_msg;
 static TbotsProto_Primitive primitive_msg;
 
 /* USER CODE END Variables */
-<<<<<<< HEAD
-/* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 1024 * 4
-};
-=======
 /* Definitions for NetStartTask */
 osThreadId_t NetStartTaskHandle;
 const osThreadAttr_t NetStartTask_attributes = {
-    .name       = "NetStartTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
+  .name = "NetStartTask",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for RobotStatusTask */
 osThreadId_t RobotStatusTaskHandle;
 const osThreadAttr_t RobotStatusTask_attributes = {
-    .name       = "RobotStatusTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal1,
+  .name = "RobotStatusTask",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal1,
 };
 /* Definitions for VisionMsgTask */
 osThreadId_t VisionMsgTaskHandle;
 const osThreadAttr_t VisionMsgTask_attributes = {
-    .name       = "VisionMsgTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
+  .name = "VisionMsgTask",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for PrimMsgTask */
 osThreadId_t PrimMsgTaskHandle;
 const osThreadAttr_t PrimMsgTask_attributes = {
-    .name       = "PrimMsgTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
+  .name = "PrimMsgTask",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for testMsgUpdate */
 osThreadId_t testMsgUpdateHandle;
 const osThreadAttr_t testMsgUpdate_attributes = {
-    .name       = "testMsgUpdate",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
+  .name = "testMsgUpdate",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for RobotLogMsgSend */
 osThreadId_t RobotLogMsgSendHandle;
 const osThreadAttr_t RobotLogMsgSend_attributes = {
-    .name       = "RobotLogMsgSend",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
+  .name = "RobotLogMsgSend",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for NetworkRobotLog */
 osThreadId_t NetworkRobotLogHandle;
 const osThreadAttr_t NetworkRobotLog_attributes = {
-    .name       = "NetworkRobotLog",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
+  .name = "NetworkRobotLog",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for UbloxOdinTask */
 osThreadId_t UbloxOdinTaskHandle;
 const osThreadAttr_t UbloxOdinTask_attributes = {
-    .name       = "UbloxOdinTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
+  .name = "UbloxOdinTask",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for RobotLogProtoQ */
 osMessageQueueId_t RobotLogProtoQHandle;
-const osMessageQueueAttr_t RobotLogProtoQ_attributes = {.name = "RobotLogProtoQ"};
->>>>>>> jonathan/fix_cubemx
+const osMessageQueueAttr_t RobotLogProtoQ_attributes = {
+  .name = "RobotLogProtoQ"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
 /* USER CODE END FunctionPrototypes */
 
-void StartDefaultTask(void *argument);
+void io_proto_multicast_startNetworkingTask(void *argument);
+extern void io_proto_multicast_sender_task(void *argument);
+extern void io_proto_multicast_listener_task(void *argument);
+void test_msg_update(void *argument);
+extern void io_network_logger_task(void *argument);
+extern void io_ublox_odinw262_communicator_task(void *argument);
 
 extern void MX_LWIP_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -171,88 +168,84 @@ void MX_FREERTOS_Init(void) {
     /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of RobotLogProtoQ */
+  RobotLogProtoQHandle = osMessageQueueNew (16, sizeof(TbotsProto_RobotLog), &RobotLogProtoQ_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
     /* add queues, ... */
-<<<<<<< HEAD
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  /* creation of NetStartTask */
+  NetStartTaskHandle = osThreadNew(io_proto_multicast_startNetworkingTask, NULL, &NetStartTask_attributes);
+
+  /* creation of RobotStatusTask */
+  RobotStatusTaskHandle = osThreadNew(io_proto_multicast_sender_task, (void *)robot_status_msg_sender_profile, &RobotStatusTask_attributes);
+
+  /* creation of VisionMsgTask */
+  VisionMsgTaskHandle = osThreadNew(io_proto_multicast_listener_task, (void *)vision_msg_listener_profile, &VisionMsgTask_attributes);
+
+  /* creation of PrimMsgTask */
+  PrimMsgTaskHandle = osThreadNew(io_proto_multicast_listener_task, (void *)primitive_msg_listener_profile, &PrimMsgTask_attributes);
+
+  /* creation of testMsgUpdate */
+  testMsgUpdateHandle = osThreadNew(test_msg_update, (void *)robot_status_msg_sender_profile, &testMsgUpdate_attributes);
+
+  /* creation of RobotLogMsgSend */
+  RobotLogMsgSendHandle = osThreadNew(io_proto_multicast_sender_task, (void *)robot_log_msg_sender_profile, &RobotLogMsgSend_attributes);
+
+  /* creation of NetworkRobotLog */
+  NetworkRobotLogHandle = osThreadNew(io_network_logger_task, (void*)robot_log_msg_sender_profile, &NetworkRobotLog_attributes);
+
+  /* creation of UbloxOdinTask */
+  UbloxOdinTaskHandle = osThreadNew(io_ublox_odinw262_communicator_task, NULL, &UbloxOdinTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* USER CODE END RTOS_THREADS */
-=======
-    /* USER CODE END RTOS_QUEUES */
 
-    /* Create the thread(s) */
-    /* creation of NetStartTask */
-    NetStartTaskHandle = osThreadNew(io_proto_multicast_startNetworkingTask, NULL,
-                                     &NetStartTask_attributes);
-
-    /* creation of RobotStatusTask */
-    RobotStatusTaskHandle =
-        osThreadNew(io_proto_multicast_sender_task,
-                    (void *)robot_status_msg_sender_profile, &RobotStatusTask_attributes);
-
-    /* creation of VisionMsgTask */
-    VisionMsgTaskHandle =
-        osThreadNew(io_proto_multicast_listener_task, (void *)vision_msg_listener_profile,
-                    &VisionMsgTask_attributes);
-
-    /* creation of PrimMsgTask */
-    PrimMsgTaskHandle =
-        osThreadNew(io_proto_multicast_listener_task,
-                    (void *)primitive_msg_listener_profile, &PrimMsgTask_attributes);
-
-    /* creation of testMsgUpdate */
-    testMsgUpdateHandle =
-        osThreadNew(test_msg_update, (void *)robot_status_msg_sender_profile,
-                    &testMsgUpdate_attributes);
-
-    /* creation of RobotLogMsgSend */
-    RobotLogMsgSendHandle =
-        osThreadNew(io_proto_multicast_sender_task, (void *)robot_log_msg_sender_profile,
-                    &RobotLogMsgSend_attributes);
-
-    /* creation of NetworkRobotLog */
-    NetworkRobotLogHandle =
-        osThreadNew(io_network_logger_task, (void *)robot_log_msg_sender_profile,
-                    &NetworkRobotLog_attributes);
-
-    /* creation of UbloxOdinTask */
-    UbloxOdinTaskHandle =
-        osThreadNew(io_ublox_odinw262_communicator_task, NULL, &UbloxOdinTask_attributes);
-
-    /* USER CODE BEGIN RTOS_THREADS */
-    /* USER CODE END RTOS_THREADS */
-
-    /* USER CODE BEGIN RTOS_EVENTS */
+  /* USER CODE BEGIN RTOS_EVENTS */
     /* add events, ... */
-    /* USER CODE END RTOS_EVENTS */
-}
->>>>>>> jonathan/fix_cubemx
+  /* USER CODE END RTOS_EVENTS */
 
 }
 
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_io_proto_multicast_startNetworkingTask */
 /**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used 
-  * @retval None
-  */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
+ * @brief  Function implementing the NetStartTask thread.
+ * @param  argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_io_proto_multicast_startNetworkingTask */
+__weak void io_proto_multicast_startNetworkingTask(void *argument)
 {
   /* init code for LWIP */
   MX_LWIP_Init();
-  /* USER CODE BEGIN StartDefaultTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartDefaultTask */
+  /* USER CODE BEGIN io_proto_multicast_startNetworkingTask */
+    /* Infinite loop */
+    for (;;)
+    {
+        osDelay(1);
+    }
+  /* USER CODE END io_proto_multicast_startNetworkingTask */
+}
+
+/* USER CODE BEGIN Header_test_msg_update */
+/**
+ * @brief Function implementing the testMsgUpdate thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_test_msg_update */
+void test_msg_update(void *argument)
+{
+  /* USER CODE BEGIN test_msg_update */
+    /* Infinite loop */
+    for (;;)
+    {
+        osDelay(1);
+    }
+  /* USER CODE END test_msg_update */
 }
 
 /* Private application code --------------------------------------------------*/
@@ -282,11 +275,11 @@ void initIoNetworking()
         "robot_log_msg_sender", MULTICAST_CHANNELS[channel], ROBOT_LOGS_PORT,
         &robot_log_msg, TbotsProto_RobotLog_fields, MAXIMUM_TRANSFER_UNIT_BYTES);
 
-    // initialize ublox
-    GpioPin_t *ublox_reset_pin =
-        io_gpio_pin_create(ublox_reset_GPIO_Port, ublox_reset_Pin, ACTIVE_LOW);
+    /*// initialize ublox*/
+    /*GpioPin_t *ublox_reset_pin =*/
+        /*io_gpio_pin_create(ublox_reset_GPIO_Port, ublox_reset_Pin, ACTIVE_LOW);*/
 
-    io_ublox_odinw262_communicator_init(&huart8, ublox_reset_pin, 5);
+    /*io_ublox_odinw262_communicator_init(&huart8, ublox_reset_pin, 5);*/
 
     // initialize network logger
     io_network_logger_init(RobotLogProtoQHandle);
@@ -294,48 +287,48 @@ void initIoNetworking()
 
 void initIoDrivetrain(void)
 {
-    // Initialize a motor driver with the given suffix, on the given
-    // timer channel
-#define INIT_DRIVETRAIN_UNIT(MOTOR_NAME_SUFFIX, TIMER_CHANNEL)                           \
-    {                                                                                    \
-        GpioPin_t *reset_pin =                                                           \
-            io_gpio_pin_create(wheel_motor_##MOTOR_NAME_SUFFIX##_reset_GPIO_Port,        \
-                               wheel_motor_##MOTOR_NAME_SUFFIX##_reset_Pin, ACTIVE_LOW); \
-        GpioPin_t *coast_pin =                                                           \
-            io_gpio_pin_create(wheel_motor_##MOTOR_NAME_SUFFIX##_coast_GPIO_Port,        \
-                               wheel_motor_##MOTOR_NAME_SUFFIX##_coast_Pin, ACTIVE_LOW); \
-        GpioPin_t *mode_pin =                                                            \
-            io_gpio_pin_create(wheel_motor_##MOTOR_NAME_SUFFIX##_mode_GPIO_Port,         \
-                               wheel_motor_##MOTOR_NAME_SUFFIX##_mode_Pin, ACTIVE_HIGH); \
-        GpioPin_t *direction_pin = io_gpio_pin_create(                                   \
-            wheel_motor_##MOTOR_NAME_SUFFIX##_direction_GPIO_Port,                       \
-            wheel_motor_##MOTOR_NAME_SUFFIX##_direction_Pin, ACTIVE_HIGH);               \
-        GpioPin_t *brake_pin =                                                           \
-            io_gpio_pin_create(wheel_motor_##MOTOR_NAME_SUFFIX##_brake_GPIO_Port,        \
-                               wheel_motor_##MOTOR_NAME_SUFFIX##_brake_Pin, ACTIVE_LOW); \
-        GpioPin_t *esf_pin =                                                             \
-            io_gpio_pin_create(wheel_motor_##MOTOR_NAME_SUFFIX##_esf_GPIO_Port,          \
-                               wheel_motor_##MOTOR_NAME_SUFFIX##_esf_Pin, ACTIVE_HIGH);  \
-        PwmPin_t *pwm_pin = io_pwm_pin_create(&htim4, TIMER_CHANNEL);                    \
-                                                                                         \
-        AllegroA3931MotorDriver_t *motor_driver = io_allegro_a3931_motor_driver_create(  \
-            pwm_pin, reset_pin, coast_pin, mode_pin, direction_pin, brake_pin, esf_pin); \
-        io_allegro_a3931_motor_setPwmPercentage(motor_driver, 0.0);                      \
-        drivetrain_unit_##MOTOR_NAME_SUFFIX = io_drivetrain_unit_create(motor_driver);   \
-    }
+    /*// Initialize a motor driver with the given suffix, on the given*/
+    /*// timer channel*/
+/*#define INIT_DRIVETRAIN_UNIT(MOTOR_NAME_SUFFIX, TIMER_CHANNEL)                           \*/
+    /*{                                                                                    \*/
+        /*GpioPin_t *reset_pin =                                                           \*/
+            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_RESET_GPIO_Port,        \*/
+                               /*WHEEL_##MOTOR_NAME_SUFFIX##_RESET_Pin, ACTIVE_LOW); \*/
+        /*GpioPin_t *coast_pin =                                                           \*/
+            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_COAST_GPIO_Port,        \*/
+                               /*WHEEL_##MOTOR_NAME_SUFFIX##_COAST_Pin, ACTIVE_LOW); \*/
+        /*GpioPin_t *mode_pin =                                                            \*/
+            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_MODE_GPIO_Port,         \*/
+                               /*WHEEL_##MOTOR_NAME_SUFFIX##_MODE_Pin, ACTIVE_HIGH); \*/
+        /*GpioPin_t *direction_pin = io_gpio_pin_create(                                   \*/
+            /*WHEEL_##MOTOR_NAME_SUFFIX##_DIRECTION_GPIO_Port,                       \*/
+            /*WHEEL_##MOTOR_NAME_SUFFIX##_DIRECTION_Pin, ACTIVE_HIGH);               \*/
+        /*GpioPin_t *brake_pin =                                                           \*/
+            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_BRAKE_GPIO_Port,        \*/
+                               /*WHEEL_##MOTOR_NAME_SUFFIX##_BRAKE_Pin, ACTIVE_LOW); \*/
+        /*GpioPin_t *esf_pin =                                                             \*/
+            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_ESF_GPIO_Port,          \*/
+                               /*WHEEL_##MOTOR_NAME_SUFFIX##_ESF_Pin, ACTIVE_HIGH);  \*/
+        /*PwmPin_t *pwm_pin = io_pwm_pin_create(&htim4, TIMER_CHANNEL);                    \*/
+                                                                                         /*\*/
+        /*AllegroA3931MotorDriver_t *motor_driver = io_allegro_a3931_motor_driver_create(  \*/
+            /*pwm_pin, reset_pin, coast_pin, mode_pin, direction_pin, brake_pin, esf_pin); \*/
+        /*io_allegro_a3931_motor_setPwmPercentage(motor_driver, 0.0);                      \*/
+        /*drivetrain_unit_##MOTOR_NAME_SUFFIX = io_drivetrain_unit_create(motor_driver);   \*/
+    /*}*/
 
-    DrivetrainUnit_t *drivetrain_unit_front_left;
-    DrivetrainUnit_t *drivetrain_unit_back_left;
-    DrivetrainUnit_t *drivetrain_unit_back_right;
-    DrivetrainUnit_t *drivetrain_unit_front_right;
+    /*DrivetrainUnit_t *drivetrain_unit_FRONT_LEFT;*/
+    /*DrivetrainUnit_t *drivetrain_unit_BACK_LEFT;*/
+    /*DrivetrainUnit_t *drivetrain_unit_BACK_RIGHT;*/
+    /*DrivetrainUnit_t *drivetrain_unit_FRONT_RIGHT;*/
 
-    INIT_DRIVETRAIN_UNIT(front_left, TIM_CHANNEL_1);
-    INIT_DRIVETRAIN_UNIT(back_left, TIM_CHANNEL_2);
-    INIT_DRIVETRAIN_UNIT(back_right, TIM_CHANNEL_3);
-    INIT_DRIVETRAIN_UNIT(front_right, TIM_CHANNEL_4);
+    /*INIT_DRIVETRAIN_UNIT(FRONT_LEFT, TIM_CHANNEL_1);*/
+    /*INIT_DRIVETRAIN_UNIT(BACK_LEFT, TIM_CHANNEL_2);*/
+    /*INIT_DRIVETRAIN_UNIT(BACK_RIGHT, TIM_CHANNEL_3);*/
+    /*INIT_DRIVETRAIN_UNIT(FRONT_RIGHT, TIM_CHANNEL_4);*/
 
-    io_drivetrain_init(drivetrain_unit_front_left, drivetrain_unit_front_right,
-                       drivetrain_unit_back_left, drivetrain_unit_back_right);
+    /*io_drivetrain_init(drivetrain_unit_FRONT_LEFT, drivetrain_unit_front_right,*/
+                       /*drivetrain_unit_back_left, drivetrain_unit_back_right);*/
 }
 
 /* USER CODE END Application */

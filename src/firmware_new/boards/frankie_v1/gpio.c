@@ -1,9 +1,8 @@
 /**
-<<<<<<< HEAD
   ******************************************************************************
-  * File Name          : gpio.c
-  * Description        : This file provides code for the configuration
-  *                      of all used GPIO pins.
+  * @file    gpio.c
+  * @brief   This file provides code for the configuration
+  *          of all used GPIO pins.
   ******************************************************************************
   * @attention
   *
@@ -17,25 +16,6 @@
   *
   ******************************************************************************
   */
-=======
- ******************************************************************************
- * @file    gpio.c
- * @brief   This file provides code for the configuration
- *          of all used GPIO pins.
- ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
- * All rights reserved.</center></h2>
- *
- * This software component is licensed by ST under Ultimate Liberty license
- * SLA0044, the "License"; You may not use this file except in compliance with
- * the License. You may obtain a copy of the License at:
- *                             www.st.com/SLA0044
- *
- ******************************************************************************
- */
->>>>>>> jonathan/fix_cubemx
 
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
@@ -76,14 +56,14 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, CHARGE_PWR_BRD_Pin|WHEEL_FRONT_RIGHT_FF1_Pin|IMU_INT1_Pin|USER_LED_2_Pin 
+  HAL_GPIO_WritePin(GPIOE, CHARGE_PWR_BRD_Pin|WHEEL_FRONT_RIGHT_FF1_Pin|IMU_INT1_Pin|USER_LED_2_Pin
                           |USER_LED_3_Pin|WHEEL_BACK_RIGHT_DIR_Pin|WHEEL_BACK_RIGHT_FF1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(IMU_INT2_GPIO_Port, IMU_INT2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, WHEEL_FRONT_RIGHT_RESET_Pin|WHEEL_FRONT_RIGHT_FF2_Pin|RED_IN_RGB_Pin|BLUE_IN_RGB_Pin 
+  HAL_GPIO_WritePin(GPIOF, WHEEL_FRONT_RIGHT_RESET_Pin|WHEEL_FRONT_RIGHT_FF2_Pin|RED_IN_RGB_Pin|BLUE_IN_RGB_Pin
                           |GREEN_IN_RGB_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -93,16 +73,16 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOD, DRIBBLER_RESET_Pin|DRIBBLER_FF1_Pin|DRIBBLER_FF2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOG, WHEEL_FRONT_LEFT_RESET_Pin|WHEEL_FRONT_LEFT_FF1_Pin|WHEEL_FRONT_LEFT_FF2_Pin|WHEEL_BACK_LEFT_RESET_Pin 
-                          |WHEEL_BACK_LEFT_FF1_Pin|WHEEL_BACK_LEFT_FF2_Pin|GENEVA_END_STOP_2_Pin|GENEVA_END_STOP_1_Pin 
+  HAL_GPIO_WritePin(GPIOG, WHEEL_FRONT_LEFT_RESET_Pin|WHEEL_FRONT_LEFT_FF1_Pin|WHEEL_FRONT_LEFT_FF2_Pin|WHEEL_BACK_LEFT_RESET_Pin
+                          |WHEEL_BACK_LEFT_FF1_Pin|WHEEL_BACK_LEFT_FF2_Pin|GENEVA_END_STOP_2_Pin|GENEVA_END_STOP_1_Pin
                           |GENEVA_DIR_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, WHEEL_FRONT_RIGHT_DIR_Pin|DRIBBLER_DIR_Pin|WHEEL_FRONT_LEFT_DIR_Pin|WHEEL_BACK_LEFT_DIR_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PEPin PEPin PEPin PEPin 
+  /*Configure GPIO pins : PEPin PEPin PEPin PEPin
                            PEPin PEPin PEPin */
-  GPIO_InitStruct.Pin = CHARGE_PWR_BRD_Pin|WHEEL_FRONT_RIGHT_FF1_Pin|IMU_INT1_Pin|USER_LED_2_Pin 
+  GPIO_InitStruct.Pin = CHARGE_PWR_BRD_Pin|WHEEL_FRONT_RIGHT_FF1_Pin|IMU_INT1_Pin|USER_LED_2_Pin
                           |USER_LED_3_Pin|WHEEL_BACK_RIGHT_DIR_Pin|WHEEL_BACK_RIGHT_FF1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -122,9 +102,9 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(IMU_INT2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PFPin PFPin PFPin PFPin 
+  /*Configure GPIO pins : PFPin PFPin PFPin PFPin
                            PFPin */
-  GPIO_InitStruct.Pin = WHEEL_FRONT_RIGHT_RESET_Pin|WHEEL_FRONT_RIGHT_FF2_Pin|RED_IN_RGB_Pin|BLUE_IN_RGB_Pin 
+  GPIO_InitStruct.Pin = WHEEL_FRONT_RIGHT_RESET_Pin|WHEEL_FRONT_RIGHT_FF2_Pin|RED_IN_RGB_Pin|BLUE_IN_RGB_Pin
                           |GREEN_IN_RGB_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -144,9 +124,9 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PDPin PDPin PDPin PDPin 
+  /*Configure GPIO pins : PDPin PDPin PDPin PDPin
                            PDPin */
-  GPIO_InitStruct.Pin = WHEEL_BACK_RIGHT_FF2_Pin|ID_SEL_1_Pin|ID_SEL_3_Pin|ID_SEL_2_Pin 
+  GPIO_InitStruct.Pin = WHEEL_BACK_RIGHT_FF2_Pin|ID_SEL_1_Pin|ID_SEL_3_Pin|ID_SEL_2_Pin
                           |ID_SEL_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -159,11 +139,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PGPin PGPin PGPin PGPin 
-                           PGPin PGPin PGPin PGPin 
+  /*Configure GPIO pins : PGPin PGPin PGPin PGPin
+                           PGPin PGPin PGPin PGPin
                            PGPin */
-  GPIO_InitStruct.Pin = WHEEL_FRONT_LEFT_RESET_Pin|WHEEL_FRONT_LEFT_FF1_Pin|WHEEL_FRONT_LEFT_FF2_Pin|WHEEL_BACK_LEFT_RESET_Pin 
-                          |WHEEL_BACK_LEFT_FF1_Pin|WHEEL_BACK_LEFT_FF2_Pin|GENEVA_END_STOP_2_Pin|GENEVA_END_STOP_1_Pin 
+  GPIO_InitStruct.Pin = WHEEL_FRONT_LEFT_RESET_Pin|WHEEL_FRONT_LEFT_FF1_Pin|WHEEL_FRONT_LEFT_FF2_Pin|WHEEL_BACK_LEFT_RESET_Pin
+                          |WHEEL_BACK_LEFT_FF1_Pin|WHEEL_BACK_LEFT_FF2_Pin|GENEVA_END_STOP_2_Pin|GENEVA_END_STOP_1_Pin
                           |GENEVA_DIR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

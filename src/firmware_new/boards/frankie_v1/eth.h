@@ -1,14 +1,8 @@
 /**
  ******************************************************************************
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/eth.h
- * File Name          : ETH.h
- * Description        : This file provides code for the configuration
- *                      of the ETH instances.
-=======
- * @file    usb_otg.h
+ * @file    eth.h
  * @brief   This file contains all the function prototypes for
- *          the usb_otg.c file
->>>>>>> jonathan/fix_cubemx:src/firmware_new/boards/frankie_v1/usb_otg.h
+ *          the eth.c file
  ******************************************************************************
  * @attention
  *
@@ -23,14 +17,9 @@
  ******************************************************************************
  */
 /* Define to prevent recursive inclusion -------------------------------------*/
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/eth.h
-#ifndef __eth_H
-#define __eth_H
-=======
-#ifndef __USB_OTG_H__
-#define __USB_OTG_H__
+#ifndef __ETH_H__
+#define __ETH_H__
 
->>>>>>> jonathan/fix_cubemx:src/firmware_new/boards/frankie_v1/usb_otg.h
 #ifdef __cplusplus
 extern "C"
 {
@@ -38,6 +27,7 @@ extern "C"
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "string.h"
 
     /* USER CODE BEGIN Includes */
 
@@ -58,15 +48,7 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/eth.h
-#endif /*__ eth_H */
 
-/**
- * @}
- */
-=======
->>>>>>> jonathan/fix_cubemx:src/firmware_new/boards/frankie_v1/usb_otg.h
-
-#endif /* __USB_OTG_H__ */
+#endif /* __ETH_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
