@@ -23,6 +23,8 @@ cc_binary(
     deps = [
         ":STM32H743ZITx_FLASH.ld",
         ":dma",
+        ":adc",
+        ":fatfs",
         ":frankie_v1_main_lib",
         ":gpio",
         ":lwip",
@@ -62,7 +64,6 @@ cc_library(
         ":lwip",
         ":tim",
         ":usart",
-        ":usb_otg",
         "//firmware_new/boards/frankie_v1/io:proto_multicast_communication",
         "//firmware_new/boards/frankie_v1/io:ublox_odinw262_communicator",
         "//shared:constants",
@@ -76,13 +77,37 @@ cc_library(
 )
 
 cc_library(
-    name = "usb_otg",
+    name = "ff",
     srcs = [
-        "usb_otg.c",
+        "ff.c",
     ],
     hdrs = [
+        "ff.h",
         "main.h",
-        "usb_otg.h",
+    ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+        "-DSTM32H743xx",
+    ],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    deps = [
+        ":hal",
+    ],
+    # This is _very_ important. If we don't do this, bazel will not link in the
+    # interrupt handling code, which *will not* cause an error, and *will* cause
+    # interrupts to stop working
+    alwayslink = True,
+)
+
+cc_library(
+    name = "fatfs",
+    srcs = [
+        "fatfs.c",
+    ],
+    hdrs = [
+        "fatfs.h",
+        "main.h",
     ],
     copts = [
         # We don't want to mark warnings as errors for 3rd party code
@@ -170,6 +195,30 @@ cc_library(
     # interrupts to stop working
     alwayslink = True,
 )
+cc_library(
+    name = "adc",
+    srcs = [
+        "adc.c",
+    ],
+    hdrs = [
+        "adc.h",
+        "main.h",
+    ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+        "-DSTM32H743xx",
+    ],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    deps = [
+        ":hal",
+    ],
+    # This is _very_ important. If we don't do this, bazel will not link in the
+    # interrupt handling code, which *will not* cause an error, and *will* cause
+    # interrupts to stop working
+    alwayslink = True,
+)
+
 
 cc_library(
     name = "dma",
@@ -254,6 +303,16 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_adc.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd_ex.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi_ex.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_delayblock.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c",
+            "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_smbus.c",
     ],
     hdrs = [
         "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h",
@@ -294,6 +353,16 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_adc.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc_ex.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_sd.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_sd_ex.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_delayblock.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_sdmmc.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_smbus.h",
         "stm32h7xx_hal_conf.h",
     ],
     copts = [
