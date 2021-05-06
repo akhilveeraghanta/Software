@@ -73,7 +73,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/main.h
 #define CHARGE_PWR_BRD_Pin GPIO_PIN_2
 #define CHARGE_PWR_BRD_GPIO_Port GPIOE
 #define FAULT_PWR_BRD_Pin GPIO_PIN_3
@@ -118,34 +117,6 @@ void Error_Handler(void);
 #define PH1_OSC_OUT_GPIO_Port GPIOH
 #define WHEEL_FRONT_RIGHT_CSOUT_Pin GPIO_PIN_0
 #define WHEEL_FRONT_RIGHT_CSOUT_GPIO_Port GPIOC
-=======
-#define wheel_motor_back_right_esf_Pin GPIO_PIN_3
-#define wheel_motor_back_right_esf_GPIO_Port GPIOE
-#define wheel_motor_front_right_reset_Pin GPIO_PIN_4
-#define wheel_motor_front_right_reset_GPIO_Port GPIOE
-#define wheel_motor_front_right_coast_Pin GPIO_PIN_5
-#define wheel_motor_front_right_coast_GPIO_Port GPIOE
-#define USER_Btn_Pin GPIO_PIN_13
-#define USER_Btn_GPIO_Port GPIOC
-#define power_monitor_I2C2_SDA_Pin GPIO_PIN_0
-#define power_monitor_I2C2_SDA_GPIO_Port GPIOF
-#define power_monitor_I2C2_SCL_Pin GPIO_PIN_1
-#define power_monitor_I2C2_SCL_GPIO_Port GPIOF
-#define power_monitor_I2C2_SMBA_Pin GPIO_PIN_2
-#define power_monitor_I2C2_SMBA_GPIO_Port GPIOF
-#define wheel_motor_front_right_mode_Pin GPIO_PIN_3
-#define wheel_motor_front_right_mode_GPIO_Port GPIOF
-#define wheel_motor_front_right_direction_Pin GPIO_PIN_4
-#define wheel_motor_front_right_direction_GPIO_Port GPIOF
-#define wheel_motor_front_right_brake_Pin GPIO_PIN_5
-#define wheel_motor_front_right_brake_GPIO_Port GPIOF
-#define wheel_motor_front_right_esf_Pin GPIO_PIN_6
-#define wheel_motor_front_right_esf_GPIO_Port GPIOF
-#define MCO_Pin GPIO_PIN_0
-#define MCO_GPIO_Port GPIOH
-#define wheel_motor_back_right_coast_Pin GPIO_PIN_0
-#define wheel_motor_back_right_coast_GPIO_Port GPIOC
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/main.h
 #define RMII_MDC_Pin GPIO_PIN_1
 #define RMII_MDC_GPIO_Port GPIOC
 #define ENCODER_FRONT_RIGHT_SIN_Pin GPIO_PIN_2

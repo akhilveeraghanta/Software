@@ -73,106 +73,58 @@ static TbotsProto_Primitive primitive_msg;
 /* Definitions for NetStartTask */
 osThreadId_t NetStartTaskHandle;
 const osThreadAttr_t NetStartTask_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "NetStartTask",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-=======
-    .name       = "NetStartTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for RobotStatusTask */
 osThreadId_t RobotStatusTaskHandle;
 const osThreadAttr_t RobotStatusTask_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "RobotStatusTask",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal1,
-=======
-    .name       = "RobotStatusTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal1,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for VisionMsgTask */
 osThreadId_t VisionMsgTaskHandle;
 const osThreadAttr_t VisionMsgTask_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "VisionMsgTask",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-=======
-    .name       = "VisionMsgTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for PrimMsgTask */
 osThreadId_t PrimMsgTaskHandle;
 const osThreadAttr_t PrimMsgTask_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "PrimMsgTask",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-=======
-    .name       = "PrimMsgTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for testMsgUpdate */
 osThreadId_t testMsgUpdateHandle;
 const osThreadAttr_t testMsgUpdate_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "testMsgUpdate",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-=======
-    .name       = "testMsgUpdate",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for RobotLogMsgSend */
 osThreadId_t RobotLogMsgSendHandle;
 const osThreadAttr_t RobotLogMsgSend_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "RobotLogMsgSend",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-=======
-    .name       = "RobotLogMsgSend",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for NetworkRobotLog */
 osThreadId_t NetworkRobotLogHandle;
 const osThreadAttr_t NetworkRobotLog_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "NetworkRobotLog",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-=======
-    .name       = "NetworkRobotLog",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for UbloxOdinTask */
 osThreadId_t UbloxOdinTaskHandle;
 const osThreadAttr_t UbloxOdinTask_attributes = {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   .name = "UbloxOdinTask",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-=======
-    .name       = "UbloxOdinTask",
-    .stack_size = 1024 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 };
 /* Definitions for RobotLogProtoQ */
 osMessageQueueId_t RobotLogProtoQHandle;
@@ -223,7 +175,6 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_QUEUES */
     /* add queues, ... */
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/freertos.c
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -258,55 +209,6 @@ void MX_FREERTOS_Init(void) {
     /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
 
-=======
-    /* USER CODE END RTOS_QUEUES */
-
-    /* Create the thread(s) */
-    /* creation of NetStartTask */
-    NetStartTaskHandle = osThreadNew(io_proto_multicast_startNetworkingTask, NULL,
-                                     &NetStartTask_attributes);
-
-    /* creation of RobotStatusTask */
-    RobotStatusTaskHandle =
-        osThreadNew(io_proto_multicast_sender_task,
-                    (void *)robot_status_msg_sender_profile, &RobotStatusTask_attributes);
-
-    /* creation of VisionMsgTask */
-    VisionMsgTaskHandle =
-        osThreadNew(io_proto_multicast_listener_task, (void *)vision_msg_listener_profile,
-                    &VisionMsgTask_attributes);
-
-    /* creation of PrimMsgTask */
-    PrimMsgTaskHandle =
-        osThreadNew(io_proto_multicast_listener_task,
-                    (void *)primitive_msg_listener_profile, &PrimMsgTask_attributes);
-
-    /* creation of testMsgUpdate */
-    testMsgUpdateHandle =
-        osThreadNew(test_msg_update, (void *)robot_status_msg_sender_profile,
-                    &testMsgUpdate_attributes);
-
-    /* creation of RobotLogMsgSend */
-    RobotLogMsgSendHandle =
-        osThreadNew(io_proto_multicast_sender_task, (void *)robot_log_msg_sender_profile,
-                    &RobotLogMsgSend_attributes);
-
-    /* creation of NetworkRobotLog */
-    NetworkRobotLogHandle =
-        osThreadNew(io_network_logger_task, (void *)robot_log_msg_sender_profile,
-                    &NetworkRobotLog_attributes);
-
-    /* creation of UbloxOdinTask */
-    UbloxOdinTaskHandle =
-        osThreadNew(io_ublox_odinw262_communicator_task, NULL, &UbloxOdinTask_attributes);
-
-    /* USER CODE BEGIN RTOS_THREADS */
-    /* USER CODE END RTOS_THREADS */
-
-    /* USER CODE BEGIN RTOS_EVENTS */
-    /* add events, ... */
-    /* USER CODE END RTOS_EVENTS */
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/freertos.c
 }
 
 /* USER CODE BEGIN Header_io_proto_multicast_startNetworkingTask */

@@ -8,6 +8,10 @@ cc_binary(
         "freertos.c",
         "main.c",
     ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+    ],
     defines = [
         "USE_HAL_DRIVER",
         "STM32H743xx",
@@ -22,15 +26,14 @@ cc_binary(
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
         ":STM32H743ZITx_FLASH.ld",
-        ":dma",
         ":adc",
-        ":i2c",
-        ":spi",
-        ":frankie_v1_main_lib",
+        ":dma",
+        ":fatfs",
         ":gpio",
         ":i2c",
         ":lwip",
         ":robot_stm32h7_main_lib",
+        ":spi",
         "//firmware/app/logger",
         "//firmware/boards/robot_stm32h7/io:drivetrain",
         "//firmware/boards/robot_stm32h7/io:drivetrain_unit",
@@ -79,7 +82,6 @@ cc_library(
     # interrupts to stop working
     alwayslink = True,
 )
-
 
 cc_library(
     name = "crc",
@@ -152,6 +154,7 @@ cc_library(
     # interrupts to stop working
     alwayslink = True,
 )
+
 cc_library(
     name = "adc",
     srcs = [
@@ -175,37 +178,15 @@ cc_library(
     # interrupts to stop working
     alwayslink = True,
 )
-cc_library(
-    name = "i2c",
-    srcs = [
-        "i2c.c",
-    ],
-    hdrs = [
-        "i2c.h",
-        "main.h",
-    ],
-    copts = [
-        # We don't want to mark warnings as errors for 3rd party code
-        "-Wno-error",
-        "-DSTM32H743xx",
-    ],
-    restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = [
-        ":hal",
-    ],
-    # This is _very_ important. If we don't do this, bazel will not link in the
-    # interrupt handling code, which *will not* cause an error, and *will* cause
-    # interrupts to stop working
-    alwayslink = True,
-)
+
 cc_library(
     name = "spi",
     srcs = [
         "spi.c",
     ],
     hdrs = [
-        "spi.h",
         "main.h",
+        "spi.h",
     ],
     copts = [
         # We don't want to mark warnings as errors for 3rd party code
@@ -222,6 +203,55 @@ cc_library(
     alwayslink = True,
 )
 
+cc_library(
+    name = "fatfs",
+    srcs = [
+        "Middlewares/Third_Party/FatFs/src/diskio.c",
+        "Middlewares/Third_Party/FatFs/src/ff.c",
+        "Middlewares/Third_Party/FatFs/src/ff_gen_drv.c",
+        "Middlewares/Third_Party/FatFs/src/option/syscall.c",
+        "bsp_driver_sd.c",
+        "fatfs.c",
+        "sd_diskio.c",
+        "sdmmc.c",
+    ],
+    hdrs = [
+        "Middlewares/Third_Party/FatFs/src/diskio.h",
+        "Middlewares/Third_Party/FatFs/src/ff.h",
+        "Middlewares/Third_Party/FatFs/src/ff_gen_drv.h",
+        "Middlewares/Third_Party/FatFs/src/ffconf_template.h",
+        "Middlewares/Third_Party/FatFs/src/integer.h",
+        "bsp_driver_sd.h",
+        "fatfs.h",
+        "ffconf.h",
+        "main.h",
+        "sd_diskio.h",
+        "sdmmc.h",
+    ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+        "-DSTM32H743xx",
+    ],
+    includes = [
+        "./",
+        "Drivers/CMSIS/DSP/Include/",
+        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/",
+        "Drivers/CMSIS/Include/",
+        "Drivers/CMSIS/RTOS2/Include/",
+        "Drivers/CMSIS/RTOS2/Template/",
+        "Middlewares/Third_Party/FatFs/src/",
+        "Middlewares/Third_Party/FatFs/src/drivers/",
+    ],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    deps = [
+        ":hal",
+    ],
+    # This is _very_ important. If we don't do this, bazel will not link in the
+    # interrupt handling code, which *will not* cause an error, and *will* cause
+    # interrupts to stop working
+    alwayslink = True,
+)
 
 cc_library(
     name = "dma",
@@ -304,6 +334,8 @@ cc_library(
     name = "hal",
     srcs = [
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_crc.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_crc_ex.c",
@@ -325,22 +357,19 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_smbus.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_adc.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sd_ex.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi_ex.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_delayblock.c",
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c",
-            "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_smbus.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c",
     ],
     hdrs = [
         "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h",
@@ -352,6 +381,8 @@ cc_library(
         "Drivers/CMSIS/Include/mpu_armv7.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_crc.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_crc_ex.h",
@@ -375,22 +406,19 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc_ex.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_sd.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_sd_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_smbus.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_adc.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc_ex.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_sd.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_sd_ex.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_delayblock.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_sdmmc.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_smbus.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h",
         "stm32h7xx_hal_conf.h",
     ],
     copts = [
@@ -460,13 +488,10 @@ cc_library(
     ],
     hdrs = [
         "FreeRTOSConfig.h",
-        "stm32h7xx.h",
-        "stm32h743xx.h",
-        "system_stm32h7xx.h",
         "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h",
+        "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h",
         "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/freertos_mpool.h",
         "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/freertos_os2.h",
-        "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h",
         "Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h",
         "Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h",
         "Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h",
@@ -482,7 +507,10 @@ cc_library(
         "Middlewares/Third_Party/FreeRTOS/Source/include/task.h",
         "Middlewares/Third_Party/FreeRTOS/Source/include/timers.h",
         "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1/portmacro.h",
+        "stm32h743xx.h",
+        "stm32h7xx.h",
         "stm32h7xx_hal_conf.h",
+        "system_stm32h7xx.h",
     ],
     copts = [
         # We don't want to mark warnings as errors for 3rd party code
@@ -513,10 +541,10 @@ cc_library(
         "Middlewares/Third_Party/LwIP/src/api/netifapi.c",
         "Middlewares/Third_Party/LwIP/src/api/sockets.c",
         "Middlewares/Third_Party/LwIP/src/api/tcpip.c",
+        "Middlewares/Third_Party/LwIP/src/apps/snmp/snmp_netconn.c",
         "Middlewares/Third_Party/LwIP/src/core/def.c",
         "Middlewares/Third_Party/LwIP/src/core/dns.c",
         "Middlewares/Third_Party/LwIP/src/core/inet_chksum.c",
-        "Middlewares/Third_Party/LwIP/src/apps/snmp/snmp_netconn.c",
         "Middlewares/Third_Party/LwIP/src/core/init.c",
         "Middlewares/Third_Party/LwIP/src/core/ip.c",
         "Middlewares/Third_Party/LwIP/src/core/ipv4/autoip.c",
@@ -586,8 +614,8 @@ cc_library(
     hdrs = [
         "Drivers/BSP/Components/lan8742/lan8742.h",
         "FreeRTOSConfig.h",
-        "Middlewares/Third_Party/LwIP/src/include/lwip/api.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/altcp.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/api.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/apps/snmp_opts.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/arch.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/autoip.h",
@@ -611,9 +639,9 @@ cc_library(
         "Middlewares/Third_Party/LwIP/src/include/lwip/ip4_addr.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/ip4_frag.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/ip6.h",
-        "Middlewares/Third_Party/LwIP/src/include/lwip/ip6_zone.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/ip6_addr.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/ip6_frag.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/ip6_zone.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/ip_addr.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/mem.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/memp.h",
@@ -626,32 +654,31 @@ cc_library(
         "Middlewares/Third_Party/LwIP/src/include/lwip/opt.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/pbuf.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/priv/api_msg.h",
-        "Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/priv/nd6_priv.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/priv/raw_priv.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/priv/sockets_priv.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/priv/tcp_priv.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/priv/tcpip_priv.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ieee.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/igmp.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/dns.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ethernet.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/dhcp.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp6.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip4.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/autoip.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/nd6.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/mld6.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/udp.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip6.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/tcp.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/prot/iana.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/priv/sockets_priv.h",
-            "Middlewares/Third_Party/LwIP/src/include/lwip/priv/raw_priv.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/autoip.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/dhcp.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/dns.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ethernet.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/iana.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp6.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ieee.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/igmp.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip4.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip6.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/mld6.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/nd6.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/tcp.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/prot/udp.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/raw.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/sio.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/snmp.h",
@@ -659,6 +686,7 @@ cc_library(
         "Middlewares/Third_Party/LwIP/src/include/lwip/stats.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/sys.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/tcp.h",
+        "Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/tcpip.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/timeouts.h",
         "Middlewares/Third_Party/LwIP/src/include/lwip/udp.h",

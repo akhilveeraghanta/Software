@@ -27,8 +27,6 @@
 #include "ethernetif.h"
 #include <string.h>
 
-#include "ethernetif.h"
-
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -58,7 +56,6 @@ osThreadAttr_t attributes;
   */
 void MX_LWIP_Init(void)
 {
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/lwip.c
   /* Initilialize the LwIP stack with RTOS */
   tcpip_init( NULL, NULL );
 
@@ -89,7 +86,6 @@ void MX_LWIP_Init(void)
 
   /* Create the Ethernet link handler thread */
 /* USER CODE BEGIN H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
-=======
     /* Initilialize the LwIP stack with RTOS */
     tcpip_init(NULL, NULL);
 
@@ -120,25 +116,16 @@ void MX_LWIP_Init(void)
 
     /* Create the Ethernet link handler thread */
     /* USER CODE BEGIN H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/lwip.c
     memset(&attributes, 0x0, sizeof(osThreadAttr_t));
     attributes.name       = "EthLink";
     attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
     attributes.priority   = osPriorityBelowNormal;
     osThreadNew(ethernet_link_thread, &gnetif, &attributes);
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/lwip.c
-/* USER CODE END H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
-
-/* USER CODE BEGIN 3 */
-
-/* USER CODE END 3 */
-=======
     /* USER CODE END H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
 
     /* USER CODE BEGIN 3 */
 
     /* USER CODE END 3 */
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/lwip.c
 }
 
 #ifdef USE_OBSOLETE_USER_CODE_SECTION_4
@@ -149,7 +136,6 @@ void MX_LWIP_Init(void)
 #endif
 
 /**
-<<<<<<< HEAD:src/firmware_new/boards/frankie_v1/lwip.c
   * @brief  Notify the User about the network interface config status
   * @param  netif: the network interface
   * @retval None
@@ -169,27 +155,6 @@ static void ethernet_link_status_updated(struct netif *netif)
 }
 
 #if defined ( __CC_ARM )  /* MDK ARM Compiler */
-=======
- * @brief  Notify the User about the network interface config status
- * @param  netif: the network interface
- * @retval None
- */
-static void ethernet_link_status_updated(struct netif *netif)
-{
-    if (netif_is_up(netif))
-    {
-        /* USER CODE BEGIN 5 */
-        /* USER CODE END 5 */
-    }
-    else /* netif is down */
-    {
-        /* USER CODE BEGIN 6 */
-        /* USER CODE END 6 */
-    }
-}
-
-#if defined(__CC_ARM) /* MDK ARM Compiler */
->>>>>>> 919c00729a0a8ac2b2fe4970579e00f263a95854:src/firmware/boards/robot_stm32h7/lwip.c
 /**
  * Opens a serial device for communication.
  *
