@@ -1,5 +1,6 @@
 /* USER CODE BEGIN Header */
 /**
+ *
  ******************************************************************************
  * File Name          : freertos.c
  * Description        : Code for freertos applications
@@ -314,48 +315,41 @@ void initIoNetworking(void)
 
 void initIoDrivetrain(void)
 {
-    /*// Initialize a motor driver with the given suffix, on the given*/
-    /*// timer channel*/
-/*#define INIT_DRIVETRAIN_UNIT(MOTOR_NAME_SUFFIX, TIMER_CHANNEL)                           \*/
-    /*{                                                                                    \*/
-        /*GpioPin_t *reset_pin =                                                           \*/
-            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_RESET_GPIO_Port,        \*/
-                               /*WHEEL_##MOTOR_NAME_SUFFIX##_RESET_Pin, ACTIVE_LOW); \*/
-        /*GpioPin_t *coast_pin =                                                           \*/
-            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_COAST_GPIO_Port,        \*/
-                               /*WHEEL_##MOTOR_NAME_SUFFIX##_COAST_Pin, ACTIVE_LOW); \*/
-        /*GpioPin_t *mode_pin =                                                            \*/
-            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_MODE_GPIO_Port,         \*/
-                               /*WHEEL_##MOTOR_NAME_SUFFIX##_MODE_Pin, ACTIVE_HIGH); \*/
-        /*GpioPin_t *direction_pin = io_gpio_pin_create(                                   \*/
-            /*WHEEL_##MOTOR_NAME_SUFFIX##_DIRECTION_GPIO_Port,                       \*/
-            /*WHEEL_##MOTOR_NAME_SUFFIX##_DIRECTION_Pin, ACTIVE_HIGH);               \*/
-        /*GpioPin_t *brake_pin =                                                           \*/
-            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_BRAKE_GPIO_Port,        \*/
-                               /*WHEEL_##MOTOR_NAME_SUFFIX##_BRAKE_Pin, ACTIVE_LOW); \*/
-        /*GpioPin_t *esf_pin =                                                             \*/
-            /*io_gpio_pin_create(WHEEL_##MOTOR_NAME_SUFFIX##_ESF_GPIO_Port,          \*/
-                               /*WHEEL_##MOTOR_NAME_SUFFIX##_ESF_Pin, ACTIVE_HIGH);  \*/
-        /*PwmPin_t *pwm_pin = io_pwm_pin_create(&htim4, TIMER_CHANNEL);                    \*/
-                                                                                         /*\*/
-        /*AllegroA3931MotorDriver_t *motor_driver = io_allegro_a3931_motor_driver_create(  \*/
-            /*pwm_pin, reset_pin, coast_pin, mode_pin, direction_pin, brake_pin, esf_pin); \*/
-        /*io_allegro_a3931_motor_setPwmPercentage(motor_driver, 0.0);                      \*/
-        /*drivetrain_unit_##MOTOR_NAME_SUFFIX = io_drivetrain_unit_create(motor_driver);   \*/
-    /*}*/
+    // Initialize a motor driver with the given suffix, on the given
+    // timer channel
+#define INIT_DRIVETRAIN_UNIT(MOTOR_NAME_SUFFIX, TIMER_CHANNEL)                           \
+    {                                                                                    \
+        GpioPin_t *reset_pin =                                                           \
+            io_gpio_pin_create(wheel_motor_##MOTOR_NAME_SUFFIX##_reset_GPIO_Port,        \
+                               wheel_motor_##MOTOR_NAME_SUFFIX##_reset_Pin, ACTIVE_LOW); \
+        GpioPin_t *mode_pin =                                                            \
+            io_gpio_pin_create(wheel_motor_##MOTOR_NAME_SUFFIX##_mode_GPIO_Port,         \
+                               wheel_motor_##MOTOR_NAME_SUFFIX##_mode_Pin, ACTIVE_HIGH); \
+                                                                                         \
+        GpioPin_t *direction_pin = io_gpio_pin_create(                                   \
+            wheel_motor_##MOTOR_NAME_SUFFIX##_direction_GPIO_Port,                       \
+            wheel_motor_##MOTOR_NAME_SUFFIX##_direction_Pin, ACTIVE_HIGH);               \
+                                                                                         \
+        PwmPin_t *pwm_pin = io_pwm_pin_create(&htim4, TIMER_CHANNEL);                    \
+                                                                                         \
+        AllegroA3931MotorDriver_t *motor_driver = io_allegro_a3931_motor_driver_create(  \
+            pwm_pin, reset_pin, mode_pin, direction_pin);                                \
+        io_allegro_a3931_motor_setPwmPercentage(motor_driver, 0.0);                      \
+        drivetrain_unit_##MOTOR_NAME_SUFFIX = io_drivetrain_unit_create(motor_driver);   \
+    }
 
-    /*DrivetrainUnit_t *drivetrain_unit_FRONT_LEFT;*/
-    /*DrivetrainUnit_t *drivetrain_unit_BACK_LEFT;*/
-    /*DrivetrainUnit_t *drivetrain_unit_BACK_RIGHT;*/
-    /*DrivetrainUnit_t *drivetrain_unit_FRONT_RIGHT;*/
+    DrivetrainUnit_t *drivetrain_unit_front_left;
+    DrivetrainUnit_t *drivetrain_unit_back_left;
+    DrivetrainUnit_t *drivetrain_unit_back_right;
+    DrivetrainUnit_t *drivetrain_unit_front_right;
 
-    /*INIT_DRIVETRAIN_UNIT(FRONT_LEFT, TIM_CHANNEL_1);*/
-    /*INIT_DRIVETRAIN_UNIT(BACK_LEFT, TIM_CHANNEL_2);*/
-    /*INIT_DRIVETRAIN_UNIT(BACK_RIGHT, TIM_CHANNEL_3);*/
-    /*INIT_DRIVETRAIN_UNIT(FRONT_RIGHT, TIM_CHANNEL_4);*/
+    INIT_DRIVETRAIN_UNIT(front_left, TIM_CHANNEL_1);
+    INIT_DRIVETRAIN_UNIT(back_left, TIM_CHANNEL_2);
+    INIT_DRIVETRAIN_UNIT(back_right, TIM_CHANNEL_3);
+    INIT_DRIVETRAIN_UNIT(front_right, TIM_CHANNEL_4);
 
-    /*io_drivetrain_init(drivetrain_unit_FRONT_LEFT, drivetrain_unit_front_right,*/
-                       /*drivetrain_unit_back_left, drivetrain_unit_back_right);*/
+    io_drivetrain_init(drivetrain_unit_front_left, drivetrain_unit_front_right,
+                       drivetrain_unit_back_left, drivetrain_unit_back_right);
 }
 
 void initPowerMonitor(void)
