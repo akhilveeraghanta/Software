@@ -96,7 +96,10 @@ cc_library(
         ":draw_functions",
         ":field",
         ":team",
+        ":geom",
         "//software/world",
+        "//software/ai/evaluation:calc_best_shot",
+        "//software/gui:geometry_conversion",
         "@qt//:qt_widgets",
     ],
 )

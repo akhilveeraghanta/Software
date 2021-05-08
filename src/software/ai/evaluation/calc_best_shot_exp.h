@@ -9,6 +9,55 @@
 #include "software/world/robot.h"
 #include "software/world/team.h"
 #include "software/world/world.h"
+class AngleSegment {
+public:
+    explicit AngleSegment(double angle_max, double angle_min, double angle_0_max, double angle_0_min) : angle_max_(angle_max), angle_min_(angle_min), angle_0_max_(angle_0_max), angle_0_min_(angle_0_min) {
+
+    }
+
+    double getAngleMax() {
+        return angle_max_;
+    }
+
+    void setAngleMax(double angle_max) {
+        this->angle_max_ = angle_max;
+    }
+
+    double getAngleMin() {
+        return angle_min_;
+    }
+
+    void setAngleMin(double angle_min) {
+        this->angle_min_ = angle_min;
+    }
+
+    double getDelta() {
+        return std::abs(angle_min_ - angle_max_);
+    }
+
+    double getAngle0Max() {
+        return angle_0_max_;
+    }
+
+    void setAngle0Max(double angle_0_max) {
+        this->angle_0_max_ = angle_0_max;
+    }
+
+    double getAngle0Min() {
+        return angle_0_min_;
+    }
+
+    void setAngle0Min(double angle_0_min) {
+        this->angle_0_min_ = angle_0_min;
+    }
+
+private:
+    double angle_max_;
+    double angle_min_;
+    double angle_0_max_;
+    double angle_0_min_;
+};
+
 
 /**
  * Finds the best shot on the given goal, and returns the best target to shoot at and
@@ -49,6 +98,10 @@ std::optional<Shot> calcBestShotOnGoalExp(const Segment &goal_post, const Point 
  * vector). If no shot can be found, returns std::nullopt
  */
 std::optional<Shot> calcBestShotOnGoalExp(const Field &field, const Team &friendly_team,
+                                       const Team &enemy_team, const Point &shot_origin,
+                                       TeamType goal,
+                                       const std::vector<Robot> &robots_to_ignore = {});
+AngleSegment calcBestShotOnGoalExpTest(const Field &field, const Team &friendly_team,
                                        const Team &enemy_team, const Point &shot_origin,
                                        TeamType goal,
                                        const std::vector<Robot> &robots_to_ignore = {});
