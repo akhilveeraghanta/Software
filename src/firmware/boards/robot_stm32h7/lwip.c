@@ -121,11 +121,11 @@ void MX_LWIP_Init(void)
     attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
     attributes.priority   = osPriorityBelowNormal;
     osThreadNew(ethernet_link_thread, &gnetif, &attributes);
-    /* USER CODE END H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
+/* USER CODE END H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
 
-    /* USER CODE BEGIN 3 */
+/* USER CODE BEGIN 3 */
 
-    /* USER CODE END 3 */
+/* USER CODE END 3 */
 }
 
 #ifdef USE_OBSOLETE_USER_CODE_SECTION_4
