@@ -42,17 +42,30 @@ cc_binary(
 )
 
 cc_library(
+    name = "robot_stm32h7_config",
+    hdrs = [
+        "FreeRTOSConfig.h",
+        "stm32h7xx_it.h",
+    ],
+    copts = [
+        "-DSTM32H743xx",
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+    ],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    # This is _very_ important. If we don't do this, bazel will not link in the
+    # interrupt handling code, which *will not* cause an error, and *will* cause
+    # interrupts to stop working
+    alwayslink = True,
+    )
+
+cc_library(
     name = "robot_stm32h7_main_lib",
     srcs = [
         "startup_stm32h743xx.s",
         "stm32h7xx_hal_msp.c",
         "stm32h7xx_it.c",
         "system_stm32h7xx.c",
-    ],
-    hdrs = [
-        "FreeRTOSConfig.h",
-        "stm32h7xx_hal_conf.h",
-        "stm32h7xx_it.h",
     ],
     copts = [
         "-DSTM32H743xx",
@@ -62,10 +75,10 @@ cc_library(
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
         ":crc",
-        ":hal",
         ":lwip",
         ":tim",
         ":usart",
+        ":stm32h7_drivers",
         "//firmware/boards/robot_stm32h7/io:proto_multicast_communication",
         "//firmware/boards/robot_stm32h7/io:ublox_odinw262_communicator",
         "//shared:constants",
@@ -94,7 +107,8 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
+        ":hal_lib",
+        ":robot_stm32h7_config",
     ],
     # This is _very_ important. If we don't do this, bazel will not link in the
     # interrupt handling code, which *will not* cause an error, and *will* cause
@@ -118,7 +132,8 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
+        ":hal_lib",
+        ":robot_stm32h7_config",
     ],
     # This is _very_ important. If we don't do this, bazel will not link in the
     # interrupt handling code, which *will not* cause an error, and *will* cause
@@ -190,7 +205,8 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
+        ":robot_stm32h7_config",
+        ":hal_lib",
     ],
     # This is _very_ important. If we don't do this, bazel will not link in the
     # interrupt handling code, which *will not* cause an error, and *will* cause
@@ -229,18 +245,13 @@ cc_library(
         "-DSTM32H743xx",
     ],
     includes = [
-        "./",
-        "Drivers/CMSIS/DSP/Include/",
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/",
-        "Drivers/CMSIS/Include/",
-        "Drivers/CMSIS/RTOS2/Include/",
-        "Drivers/CMSIS/RTOS2/Template/",
         "Middlewares/Third_Party/FatFs/src/",
         "Middlewares/Third_Party/FatFs/src/drivers/",
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
+        ":robot_stm32h7_config",
+        ":hal_lib",
     ],
     # This is _very_ important. If we don't do this, bazel will not link in the
     # interrupt handling code, which *will not* cause an error, and *will* cause
@@ -264,7 +275,8 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
+        ":robot_stm32h7_config",
+        ":hal_lib",
     ],
     # This is _very_ important. If we don't do this, bazel will not link in the
     # interrupt handling code, which *will not* cause an error, and *will* cause
@@ -288,7 +300,8 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
+        ":robot_stm32h7_config",
+        ":hal_lib",
     ],
     # This is _very_ important. If we don't do this, bazel will not link in the
     # interrupt handling code, which *will not* cause an error, and *will* cause
@@ -312,7 +325,8 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
+        ":robot_stm32h7_config",
+        ":hal_lib",
     ],
     # This is _very_ important. If we don't do this, bazel will not link in the
     # interrupt handling code, which *will not* cause an error, and *will* cause
@@ -322,13 +336,34 @@ cc_library(
 
 stm32h7_hal_library_files_genrule("hal_library_files")
 
+cc_library(
+    name = "hal",
+    hdrs = [
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h",
+        "stm32h7xx_hal_conf.h"
+        ],
+    srcs = [
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c",
+        ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+        "-DSTM32H743xx",
+    ],
+    deps = [
+        ":robot_stm32h7_config",
+            ],
+    includes = ["Drivers/STM32H7xx_HAL_Driver/Inc/", "./"],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    alwayslink = True,
+    )
+
 # We got some of this list of hdrs/srcs by looking at the Makefile STM32CubeMX generates,
 # (if the project type is set to `MakeFile`) and others by simply attempting compilation,
 # seeing where stuff failed, and finding the correct header in the downloaded files
 cc_library(
-    name = "hal",
+    name = "hal_lib",
     srcs = [
-        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c",
@@ -367,13 +402,6 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c",
     ],
     hdrs = [
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h",
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h",
-        "Drivers/CMSIS/Include/cmsis_compiler.h",
-        "Drivers/CMSIS/Include/cmsis_gcc.h",
-        "Drivers/CMSIS/Include/cmsis_version.h",
-        "Drivers/CMSIS/Include/core_cm7.h",
-        "Drivers/CMSIS/Include/mpu_armv7.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_adc.h",
@@ -423,25 +451,38 @@ cc_library(
     defines = [
         "STM32H743xx",
     ],
-    includes = [
-        "./",
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include",
-        "Drivers/STM32H7xx_HAL_Driver/Inc",
-    ],
     restricted_to = ["//cc_toolchain:stm32h7"],
+    includes = ["./", "Drivers/STM32H7xx_HAL_Driver/Inc"],
     deps = [
-        ":rtos",
+        ":hal",
+        ":cmsis",
+        ":stm32h7_drivers",
+        ":robot_stm32h7_config",
     ],
 )
 
 cc_library(
-    name = "cmsis",
-    srcs = [
-    ],
+    name = "arm_math",
     hdrs = [
         "Drivers/CMSIS/DSP/Include/arm_common_tables.h",
         "Drivers/CMSIS/DSP/Include/arm_const_structs.h",
         "Drivers/CMSIS/DSP/Include/arm_math.h",
+    ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+    ],
+    defines = [
+        "STM32H743xx",
+        "ARM_MATH_CM7",
+    ],
+    strip_include_prefix = "Drivers/CMSIS/DSP/Include/",
+    restricted_to = ["//cc_toolchain:stm32h7"],
+)
+
+cc_library(
+    name = "cmsis",
+    hdrs = [
         "Drivers/CMSIS/Include/cmsis_compiler.h",
         "Drivers/CMSIS/Include/cmsis_gcc.h",
         "Drivers/CMSIS/Include/cmsis_version.h",
@@ -456,15 +497,27 @@ cc_library(
         "STM32H743xx",
         "ARM_MATH_CM7",
     ],
-    includes = [
-        "./",
-        "Drivers/CMSIS/DSP/Include/",
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/",
-        "Drivers/CMSIS/Include/",
-        "Drivers/CMSIS/RTOS2/Include/",
-        "Drivers/CMSIS/RTOS2/Template/",
-    ],
+    strip_include_prefix = "Drivers/CMSIS/Include/",
     restricted_to = ["//cc_toolchain:stm32h7"],
+)
+
+cc_library(
+    name = "stm32h7_drivers",
+    hdrs = [
+        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h",
+        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h",
+        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h",
+    ],
+    copts = [
+        # We don't want to mark warnings as errors for 3rd party code
+        "-Wno-error",
+    ],
+    defines = [
+        "STM32H743xx",
+    ],
+    strip_include_prefix = "Drivers/CMSIS/Device/ST/STM32H7xx/Include",
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    deps = [":cmsis"],
 )
 
 cc_library(
@@ -482,10 +535,6 @@ cc_library(
         "Middlewares/Third_Party/FreeRTOS/Source/timers.c",
     ],
     hdrs = [
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h",
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h",
-        "Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h",
-        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h",
         "FreeRTOSConfig.h",
         "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h",
         "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h",
@@ -506,7 +555,6 @@ cc_library(
         "Middlewares/Third_Party/FreeRTOS/Source/include/task.h",
         "Middlewares/Third_Party/FreeRTOS/Source/include/timers.h",
         "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1/portmacro.h",
-        "stm32h7xx_hal_conf.h",
     ],
     copts = [
         # We don't want to mark warnings as errors for 3rd party code
@@ -524,7 +572,7 @@ cc_library(
         "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1",
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = [":cmsis"],
+    deps = [":cmsis", ":stm32h7_drivers"],
 )
 
 cc_library(
@@ -731,7 +779,6 @@ cc_library(
         "lwip.h",
         "lwipopts.h",
         "main.h",
-        "stm32h7xx_hal_conf.h",
     ],
     copts = [
         # We don't want to mark warnings as errors for 3rd party code
@@ -749,8 +796,9 @@ cc_library(
     ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        ":hal",
         ":rtos",
+        ":robot_stm32h7_config",
+        ":hal_lib",
     ],
     alwayslink = True,
 )

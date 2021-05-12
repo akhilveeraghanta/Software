@@ -8,7 +8,8 @@ cc_library(
     hdrs = ["gpio_pin.h"],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware/boards/robot_stm32h7:hal",
+        "//firmware/boards/robot_stm32h7:hal_lib",
+        "//firmware/boards/robot_stm32h7:robot_stm32h7_config",
     ],
 )
 
@@ -18,7 +19,7 @@ cc_library(
     hdrs = ["pwm_pin.h"],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware/boards/robot_stm32h7:hal",
+        "//firmware/boards/robot_stm32h7:hal_lib",
     ],
 )
 
@@ -78,7 +79,7 @@ cc_library(
     deps = [
         ":ublox_odinw262_communicator",
         "//firmware/app/logger",
-        "//firmware/boards/robot_stm32h7:hal",
+        "//firmware/boards/robot_stm32h7:hal_lib",
         "//firmware/boards/robot_stm32h7:lwip",
         "//shared/proto:tbots_nanopb_proto",
         "@nanopb",
@@ -91,7 +92,7 @@ cc_library(
     hdrs = ["network_logger.h"],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware/boards/robot_stm32h7:hal",
+        "//firmware/boards/robot_stm32h7:hal_lib",
         "//firmware/boards/robot_stm32h7:lwip",
         "//firmware/boards/robot_stm32h7:rtos",
         "//firmware/boards/robot_stm32h7/io:proto_multicast_communication",
@@ -107,7 +108,7 @@ cc_library(
     hdrs = ["uart_logger.h"],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware/boards/robot_stm32h7:hal",
+        "//firmware/boards/robot_stm32h7:hal_lib",
         "//firmware/boards/robot_stm32h7:rtos",
         "//firmware/boards/robot_stm32h7:usart",
         "//shared/proto:tbots_nanopb_proto",
@@ -124,7 +125,7 @@ cc_library(
     deps = [
         ":gpio_pin",
         "//firmware/app/logger",
-        "//firmware/boards/robot_stm32h7:hal",
+        "//firmware/boards/robot_stm32h7:hal_lib",
         "//firmware/boards/robot_stm32h7:rtos",
         "//firmware/boards/robot_stm32h7:usart",
         "//firmware/boards/robot_stm32h7/io:ublox_odinw262_communicator_buffer_utils",
@@ -171,14 +172,10 @@ cc_library(
     name = "INA226_power_monitor_driver",
     srcs = ["INA226_power_monitor_driver.c"],
     hdrs = ["INA226_power_monitor_driver.h"],
-    copts = [
-        # This library uses hal and includes ST headers, so we can't mark warnings as errors
-        # This was adapted from: https://github.com/macgeorge/STM32-example-codes
-        "-Wno-error",
-    ],
     restricted_to = ["//cc_toolchain:stm32h7"],
     deps = [
-        "//firmware/boards/robot_stm32h7:cmsis",
-        "//firmware/boards/robot_stm32h7:hal",
+        "//firmware/boards/robot_stm32h7:arm_math",
+        "//firmware/boards/robot_stm32h7:hal_lib",
+        "//firmware/boards/robot_stm32h7:robot_stm32h7_config",
     ],
 )
