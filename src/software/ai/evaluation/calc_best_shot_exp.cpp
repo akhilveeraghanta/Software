@@ -268,13 +268,21 @@ std::pair<AngleSegment, std::pair<AngleMap, std::vector<Segment>>> calcBestShotO
     return std::make_pair(angleMap.getBiggestViableAngleSegment(), std::make_pair(angleMap, obstacles));
 }
 
-std::pair<double, double> screenValues(const Field &field, double cartesian_x, double cartesian_y) {
-    Rectangle field_boundary = field.fieldBoundary();
+std::pair<double, double> screenValues(const Field &field, double cartesian_x,
+                                       double cartesian_y)
+{
+    static Rectangle field_boundary = field.fieldBoundary();
 
-    return std::make_pair((cartesian_x - field_boundary.xMin()) * field_boundary.xLength() / (field_boundary.xMax() - field_boundary.xMin()), (cartesian_y - field_boundary.yMax()) * -field_boundary.yLength() / (field_boundary.yMax() - field_boundary.yMin()));
+    return std::make_pair(
+        (cartesian_x - field_boundary.xMin()) * field_boundary.xLength() /
+            (field_boundary.xMax() - field_boundary.xMin()),
+        (cartesian_y - field_boundary.yMax()) * -field_boundary.yLength() /
+            (field_boundary.yMax() - field_boundary.yMin()));
 }
 
-Point screenPoint(const Field &field, const Point& cartesian_point) {
-    std::pair<double, double> screen_transform = screenValues(field, cartesian_point.x(), cartesian_point.y());
+Point screenPoint(const Field &field, const Point &cartesian_point)
+{
+    std::pair<double, double> screen_transform =
+        screenValues(field, cartesian_point.x(), cartesian_point.y());
     return Point(screen_transform.first, screen_transform.second);
 }
