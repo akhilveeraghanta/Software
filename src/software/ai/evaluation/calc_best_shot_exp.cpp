@@ -127,9 +127,24 @@ std::optional<Shot> calcBestShotOnGoalExp(const Field &field, const Team &friend
 
     AngleSegment biggest_angle_seg = angleMap.getBiggestViableAngleSegment();
 
-    Ray mid_point_ray = Ray(shot_origin, Angle::fromDegrees(((biggest_angle_seg.getCartesianAngleMax() - biggest_angle_seg.getCartesianAngleMin()) /  2) + biggest_angle_seg.getCartesianAngleMax()));
+    if (biggest_angle_seg.getCartesianAngleMax() == 0 &&
+        biggest_angle_seg.getCartesianAngleMin() == 0)
+    {
+        return std::nullopt;
+    }
+
+    Ray mid_point_ray =
+        Ray(shot_origin, Angle::fromDegrees(((biggest_angle_seg.getCartesianAngleMax() -
+                                              biggest_angle_seg.getCartesianAngleMin()) /
+                                             2) +
+                                            biggest_angle_seg.getCartesianAngleMin()));
 
     std::vector<Point> intersections = intersection(mid_point_ray, goal_seg);
+
+    if (intersections.empty())
+    {
+        return std::nullopt;
+    }
 
     Angle open_angle = Angle::fromDegrees(biggest_angle_seg.getDelta());
     return std::make_optional(Shot(intersections.front(), open_angle));

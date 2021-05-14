@@ -50,12 +50,12 @@ void drawWorld(QGraphicsScene* scene, const World& world, TeamColour friendly_te
     Segment leftseg = Segment(
             world.ball().position(),
             world.ball().position() +
-            10 * Vector::createFromAngle(Angle::fromDegrees(pair.second.first.getAngle0Max())));
+            4 * Vector::createFromAngle(Angle::fromDegrees(pair.second.first.getAngle0Max())));
 
     Segment rightseg = Segment(
             world.ball().position(),
             world.ball().position() +
-            10 * Vector::createFromAngle(Angle::fromDegrees(pair.second.first.getAngle0Min())));
+            4 * Vector::createFromAngle(Angle::fromDegrees(pair.second.first.getAngle0Min())));
 
     drawSegment(scene, leftseg, path_pen);
     drawSegment(scene, rightseg, path_pen);
@@ -63,12 +63,12 @@ void drawWorld(QGraphicsScene* scene, const World& world, TeamColour friendly_te
     Segment topangle = Segment(
             world.ball().position(),
             world.ball().position() +
-            10 * Vector::createFromAngle(Angle::fromDegrees(pair.first.getCartesianAngleMax())));
+            4 * Vector::createFromAngle(Angle::fromDegrees(pair.first.getCartesianAngleMax())));
 
     Segment bottomangle = Segment(
             world.ball().position(),
             world.ball().position() +
-            10 * Vector::createFromAngle(Angle::fromDegrees(pair.first.getCartesianAngleMin())));
+            4 * Vector::createFromAngle(Angle::fromDegrees(pair.first.getCartesianAngleMin())));
 
     path_pen.setColor(QColor::fromRgb(255, 255, 255));
     drawSegment(scene, topangle, path_pen);

@@ -52,7 +52,8 @@ double rateZone(const Field& field, const Team& enemy_team, const Rectangle& zon
  *         the pass, and 1 indicating that it is guaranteed to be able to score off of
  *         the pass
  */
-double ratePassShootScore(const Field& field, const Team& enemy_team, const Pass& pass,
+double ratePassShootScore(const Field& field, const Team& enemy_team,
+                          const Team& friendly_team, const Pass& pass,
                           std::shared_ptr<const PassingConfig> passing_config);
 
 /**
