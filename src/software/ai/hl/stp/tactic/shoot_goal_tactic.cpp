@@ -37,31 +37,6 @@ void ShootGoalTactic::updateControlParams(std::optional<Point> chip_target)
     this->chip_target = chip_target;
 }
 
-double ShootGoalTactic::calculateRobotCost(const Robot &robot, const World &world) const
-{
-    auto ball_intercept_opt =
-        findBestInterceptForBall(world.ball(), world.field(), robot);
-    double cost = 0;
-    if (ball_intercept_opt)
-    {
-        // If we can intercept the ball, use the distance to the intercept point.
-        // We normalize with the total field length so that robots that are within the
-        // field have a cost less than 1
-        cost = (ball_intercept_opt->first - robot.position()).length() /
-               world.field().totalXLength();
-    }
-    else
-    {
-        // If we can't intercept the ball, just use the distance to the ball's current
-        // position. We normalize with the total field length so that robots that are
-        // within the field have a cost less than 1
-        cost = (world.ball().position() - robot.position()).length() /
-               world.field().totalXLength();
-    }
-
-    return std::clamp<double>(cost, 0, 1);
-}
-
 bool ShootGoalTactic::hasShotAvailable() const
 {
     return has_shot_available;

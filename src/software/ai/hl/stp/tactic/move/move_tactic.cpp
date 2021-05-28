@@ -53,12 +53,6 @@ void MoveTactic::updateControlParams(Point destination, Angle final_orientation,
 
 double MoveTactic::calculateRobotCost(const Robot &robot, const World &world) const
 {
-    // Prefer robots closer to the destination
-    // We normalize with the total field length so that robots that are within the field
-    // have a cost less than 1
-    double cost = (robot.position() - control_params.destination).length() /
-                  world.field().totalXLength();
-    return std::clamp<double>(cost, 0, 1);
 }
 
 void MoveTactic::calculateNextAction(ActionCoroutine::push_type &yield)

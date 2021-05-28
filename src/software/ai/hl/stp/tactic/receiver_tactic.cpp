@@ -31,16 +31,6 @@ void ReceiverTactic::updateControlParams(const Pass& updated_pass)
     this->pass = updated_pass;
 }
 
-double ReceiverTactic::calculateRobotCost(const Robot& robot, const World& world) const
-{
-    // Prefer robots closer to the pass receive position
-    // We normalize with the total field length so that robots that are within the field
-    // have a cost less than 1
-    double cost =
-        (robot.position() - pass.receiverPoint()).length() / world.field().totalXLength();
-    return std::clamp<double>(cost, 0, 1);
-}
-
 void ReceiverTactic::calculateNextAction(ActionCoroutine::push_type& yield)
 {
     auto move_action = std::make_shared<MoveAction>(true);

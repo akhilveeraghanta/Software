@@ -6,12 +6,6 @@
 
 StopTactic::StopTactic(bool coast) : Tactic(true, {}), coast(coast) {}
 
-double StopTactic::calculateRobotCost(const Robot &robot, const World &world) const
-{
-    // Prefer all robots equally
-    return 0.5;
-}
-
 void StopTactic::updateWorldParams(const World &world) {}
 
 void StopTactic::calculateNextAction(ActionCoroutine::push_type &yield)

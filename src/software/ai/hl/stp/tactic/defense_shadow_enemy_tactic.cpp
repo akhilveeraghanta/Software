@@ -35,21 +35,6 @@ void DefenseShadowEnemyTactic::updateControlParams(const EnemyThreat &enemy_thre
     this->enemy_threat = enemy_threat;
 }
 
-double DefenseShadowEnemyTactic::calculateRobotCost(const Robot &robot,
-                                                    const World &world) const
-{
-    if (!enemy_threat)
-    {
-        return 0;
-    }
-    // Prefer robots closer to the enemy being shadowed
-    // We normalize with the total field length so that robots that are within the field
-    // have a cost less than 1
-    double cost = (robot.position() - enemy_threat->robot.position()).length() /
-                  world.field().totalXLength();
-    return std::clamp<double>(cost, 0, 1);
-}
-
 void DefenseShadowEnemyTactic::calculateNextAction(ActionCoroutine::push_type &yield)
 {
     auto move_action = std::make_shared<MoveAction>(false);

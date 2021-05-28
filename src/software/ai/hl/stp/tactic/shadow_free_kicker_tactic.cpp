@@ -23,13 +23,6 @@ void ShadowFreekickerTactic::updateWorldParams(const World &world)
     this->ball       = world.ball();
 }
 
-double ShadowFreekickerTactic::calculateRobotCost(const Robot &robot,
-                                                  const World &world) const
-{
-    double cost = (robot.position() - world.ball().position()).length() /
-                  world.field().totalXLength();
-    return std::clamp<double>(cost, 0, 1);
-}
 void ShadowFreekickerTactic::calculateNextAction(ActionCoroutine::push_type &yield)
 {
     auto move_action      = std::make_shared<MoveAction>(false);
