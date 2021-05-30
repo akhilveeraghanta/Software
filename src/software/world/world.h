@@ -168,6 +168,18 @@ class World final
     TeamSide getTeamWithPossession() const;
 
     /**
+     * Sets whether estop is enabled
+     * @param estop_enabled whether robots in this world are protected by estop
+     */
+    void setEstopEnabled(bool estop_enabled);
+
+    /**
+     * Gets whether estop is enabled
+     * @return whether estop is enabled for robots in this world
+     */
+    bool isEstopEnabled();
+
+    /**
      * Defines the equality operator for a World. Worlds are equal if their field, ball
      * friendly_team, enemy_team and game_state are equal. The last update
      * timestamp and histories are not part of the equality.
@@ -208,4 +220,6 @@ class World final
     boost::circular_buffer<RefereeStage> referee_stage_history_;
     // which team has possession of the ball
     TeamSide team_with_possesion_;
+
+    bool estop_enabled;
 };
