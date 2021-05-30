@@ -50,6 +50,7 @@ cc_binary(
         "//firmware/boards/robot_stm32h7/io:vision",
         "//firmware/shared:physics",
         "//shared:constants",
+        "//shared:robot_constants",
     ],
 )
 

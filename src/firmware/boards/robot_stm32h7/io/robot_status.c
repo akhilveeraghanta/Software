@@ -18,6 +18,7 @@ void io_robot_status_task(void *argument)
 
         // TODO (#1517) update robot id based on robot id selection
         g_robot_status_msg.robot_id                    = 0;
+        g_robot_status_msg.estop_enabled                    = true;
         g_robot_status_msg.firmware_status.fw_build_id = 0;
 
         g_robot_status_msg.break_beam_status = (TbotsProto_BreakBeamStatus){
