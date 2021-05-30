@@ -19,9 +19,9 @@ platformio_library(
 )
 
 platformio_project(
-    name = "example_arduino_project",
-    src = "serial_echo_example.cc",
-    board = "uno",
+    name = "main",
+    src = "main.cc",
+    board = "nanoatmega328new",
     framework = "arduino",
     deps = [
         ":echo_library",
