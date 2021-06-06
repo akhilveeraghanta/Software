@@ -357,6 +357,7 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth_ex.c",
+        "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c",
@@ -384,7 +385,6 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_delayblock.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.c",
         "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c",
-        "stm32h7xx_hal_eth.c",
     ],
     hdrs = [
         "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h",
@@ -405,6 +405,7 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma_ex.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_eth_ex.h",
+        "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_eth.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_exti.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash_ex.h",
