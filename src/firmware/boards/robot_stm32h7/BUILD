@@ -435,7 +435,6 @@ cc_library(
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_sdmmc.h",
         "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h",
         "stm32h7xx_hal_conf.h",
-        "stm32h7xx_hal_eth.h",
     ],
     copts = [
         # We don't want to mark warnings as errors for 3rd party code
