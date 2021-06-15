@@ -24,6 +24,9 @@ std::unique_ptr<TbotsProto::Vision> createVision(const World& world)
     // set ball state
     *(vision_msg->mutable_ball_state()) = *createBallState(world.ball());
 
+    static unsigned packetcounter = 0;
+    vision_msg->set_counter(packetcounter++);
+
     return vision_msg;
 }
 

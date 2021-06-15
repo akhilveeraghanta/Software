@@ -10,6 +10,9 @@
 #include "firmware/app/logger/logger.h"
 #include "shared/proto/tbots_software_msgs.nanopb.h"
 #include "shared/constants.h"
+#include "pb.h"
+#include "pb_decode.h"
+#include "pb_encode.h"
 
 #define DEAD_RECKONING_TICK_TIME_MS 5
 #define RAD_PER_MS_TO_METERS_PER_S 3
@@ -146,53 +149,72 @@ void io_vision_init(TIM_HandleTypeDef* timer,
 
 void io_vision_task(void* arg)
 {
-    ProtoMulticastCommunicationProfile_t* comm_profile =
+    ProtoMulticastCommunicationProfile_t* profile =
         (ProtoMulticastCommunicationProfile_t*)arg;
 
-    TbotsProto_Vision vision_copy;
+    osDelay(2000);
+    // Bind the socket to the multicast address and port we then use that
+    // communication profile to join the specified multicast group.
+    struct netconn* conn = netconn_new(NETCONN_UDP_IPV6);
+
+    netconn_bind(conn, io_proto_multicast_communication_profile_getAddress(profile),
+                 io_proto_multicast_communication_profile_getPort(profile));
+
+    netconn_join_leave_group(conn,
+                             io_proto_multicast_communication_profile_getAddress(profile),
+                             IP6_ADDR_ANY, NETCONN_JOIN);
+
+    struct netbuf* rx_buf = NULL;
+    err_t network_err;
+    bool no_protobuf_err;
+    uint32_t count = 0;
 
     for (;;)
     {
-        uint32_t tick_start = osKernelGetTickCount();
+        network_err = netconn_recv(conn, &rx_buf);
 
-        io_proto_multicast_communication_profile_acquireLock(comm_profile);
-
-        vision_copy = (*(TbotsProto_Vision*)io_proto_multicast_communication_profile_getProtoStruct(
-                        comm_profile));
-
-        io_proto_multicast_communication_profile_releaseLock(comm_profile);
-
-        if(memcmp(&vision_copy, &vision, sizeof(vision_copy)) != 0)
+        switch (network_err)
         {
-            // only update vision if we have atleast 1 robot state
-            if (vision_copy.robot_states_count == 1)
+            case ERR_OK:
             {
-                io_lock_vision();
-                vision = vision_copy;
-                io_unlock_vision();
+                pb_istream_t in_stream = pb_istream_from_buffer(
+                    (uint8_t*)rx_buf->p->payload, rx_buf->p->tot_len);
+
+                io_proto_multicast_communication_profile_acquireLock(profile);
+
+                // deserialize into buffer, nanopb err logic is inverted, false = error
+                no_protobuf_err = pb_decode(
+                    &in_stream,
+                    io_proto_multicast_communication_profile_getProtoFields(profile),
+                    io_proto_multicast_communication_profile_getProtoStruct(profile));
+
+                io_proto_multicast_communication_profile_releaseLock(profile);
+
+                if (no_protobuf_err)
+                {
+                    TbotsProto_Vision vision_copy_1 =
+                        (*(TbotsProto_Vision*)io_proto_multicast_communication_profile_getProtoStruct(
+                            profile));
+                    if (vision_copy_1.robot_states_count == 1)
+                    {
+                        io_lock_vision();
+                        TLOG_INFO("NEW VISION PACKET %d %d", vision_copy_1.counter, count++);
+                    }
+                    vision = vision_copy_1;
+                    io_unlock_vision();
+                }
+                break;
             }
-            io_vision_applyVisionFrameToDeadReckoning(0);
         }
 
-        io_vision_stepDeadReckoning();
-
-        uint32_t tick_end = osKernelGetTickCount();
-
-        // TODO pull 5 into a constant
-        if (tick_end - tick_start > 8)
-        {
-            TLOG_WARNING("Vision (dead reckoning) falling behind!! %d", tick_end - tick_start);
-        }
-        else
-        {
-            osDelay(8 - (tick_end - tick_start));
-        }
+        netbuf_delete(rx_buf);
     }
 }
 
 void io_vision_applyVisionFrameToDeadReckoning(uint32_t robot_id)
 {
     // TODO generalize this 
+    io_lock_vision();
     float x     = vision.robot_states[robot_id].value.global_position.x_meters;
     float y     = vision.robot_states[robot_id].value.global_position.y_meters;
     float angle = vision.robot_states[robot_id].value.global_orientation.radians;
@@ -242,10 +264,12 @@ void io_vision_applyVisionFrameToDeadReckoning(uint32_t robot_id)
     g_current_ball_state.y  = ball_pos[1];
     g_current_ball_state.vx = ball_vel[0];
     g_current_ball_state.vy = ball_vel[1];
+    io_unlock_vision();
 }
 
 void io_vision_stepDeadReckoning()
 {
+    io_lock_vision();
     float encoder_speeds[4];
     float wheel_speeds[3];
 
@@ -296,11 +320,12 @@ void io_vision_stepDeadReckoning()
     g_current_ball_state.x += g_current_ball_state.vx * DEAD_RECKONING_TICK_TIME_MS;
     g_current_ball_state.y += g_current_ball_state.vy * DEAD_RECKONING_TICK_TIME_MS;
 
-    TLOG_INFO("dead reckoning %d %d %d",
-             (int)(g_current_state.x * 100),
-             (int)(g_current_state.y * 100),
-             (int)(g_current_state.angle * 100)
-    );
+    /*TLOG_INFO("dead reckoning %d %d %d",*/
+             /*(int)(g_current_state.x * 100),*/
+             /*(int)(g_current_state.y * 100),*/
+             /*(int)(g_current_state.angle * 100)*/
+    /*);*/
+    io_unlock_vision();
 }
 
 void io_lock_vision()

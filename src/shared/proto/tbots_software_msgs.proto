@@ -17,6 +17,8 @@ message Vision
 
     // Ball state
     BallState ball_state = 3;
+
+    uint32 counter = 4;
 }
 
 message PrimitiveSet
