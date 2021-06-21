@@ -5,6 +5,8 @@
 #include "firmware/boards/robot_stm32h7/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h"
 #pragma GCC diagnostic pop
 
+#include <stdbool.h>
+
 typedef struct GpioPin GpioPin_t;
 
 /**
@@ -52,3 +54,10 @@ void io_gpio_pin_setActive(GpioPin_t* gpio_pin);
  * @param gpio_pin
  */
 void io_gpio_pin_setInactive(GpioPin_t* gpio_pin);
+
+/**
+ * Gets the state of the GPIO pin
+ * @param gpio_pin The GPIO pin to read.
+ * @return true if active (1), false if inactive (0)
+ */
+bool io_gpio_pin_getState(GpioPin_t* gpio_pin);

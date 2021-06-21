@@ -21,6 +21,13 @@ typedef struct GpioPin
  */
 void io_gpio_pin_setHALPinState(GpioPin_t* gpio_pin, GPIO_PinState pin_state);
 
+/**
+ * Get the raw HAL state for the given GPIO pin
+ * @param gpio_pin The pin to get the state for
+ * @return true if "active", false if not "active"
+ */
+GPIO_PinState io_gpio_pin_getHALPinState(GpioPin_t* gpio_pin);
+
 GpioPin_t* io_gpio_pin_create(GPIO_TypeDef* gpio_handler, uint16_t gpio_pin_index,
                               GpioPinActiveState active_state)
 {
@@ -66,7 +73,26 @@ void io_gpio_pin_setInactive(GpioPin_t* gpio_pin)
     }
 }
 
+bool io_gpio_pin_getState(GpioPin_t* gpio_pin)
+{
+    switch (io_gpio_pin_getHALPinState(gpio_pin))
+    {
+        case GPIO_PIN_SET:
+            return (gpio_pin->active_state == ACTIVE_HIGH);
+        case GPIO_PIN_RESET:
+            return (gpio_pin->active_state == ACTIVE_LOW);
+        default:  // would prefer to use GPIO_PIN_RESET but get build error
+            break;
+    }
+    return false;
+}
+
 void io_gpio_pin_setHALPinState(GpioPin_t* gpio_pin, GPIO_PinState pin_state)
 {
     HAL_GPIO_WritePin(gpio_pin->gpio_handler, gpio_pin->gpio_pin_index, pin_state);
+}
+
+GPIO_PinState io_gpio_pin_getHALPinState(GpioPin_t* gpio_pin)
+{
+    return HAL_GPIO_ReadPin(gpio_pin->gpio_handler, gpio_pin->gpio_pin_index);
 }

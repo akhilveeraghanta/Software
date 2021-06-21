@@ -70,6 +70,11 @@ extern "C"
      */
     void initIoPowerMonitor(void);
 
+    /**
+     * Initializes the chicker
+     */
+    void initIoChicker(void);
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -215,6 +220,7 @@ extern "C"
 #define WHEEL_BACK_LEFT_FF2_GPIO_Port GPIOG
 #define BREAKBEAM_Pin GPIO_PIN_8
 #define BREAKBEAM_GPIO_Port GPIOG
+#define BREAKBEAM_EXTI_IRQn EXTI9_5_IRQn
 #define WHEEL_BACK_RIGHT_PWM_Pin GPIO_PIN_6
 #define WHEEL_BACK_RIGHT_PWM_GPIO_Port GPIOC
 #define WHEEL_FRONT_LEFT_PWM_Pin GPIO_PIN_7

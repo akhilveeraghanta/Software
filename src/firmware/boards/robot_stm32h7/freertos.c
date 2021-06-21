@@ -34,6 +34,7 @@
 #include "firmware/app/primitives/primitive_manager.h"
 #include "firmware/app/world/firmware_robot.h"
 #include "firmware/app/world/firmware_world.h"
+#include "firmware/boards/robot_stm32h7/io/breakbeam.h"
 #include "firmware/boards/robot_stm32h7/io/charger.h"
 #include "firmware/boards/robot_stm32h7/io/chicker.h"
 #include "firmware/boards/robot_stm32h7/io/dribbler.h"
@@ -437,6 +438,16 @@ void initIoPowerMonitor(void)
     // io_power_monitor_init(I2C1, INA226_ADDRESS,
     //                       INA226_MODE_CONT_SHUNT_AND_BUS | INA226_VBUS_140uS |
     //                           INA226_VBUS_140uS | INA226_AVG_1024);
+}
+
+void initIoChicker(void)
+{
+    GpioPin_t *breakbeam_pin =
+        io_gpio_pin_create(BREAKBEAM_GPIO_Port, BREAKBEAM_Pin, ACTIVE_HIGH);
+
+    Breakbeam_t *breakbeam = io_breakbeam_create(breakbeam_pin);
+
+    io_chicker_init(breakbeam);
 }
 
 /* USER CODE END Application */

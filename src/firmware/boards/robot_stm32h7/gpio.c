@@ -130,8 +130,8 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    /*Configure GPIO pins : PGPin PGPin PGPin */
-    GPIO_InitStruct.Pin  = CH_SEL_1_Pin | CH_SEL_2_Pin | BREAKBEAM_Pin;
+    /*Configure GPIO pins : PGPin PGPin */
+    GPIO_InitStruct.Pin  = CH_SEL_1_Pin | CH_SEL_2_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
@@ -165,6 +165,12 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin  = BREAKBEAM_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(BREAKBEAM_GPIO_Port, &GPIO_InitStruct);
+
     /*Configure GPIO pins : PAPin PAPin */
     GPIO_InitStruct.Pin   = WHEEL_BACK_LEFT_DIR_Pin | WHEEL_BACK_LEFT_MODE_Pin;
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
@@ -195,6 +201,10 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF12_SDIO1;
     HAL_GPIO_Init(SD_CMD_GPIO_Port, &GPIO_InitStruct);
+
+    /* EXTI interrupt init*/
+    HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 }
 
 /* USER CODE BEGIN 2 */

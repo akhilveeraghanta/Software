@@ -29,6 +29,8 @@
 #include <stdbool.h>
 
 #include "firmware/app/logger/logger.h"
+#include "firmware/boards/robot_stm32h7/io/chicker.h"
+#include "firmware/boards/robot_stm32h7/io/ublox_odinw262_communicator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -272,6 +274,24 @@ void DMA1_Stream0_IRQHandler(void)
     /* USER CODE BEGIN DMA1_Stream0_IRQn 1 */
 
     /* USER CODE END DMA1_Stream0_IRQn 1 */
+}
+
+/**
+ * @brief This function handles EXTI line[9:5] interrupts.
+ */
+void EXTI9_5_IRQHandler(void)
+{
+    /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+    if (__HAL_GPIO_EXTI_GET_IT(BREAKBEAM_Pin) != 0x00u)
+    {
+        __HAL_GPIO_EXTI_CLEAR_IT(BREAKBEAM_Pin);  // clears the Interrupt Flag
+        io_chicker_handleBreakbeam();
+    }
+    /* USER CODE END EXTI9_5_IRQn 0 */
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
+    /* USER CODE BEGIN EXTI9_5_IRQn 1 */
+
+    /* USER CODE END EXTI9_5_IRQn 1 */
 }
 
 /**

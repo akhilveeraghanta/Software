@@ -41,6 +41,7 @@
 #include "firmware/app/primitives/primitive_manager.h"
 #include "firmware/app/world/firmware_robot.h"
 #include "firmware/app/world/firmware_world.h"
+#include "firmware/boards/robot_stm32h7/io/breakbeam.h"
 #include "firmware/boards/robot_stm32h7/io/charger.h"
 #include "firmware/boards/robot_stm32h7/io/chicker.h"
 #include "firmware/boards/robot_stm32h7/io/dribbler.h"
@@ -166,6 +167,7 @@ int main(void)
     initIoDrivetrain();
     initIoNetworking();
     initIoPowerMonitor();
+    initIoChicker();
 
     // Setup the world that acts as the interface for the higher level firmware
     // (like primitives or the controller) to interface with the outside world

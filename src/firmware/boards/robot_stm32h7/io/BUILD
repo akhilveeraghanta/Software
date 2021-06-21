@@ -48,6 +48,14 @@ cc_library(
 )
 
 cc_library(
+    name = "breakbeam",
+    srcs = ["breakbeam.c"],
+    hdrs = ["breakbeam.h"],
+    restricted_to = ["//cc_toolchain:stm32h7"],
+    deps = [":gpio_pin"],
+)
+
+cc_library(
     name = "infineon_TLE009_E1000_angle_sensor",
     srcs = ["infineon_TLE5009_E1000_angle_sensor.c"],
     hdrs = ["infineon_TLE5009_E1000_angle_sensor.h"],
@@ -196,7 +204,11 @@ cc_library(
     srcs = ["chicker.c"],
     hdrs = ["chicker.h"],
     restricted_to = ["//cc_toolchain:stm32h7"],
-    deps = ["//firmware/app/logger"],
+    deps = [
+        ":breakbeam",
+        ":gpio_pin",
+        "//firmware/app/logger",
+    ],
 )
 
 cc_library(
