@@ -143,11 +143,12 @@ double ratePassShootScore(const Field& field, const Team& enemy_team, const Pass
     }
     Angle rotation_to_shot_target_after_pass = pass.receiverOrientation().minDiff(
         (shot_target - pass.receiverPoint()).orientation());
+
     double required_rotation_for_shot_score =
         1 - sigmoid(rotation_to_shot_target_after_pass.abs().toDegrees(),
                     ideal_max_rotation_to_shoot_degrees, 4);
 
-    return shot_openness_score * required_rotation_for_shot_score;
+    return (shot_openness_score + required_rotation_for_shot_score)/2;
 }
 
 double ratePassEnemyRisk(const Team& enemy_team, const Pass& pass,
@@ -217,12 +218,23 @@ double calculateInterceptRisk(const Robot& enemy_robot, const Pass& pass,
         ENEMY_ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED, ROBOT_MAX_RADIUS_METERS);
     Duration ball_time_to_pass_receive_position = pass.estimatePassDuration();
 
+    // FUTURE TODO (#2167): IMPORTANT!!!
+    // Previously we were always just adding the enemy reaction time to the estimated time to destination. This meant
+    // that even if there was a robot right in front of the passer, we would think we could get the ball past them
+    // before they could intercept (which is obviously wrong). REMOVE THIS FIX, MAKE A TEST FAIL, AND ADD A PROPER REGRESSION TEST
+    const double REACTION_TIME_SCALING_FACTOR = 3.0;
+    double scaled_enemy_reaction_time_closest_pass_point = std::clamp(enemy_robot_time_to_closest_pass_point.toSeconds() /
+                        REACTION_TIME_SCALING_FACTOR, 0.0, enemy_reaction_time.toSeconds());
+
     double robot_ball_time_diff_at_closest_pass_point =
-        ((enemy_robot_time_to_closest_pass_point + enemy_reaction_time) -
+        ((enemy_robot_time_to_closest_pass_point + Duration::fromSeconds(scaled_enemy_reaction_time_closest_pass_point)) -
          (ball_time_to_closest_pass_point))
-            .toSeconds();
+        .toSeconds();
+
+    double scaled_enemy_reaction_time_receive_point = std::clamp(enemy_robot_time_to_pass_receive_position.toSeconds() /
+            REACTION_TIME_SCALING_FACTOR, 0.0, enemy_reaction_time.toSeconds());
     double robot_ball_time_diff_at_pass_receive_point =
-        ((enemy_robot_time_to_pass_receive_position + enemy_reaction_time) -
+        ((enemy_robot_time_to_pass_receive_position + Duration::fromSeconds(scaled_enemy_reaction_time_receive_point)) -
          (ball_time_to_pass_receive_position))
             .toSeconds();
 
