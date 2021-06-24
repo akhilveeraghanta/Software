@@ -40,7 +40,7 @@ struct ReceiverFSM
 
     // The minimum angle between a ball's trajectory and the ball-receiver_point vector
     // for which we can consider a pass to be stray
-    static constexpr Angle MIN_STRAY_PASS_ANGLE = Angle::fromDegrees(10);
+    static constexpr Angle MIN_STRAY_PASS_ANGLE = Angle::fromDegrees(90);
 
     // the minimum speed required for a pass to be considered stray
     static constexpr double MIN_STRAY_PASS_SPEED = 0.3;
@@ -292,15 +292,7 @@ struct ReceiverFSM
             // the pass starts when the passing robot is facing the proper orientation
             // with keepaway, we don't face the orientation immediately after the receiver
             // receives the pass to execute
-            bool friendly_robot_has_ball = false;
-            for(auto robot : event.common.world.friendlyTeam().getAllRobots())
-            {
-                if (robot.isNearDribbler(event.common.world.ball().position()))
-                {
-                    friendly_robot_has_ball = true;
-                }
-            }
-            return (event.common.world.ball().velocity().length() > MIN_PASS_START_SPEED && !friendly_robot_has_ball);
+            return event.common.world.ball().velocity().length() > MIN_PASS_START_SPEED;
         };
 
         /**
@@ -330,7 +322,9 @@ struct ReceiverFSM
             // We tolerate imperfect passes that hit the edges of the robot,
             // so that we can quickly transition out and grab the ball.
             bool near_dribbler = event.common.robot.isNearDribbler(
-                event.common.world.ball().position(), 0.01);
+                event.common.world.ball().position(), 0.05);
+            std::cerr<<"NEAR DRIBBLER: "<<near_dribbler;
+            std::cerr<<"STRAY PASS: "<<stray_pass;
             return stray_pass || near_dribbler;
         };
 

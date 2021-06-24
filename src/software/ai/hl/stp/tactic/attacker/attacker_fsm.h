@@ -73,35 +73,14 @@ struct AttackerFSM
             }
             else if (event.control_params.pass_committed)
             {
-                auto pass_segment =
-                    Segment(event.control_params.best_pass_so_far->passerPoint(),
-                            event.control_params.best_pass_so_far->receiverPoint());
-
-                bool should_chip = false;
-
-                for (const Robot& enemy : event.common.world.enemyTeam().getAllRobots())
-                {
-                    if (intersects(Circle(enemy.position(), ROBOT_MAX_RADIUS_METERS * 2),
-                                   pass_segment))
-                    {
-                        should_chip = true;
-                    }
-                }
-
                 // we have committed to passing, execute the pass
                 control_params = PivotKickFSM::ControlParams{
                     .kick_origin = event.control_params.best_pass_so_far->passerPoint(),
-                    .kick_direction =
-                        event.control_params.best_pass_so_far->passerOrientation(),
-                    .auto_chip_or_kick =
-                        AutoChipOrKick{AutoChipOrKickMode::AUTOKICK,
-                                       event.control_params.best_pass_so_far->speed()}};
-                if (should_chip)
-                {
-                    control_params.auto_chip_or_kick = AutoChipOrKick{
-                        AutoChipOrKickMode::AUTOCHIP,
-                        pass_segment.length() * CHIP_PASS_TARGET_DISTANCE_TO_ROLL_RATIO};
-                }
+                        .kick_direction =
+                            event.control_params.best_pass_so_far->passerOrientation(),
+                        .auto_chip_or_kick =
+                            AutoChipOrKick{AutoChipOrKickMode::AUTOKICK,
+                                event.control_params.best_pass_so_far->speed()}};
             }
             processEvent(PivotKickFSM::Update(control_params, event.common));
         };
@@ -187,7 +166,6 @@ struct AttackerFSM
             {
                 if (contains(about_to_steal_danger_zone, enemy.position()))
                 {
-                    LOG(DEBUG) << "Attacker Chipping: NOT a chip pass";
                     return true;
                 }
             }

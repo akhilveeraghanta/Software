@@ -102,7 +102,7 @@ def plot_ssl_wrapper_at_idx(idx):
 
     pass_dict = {
         "passer_point": the_world.ball().position(),
-        "pass_speed": 4.0,
+        "pass_speed": 4.0, # 4.5 - 6.5
     }
 
     def ratePassCost(x, y):
@@ -133,17 +133,17 @@ def plot_ssl_wrapper_at_idx(idx):
         pass_dict["receiver_point"] = world.Point(x, y)
         return passing.getStaticPositionQuality(the_world, pass_dict, config)
 
-    #rate_pass_heatmap_plotter.plot_heatmap(ratePassCost)
-    #rate_kick_pass_enemy_heatmap_plotter.plot_heatmap(rateKickPassEnemyRiskCost)
-    #rate_kick_pass_friendly_heatmap_plotter.plot_heatmap(
-    #    rateKickPassFriendlyCapabilityCost
-    #)
-    #rate_chip_pass_enemy_heatmap_plotter.plot_heatmap(rateChipPassEnemyRiskCost)
-    #rate_chip_pass_friendly_heatmap_plotter.plot_heatmap(
-    #   rateChipPassFriendlyCapabilityCost
-    #)
-    #rate_pass_shoot_score_plotter.plot_heatmap(ratePassShootScoreCost)
-    #static_pass_quality.plot_heatmap(rateStaticPassQuality)
+    rate_pass_heatmap_plotter.plot_heatmap(ratePassCost)
+    rate_kick_pass_enemy_heatmap_plotter.plot_heatmap(rateKickPassEnemyRiskCost)
+    rate_kick_pass_friendly_heatmap_plotter.plot_heatmap(
+        rateKickPassFriendlyCapabilityCost
+    )
+    rate_chip_pass_enemy_heatmap_plotter.plot_heatmap(rateChipPassEnemyRiskCost)
+    rate_chip_pass_friendly_heatmap_plotter.plot_heatmap(
+       rateChipPassFriendlyCapabilityCost
+    )
+    rate_pass_shoot_score_plotter.plot_heatmap(ratePassShootScoreCost)
+    static_pass_quality.plot_heatmap(rateStaticPassQuality)
 
     #zones = pass_generator.getAllZones(the_world)
     #pass_generator_plotter.plot_zones(zones)

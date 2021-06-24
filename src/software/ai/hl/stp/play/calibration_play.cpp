@@ -2,6 +2,7 @@
 
 #include "software/ai/hl/stp/tactic/dribble/dribble_tactic.h"
 #include "software/ai/hl/stp/tactic/kick/kick_tactic.h"
+#include "software/ai/hl/stp/tactic/chip/chip_tactic.h"
 #include "software/ai/hl/stp/tactic/move/move_tactic.h"
 #include "software/geom/circle.h"
 #include "software/util/design_patterns/generic_factory.h"
@@ -62,6 +63,26 @@ void CalibrationPlay::getNextTactics(TacticCoroutine::push_type &yield,
         {
             yield({{kick_tactic}});
         } while(!kick_tactic->done());
+    }
+
+    for (int k = 0; k < 8; k++)
+    {
+        auto dribble_tactic = std::make_shared<DribbleTactic>();
+        auto chip_tactic = std::make_shared<ChipTactic>(false);
+
+        dribble_tactic->updateControlParams(start_point, angle_to_face + k * angle_to_add, true);
+
+        do 
+        {
+            yield({{dribble_tactic}});
+        } while(!dribble_tactic->done());
+
+        chip_tactic->updateControlParams(
+                start_point, angle_to_face + k * angle_to_add, 2.0);
+        do 
+        {
+            yield({{chip_tactic}});
+        } while(!chip_tactic->done());
     }
 }
 

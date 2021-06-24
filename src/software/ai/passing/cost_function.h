@@ -64,11 +64,9 @@ double ratePassShootScore(const Field& field, const Team& enemy_team, const Pass
  *         to run without interference, and 0 indicating that the pass will certainly
  *         be interfered with (and so is very poor)
  */
-double rateKickPassEnemyRisk(const Team& enemy_team, const Pass& pass,
+double ratePassEnemyRisk(const Team& enemy_team, const Pass& pass,
                              const Duration& enemy_reaction_time,
                              double enemy_proximity_importance);
-double rateChipPassEnemyRisk(const Team& enemy_team, const Pass& pass,
-                             const Duration& enemy_reaction_time);
 
 /**
  * Calculates the likelihood that the given pass will be intercepted
@@ -81,7 +79,7 @@ double rateChipPassEnemyRisk(const Team& enemy_team, const Pass& pass,
  *         guaranteed to be intercepted, and 0 indicating it's impossible for the
  *         pass to be intercepted
  */
-double calculateKickInterceptRisk(const Team& enemy_team, const Pass& pass,
+double calculateInterceptRisk(const Team& enemy_team, const Pass& pass,
                                   const Duration& enemy_reaction_time);
 
 /**
@@ -95,8 +93,9 @@ double calculateKickInterceptRisk(const Team& enemy_team, const Pass& pass,
  *         be intercepted, and 0 indicating it's impossible for the pass to be
  *         intercepted
  */
-double calculateKickInterceptRisk(const Robot& enemy_robot, const Pass& pass,
+double calculateInterceptRisk(const Robot& enemy_robot, const Pass& pass,
                                   const Duration& enemy_reaction_time);
+
 
 /**
  * Calculate the probability of a friendly robot receiving the given pass
@@ -112,12 +111,8 @@ double calculateKickInterceptRisk(const Robot& enemy_robot, const Pass& pass,
  *         friendly team to receive the given pass, with 1 being very likely, 0
  *         being impossible
  */
-double rateKickPassFriendlyCapability(
-    Team friendly_team, const Pass& pass,
-    std::shared_ptr<const PassingConfig> passing_config);
-double rateChipPassFriendlyCapability(
-    Team friendly_team, const Pass& pass,
-    std::shared_ptr<const PassingConfig> passing_config);
+double ratePassFriendlyCapability(Team friendly_team, const Pass& pass,
+                                  std::shared_ptr<const PassingConfig> passing_config);
 
 /**
  * Calculates the static position quality for a given position on a given field
@@ -146,11 +141,3 @@ double getStaticPositionQuality(const Field& field, const Point& position,
  */
 double calculateProximityRisk(const Point& point, const Team& enemy_team,
                               double enemy_proximity_importance);
-
-/**
- * Figures out the earliest timestamp the given robot can't receive the given pass.
- *
- * @param robot The robot to calculate the receive timestamp for
- * @param pass The pass to receive
- */
-Timestamp calculateEarliestTimeRobotCanReceive(const Robot& robot, const Pass& pass);

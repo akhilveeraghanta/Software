@@ -184,7 +184,7 @@ PassWithRating ShootOrPassPlay::attemptToShootWhileLookingForAPass(
 
     // Wait for a good pass by starting out only looking for "perfect" passes (with a
     // score of 1) and decreasing this threshold over time
-    double min_pass_score_threshold        = 1.0;
+    double min_pass_score_threshold        = 0.3;
     Timestamp pass_optimization_start_time = world.getMostRecentTimestamp();
     // This boolean indicates if we're ready to perform a pass
     bool ready_to_pass = false;

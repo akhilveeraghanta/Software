@@ -244,27 +244,11 @@ void FreeKickPlay::performPassStage(
 
     auto receiver = std::make_shared<ReceiverTactic>(pass);
     auto kicker = std::make_shared<KickTactic>(false);
-    auto chipper = std::make_shared<ChipTactic>(false);
-
-    auto pass_segment = Segment(pass.passerPoint(), pass.receiverPoint());
-
-    bool should_chip = false;
-
-    for (const Robot& enemy : world.enemyTeam().getAllRobots())
-    {
-        if (intersects(Circle(enemy.position(), ROBOT_MAX_RADIUS_METERS * 2),
-                    pass_segment))
-        {
-            should_chip = true;
-        }
-    }
 
     // Perform the pass and wait until the receiver is finished
     do
     {
         kicker->updateControlParams(pass.passerPoint(), pass.passerOrientation(), pass.speed());
-        chipper->updateControlParams(pass.passerPoint(), pass.passerOrientation(),
-                pass_segment.length() * CHIP_PASS_TARGET_DISTANCE_TO_ROLL_RATIO);
         receiver->updateControlParams(pass);
 
         std::get<0>(crease_defender_tactics)
@@ -273,16 +257,8 @@ void FreeKickPlay::performPassStage(
             ->updateControlParams(world.ball().position(),
                                   CreaseDefenderAlignment::RIGHT);
 
-        if(should_chip)
-        {
-            yield({{chipper, receiver, std::get<0>(crease_defender_tactics),
+        yield({{kicker, receiver, std::get<0>(crease_defender_tactics),
                 std::get<1>(crease_defender_tactics)}});
-        }
-        else
-        {
-            yield({{kicker, receiver, std::get<0>(crease_defender_tactics),
-                std::get<1>(crease_defender_tactics)}});
-        }
     } while (!receiver->done());
 }
 
