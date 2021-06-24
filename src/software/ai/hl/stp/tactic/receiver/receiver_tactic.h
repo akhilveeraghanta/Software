@@ -27,8 +27,8 @@ class ReceiverTactic : public Tactic
      *                     the tactic will be restarted every time it completes
      */
     explicit ReceiverTactic(const Field& field, const Team& friendly_team,
-                            const Team& enemy_team, const Pass pass, const Ball& ball,
-                            bool loop_forever);
+                               const Team& enemy_team, const Pass pass, const Ball& ball,
+                               bool loop_forever);
 
     ReceiverTactic() = delete;
 

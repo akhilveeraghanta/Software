@@ -7,23 +7,13 @@
 #include "software/geom/algorithms/closest_point.h"
 #include "software/logger/logger.h"
 
-ReceiverTactic::ReceiverTactic(const Field& field, const Team& friendly_team,
-                               const Team& enemy_team, const Pass pass, const Ball& ball,
-                               bool loop_forever)
-    : Tactic(loop_forever, {RobotCapability::Move}),
-      field(field),
-      pass(pass),
-      ball(ball),
-      friendly_team(friendly_team),
-      enemy_team(enemy_team)
+ReceiverTactic::ReceiverTactic(const Pass pass)
+    : Tactic(loop_forever, {RobotCapability::Move})
 {
 }
 
 void ReceiverTactic::updateWorldParams(const World& world)
 {
-    this->friendly_team = world.friendlyTeam();
-    this->enemy_team    = world.enemyTeam();
-    this->ball          = world.ball();
 }
 
 void ReceiverTactic::updateControlParams(const Pass& updated_pass)

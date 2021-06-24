@@ -139,10 +139,12 @@ void FreeKickPlay::getNextTactics(TacticCoroutine::push_type &yield, const World
     double min_score;
     do
     {
-        std::optional<Shot> shot = calcBestShotOnGoal(
-                world.field(), world.friendlyTeam(),
-                world.enemyTeam(), world.ball().position(),
-                TeamType::ENEMY);
+        //std::optional<Shot> shot = calcBestShotOnGoal(
+                //world.field(), world.friendlyTeam(),
+                //world.enemyTeam(), world.ball().position(),
+                //TeamType::ENEMY);
+	
+        std::optional<Shot> shot = std::nullopt;
 
         if (shot.has_value())
         {
@@ -242,7 +244,9 @@ void FreeKickPlay::performPassStage(
     LOG(DEBUG) << "Committing to pass: " << best_pass_and_score_so_far.pass;
     LOG(DEBUG) << "Score of pass we committed to: " << best_pass_and_score_so_far.rating;
 
-    auto receiver = std::make_shared<ReceiverTactic>(pass);
+        auto receiver = std::make_shared<ReceiverTactic>(
+            world.field(), world.friendlyTeam(), world.enemyTeam(), pass, world.ball(),
+            false);
     auto kicker = std::make_shared<KickTactic>(false);
 
     // Perform the pass and wait until the receiver is finished
