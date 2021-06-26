@@ -32,7 +32,7 @@ bool ShootOrPassPlay::invariantHolds(const World &world) const
 {
     return world.gameState().isPlaying() &&
            (world.getTeamWithPossession() == TeamSide::FRIENDLY ||
-            world.getTeamWithPossessionConfidence() < 1.0);
+            world.getTeamWithPossessionConfidence() < 3.0);
 }
 
 
