@@ -53,7 +53,7 @@ struct AutoChipOrKick
  * STOP_COMMAND maximum speed allowed when responding to a stop command
  * TIPTOE maximum speed allowed that does not bump the ball to kick speed
  */
-MAKE_ENUM(MaxAllowedSpeedMode, PHYSICAL_LIMIT, STOP_COMMAND, TIPTOE);
+MAKE_ENUM(MaxAllowedSpeedMode, PHYSICAL_LIMIT, STOP_COMMAND, TIPTOE, DRIBBLING);
 
 /**
  * Create a Move Primitive Message

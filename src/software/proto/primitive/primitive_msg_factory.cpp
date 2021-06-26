@@ -98,6 +98,8 @@ double convertMaxAllowedSpeedModeToMaxAllowedSpeed(
             return STOP_COMMAND_ROBOT_MAX_SPEED_METERS_PER_SECOND;
         case MaxAllowedSpeedMode::TIPTOE:
             return 0.5;
+        case MaxAllowedSpeedMode::DRIBBLING:
+            return 1;
         default:
             LOG(WARNING) << "MaxAllowedSpeedMode is invalid" << std::endl;
             return 0.0;
